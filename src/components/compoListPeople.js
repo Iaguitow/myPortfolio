@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react"
-import dbPeople from "../classes/ClassDBPeople"
+import dbPeople from "../classes/classDBPeople"
 import { SafeAreaView } from "react-native";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons"
 import {

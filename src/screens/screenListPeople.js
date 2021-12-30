@@ -2,7 +2,7 @@ import React from 'react';
 import { Center, NativeBaseProvider } from "native-base";
 import ListPeople from "../components/compoListPeople";
 
-const home = () => {
+const ScreenListPeople = () => {
     return (
         <NativeBaseProvider>
             <Center flex={1}>
@@ -12,4 +12,4 @@ const home = () => {
     );
 };
 
-export default home;
+export default ScreenListPeople;
