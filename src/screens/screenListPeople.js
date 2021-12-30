@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Center, NativeBaseProvider } from "native-base";
-import ListPeople from "../components/compoList";
+import ListPeople from "../components/compoListPeople";
 
 const home = () => {
     return (

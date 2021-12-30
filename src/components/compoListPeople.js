@@ -1,4 +1,5 @@
-import React from "react"
+import React, {useEffect, useState} from "react"
+import dbPeople from "../classes/ClassDBPeople"
 import { SafeAreaView } from "react-native";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons"
 import {
@@ -11,74 +12,18 @@ import {
   Input,
   Icon
 } from "native-base";
-import { RuntimeGlobals } from "webpack";
 
 const ListPeople = () => {
-  const data = [
-    {
-      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-      fullName: "Aafreen Khan",
-      timeStamp: "12:47 PM",
-      recentText: "React Native Developer",
-      avatarUrl:
-        "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-    },
-    {
-      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-      fullName: "Sujitha Mathur",
-      timeStamp: "11:11 PM",
-      recentText: "React Native Developer",
-      avatarUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyEaZqT3fHeNrPGcnjLLX1v_W4mvBlgpwxnA&usqp=CAU",
-    },
-    {
-      id: "58694a0f-3da1-471f-bd96-145571e29d72",
-      fullName: "Anci Barroco",
-      timeStamp: "6:22 PM",
-      recentText: "React Native Developer",
-      avatarUrl: "https://miro.medium.com/max/1400/0*0fClPmIScV5pTLoE.jpg",
-    },
-    {
-      id: "68694a0f-3da1-431f-bd56-142371e29d727",
-      fullName: "Aniket Kumar",
-      timeStamp: "8:56 PM",
-      recentText: "React Native Developer",
-      avatarUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSr01zI37DYuR8bMV5exWQBSw28C1v_71CAh8d7GP1mplcmTgQA6Q66Oo--QedAN1B4E1k&usqp=CAU",
-    },
-    {
-      id: "28694a0f-3da1-471f-bd96-142456e29d726",
-      fullName: "Kiara sdfssef",
-      timeStamp: "12:47 PM",
-      recentText: "React Native Developer",
-      avatarUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBwgu1A5zgPSvfE83nurkuzNEoXs9DMNr8Ww&usqp=CAU",
-    },
-    {
-      id: "28694a0f-3da1-471f-bd96-142456e29d725",
-      fullName: "Kiara",
-      timeStamp: "12:47 PM",
-      recentText: "React Native Developer",
-      avatarUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBwgu1A5zgPSvfE83nurkuzNEoXs9DMNr8Ww&usqp=CAU",
-    },
-    {
-      id: "28694a0f-3da1-471f-bd96-142456e29d724",
-      fullName: "Kiara",
-      timeStamp: "12:47 PM",
-      recentText: "React Native Developer",
-      avatarUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBwgu1A5zgPSvfE83nurkuzNEoXs9DMNr8Ww&usqp=CAU",
-    },
-    {
-      id: "28694a0f-3da1-471f-bd96-142456e29d723",
-      fullName: "Kiara",
-      timeStamp: "12:47 PM",
-      recentText: "React Native Developer",
-      avatarUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBwgu1A5zgPSvfE83nurkuzNEoXs9DMNr8Ww&usqp=CAU",
-    },
-  ]
+
+  const [objPeople, setObjsPeople] = useState([]);
+  useEffect(() => {
+    dbPeople.getPeople(true,0).then((objPeoples) =>{
+       var formatedObjPeople = Object.values(objPeoples);
+       console.log(formatedObjPeople);
+       setObjsPeople(formatedObjPeople);
+    });
+  },[]);
+
   return (
     <Box width={"100%"} flex={1}>
       <SafeAreaView>
@@ -108,7 +53,7 @@ const ListPeople = () => {
       </SafeAreaView>
       <FlatList
         onTouchStart={() => {console.log("touched")}}
-        data={data}
+        data={objPeople}
         renderItem={({ item }) => (
           <Box
             borderTopWidth={2}
@@ -128,7 +73,7 @@ const ListPeople = () => {
                   borderColor={"gray.900"}
                   size="110px"
                   source={{
-                    uri: item.avatarUrl,
+                    uri: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
                   }}
                 />
               </VStack>
@@ -141,7 +86,7 @@ const ListPeople = () => {
                   color="coolGray.700"
                   bold
                 >
-                  {item.fullName}
+                  {item.NAME}
                 </Text>
                 <Text
                   fontSize={16}
@@ -150,7 +95,7 @@ const ListPeople = () => {
                     color: "warmGray.200",
                   }}
                 >
-                  {item.recentText}
+                  {item.profession}
                 </Text>
                 <HStack paddingTop={5} alignItems={"flex-end"} space={8}>
                   <Icon
@@ -181,7 +126,7 @@ const ListPeople = () => {
                       }}
                       color="coolGray.800"
                     >
-                      2k
+                      {item.likes}
                     </Text>
                   </HStack>
                   <HStack alignSelf={"center"}>
@@ -202,7 +147,7 @@ const ListPeople = () => {
                       }}
                       color="coolGray.800"
                     >
-                      3k
+                      {item.visualization}
                     </Text>
                   </HStack>
                 </HStack>
