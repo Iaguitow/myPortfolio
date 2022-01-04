@@ -15,10 +15,13 @@ class People {
             'Content-Type': 'application/json',
           }
         }).then(function (response) {
+          if(typeof response.data !== "object"){
+            alert(response.data);
+            return;
+        }
           resolve(response.data);
-          //console.log(JSON.stringify(response.data));
         }).catch(function (error) {
-          reject(error.message);
+          resolve(error.message);
         }).finally(function () {
           //always executed
           //alert("Finally Called")

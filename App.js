@@ -1,18 +1,23 @@
 import { StatusBar,LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import login from "./src/screens/login";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Login from "./src/screens/ScreenLogin";
+import RegisterPeople from "./src/screens/ScreenRegisterPeople";
+import Drawer from "./src/components/Drawer";
 
 LogBox.ignoreLogs(["The contrast ratio"]);
-const Stack = createStackNavigator();
+
+const Stack = createNativeStackNavigator();
 StatusBar.setHidden(false);
 
 export default function App() {
   return (
     <NavigationContainer independent={true}>
       <StatusBar barStyle="light-content" style="auto"/>
-      <Stack.Navigator initialRouteName="login" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name='login' component={login} />
+      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name='Login' component={Login} />
+        <Stack.Screen name='RegisterPeople' component={RegisterPeople}/>
+        <Stack.Screen name='Drawer' component={Drawer}/>
       </Stack.Navigator>
     </NavigationContainer>
   )

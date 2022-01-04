@@ -10,17 +10,27 @@ import {
 } from 'native-base';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-export default function FootTabLogin() {
+export default function FootTabLogin({ navigation }) {
   const [selected, setSelected] = React.useState(2);
   return (
       <Box flex={0} bg="transparent">
         
         <HStack bg="rgb(3,17,29)" alignItems="center" shadow={6}>
+        {/*****************************  REGISTER BUTTON *************************/}
           <Pressable
             opacity={selected === 0 ? 1 : 0.5}
             py="3"
             flex={1}
-            onPress={() => setSelected(0)}>
+            onPress={() => {
+              try{
+                setSelected(0);
+                navigation.navigate("RegisterPeople");
+              }
+              catch(err){
+                console.log(err);
+              }
+              
+            }}>
             <Center>
               <Icon
                 mb="1"
@@ -37,6 +47,7 @@ export default function FootTabLogin() {
               </Text>
             </Center>
           </Pressable>
+          {/*****************************  LOST PASSWORD BUTTON *************************/}
           <Divider bgColor={"gray.700"} thickness="2" mx="1" orientation="vertical" />
           <Pressable
             opacity={selected === 1 ? 1 : 0.5}
