@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react"
-import { Animated } from "react-native"
-import { MaterialIcons, AntDesign } from "@expo/vector-icons"
-import { LinearGradient } from 'expo-linear-gradient'
+import React, { useState, useEffect } from "react";
+import { Animated } from "react-native";
+import { MaterialIcons, AntDesign } from "@expo/vector-icons";
+import { LinearGradient } from 'expo-linear-gradient';
 import { 
     Input, 
     Icon, 
@@ -13,10 +13,10 @@ import {
     KeyboardAvoidingView, 
     Center, 
     Image 
-} from "native-base"
+} from "native-base";
 
-import FootTabLogin from "../components/FootTabLogin"
-import dbLogin from "../classes/ClassDBLogin"
+import FootTabLogin from "../components/FootTabLogin";
+import dbLogin from "../classes/ClassDBLogin";
 
 export default function Login({ navigation }){
 
@@ -204,7 +204,7 @@ export default function Login({ navigation }){
                                     }} 
                                     iconLeft 
                                     bgColor={"rgba(3,17,29,0.7)"} 
-                                    shadow={9} w={{ base: "42%" }} 
+                                    shadow={9} w={{ base: "45%" }} 
                                     h={{ base: "100%" }}
                                 >
                                     <HStack alignItems={"center"} space={1} paddingRight={2}>
@@ -219,7 +219,7 @@ export default function Login({ navigation }){
                                             fontWeight={"bold"}
                                             fontSize={selectedSocialMedia===0?18:14}
                                         >
-                                            Google Login
+                                            Google Sign Up
                                         </Text>
                                     </HStack>
                                 </Button>
@@ -233,7 +233,7 @@ export default function Login({ navigation }){
                                     }}
                                     iconLeft 
                                     bgColor={"rgba(3,17,29,0.7)"} 
-                                    w={{ base: "42%" }}
+                                    w={{ base: "45%" }}
                                     h={{ base: "100%" }}
                                     >
                                     <HStack alignItems={"center"} space={1} paddingRight={2}>
@@ -248,7 +248,7 @@ export default function Login({ navigation }){
                                             fontWeight={"bold"}
                                             fontSize={selectedSocialMedia===1?18:14}
                                         >
-                                            LinkedIn Login
+                                            LinkedIn Sign Up
                                         </Text>
                                     </HStack>
                                 </Button>

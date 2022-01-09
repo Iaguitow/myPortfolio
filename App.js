@@ -13,7 +13,7 @@ StatusBar.setHidden(false);
 export default function App() {
   return (
     <NavigationContainer independent={true}>
-      <StatusBar barStyle="light-content" style="auto"/>
+      <StatusBar style="inverted"/>
       <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Login' component={Login} />
         <Stack.Screen name='RegisterPeople' component={RegisterPeople}/>

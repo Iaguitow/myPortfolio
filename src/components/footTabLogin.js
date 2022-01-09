@@ -24,12 +24,14 @@ export default function FootTabLogin({ navigation }) {
             onPress={() => {
               try{
                 setSelected(0);
-                navigation.navigate("RegisterPeople");
+                setTimeout(()=>{
+                  setSelected(2);
+                  navigation.navigate("RegisterPeople");
+                },300);
               }
               catch(err){
                 console.log(err);
               }
-              
             }}>
             <Center>
               <Icon
@@ -53,7 +55,13 @@ export default function FootTabLogin({ navigation }) {
             opacity={selected === 1 ? 1 : 0.5}
             py="2"
             flex={1}
-            onPress={() => setSelected(1)}
+            onPress={() => {
+              setSelected(1);
+              setTimeout(()=>{
+                  setSelected(2);
+                  //navigation.navigate("RegisterPeople");
+                },300);
+              }}
           >
             <Center>
               <Icon
