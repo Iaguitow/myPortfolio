@@ -13,8 +13,8 @@ import {
 
 export default function RegisterPeople({ navigation }) {
 
-  const [TextRegisterColor,setTextRegisterColor] = useState("rgb(0,185,243)");
-  const [TextLoginColor,setTextLoginColor] = useState("white");
+  const [TextRegisterColor,setTextRegisterColor] = useState(true);
+  const [TextLoginColor,setTextLoginColor] = useState(false);
 
   return (
     ///////////////////////// HEADER AND LOGO /////////////////////////
@@ -35,14 +35,14 @@ export default function RegisterPeople({ navigation }) {
                 source={require('../../assets/icon.png')}
               />
               <HStack alignSelf={"flex-end"} space={2} marginRight={5}>
-                <Text style={{fontWeight:"bold",fontSize:18,color:TextRegisterColor}}>Register</Text>
+                <Text style={{fontWeight:"bold",fontSize:18,color:TextRegisterColor?"rgb(0,185,243)":"white"}}>Register</Text>
                 <Divider bgColor={"gray.300"} thickness="2" mx="1" orientation="vertical" />
-                <Text style={{fontWeight:"bold",fontSize:18,color:TextLoginColor}} onPress={()=>{
-                  setTextRegisterColor("white");
-                  setTextLoginColor("rgb(0,185,243)");
+                <Text style={{fontWeight:"bold",fontSize:18,color:TextLoginColor?"rgb(0,185,243)":"white"}} onPress={()=>{
+                  setTextRegisterColor(false);
+                  setTextLoginColor(true);
                   setTimeout(()=>{
                     navigation.goBack();
-                  },300);
+                  },320);
                 }}>
                   Login
                 </Text>
