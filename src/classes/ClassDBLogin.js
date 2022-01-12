@@ -26,14 +26,14 @@ class Login {
                         resolve(user);
                     });
                 }).catch(function (error){
-                    Toast.showToast(error.message);
-                    resolve(false);
+                    Toast.showToast("Error","Connection Error",error.message+", If this error continue happening, please verify your connectionn or try again later. ");
+                    reject(false);
                 }).finally(function (){
 
                 });
             }      
             catch (error) {
-                alert(error);
+                Toast.showToast("Error","Connection Error",error.message+", If this error continue happening, please verify your connectionn or try again later. ");
                 reject(false);
             }
         });

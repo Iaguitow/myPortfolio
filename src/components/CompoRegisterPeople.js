@@ -4,6 +4,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import GeneralUtils from "../utils/GeneralUtils"
 import Toast from "./CompoToast"
+import dbPeople from "../classes/ClassDBPeople"
 import {
   KeyboardAvoidingView,
   Input,
@@ -328,40 +329,56 @@ export default function CompoRegisterPeople() {
 {/************************* REGISTER BUTTON *************************/}
                         <Button
                             onPress={() => {
-                                // TEST IMPLEMENTATION // 
+                                // TEST IMPLEMENTATION //
+                                setisRegistering(true); 
                                 if(!!name.trim() && !!phone.trim() && (phone.length === 11) && !!password1.trim() && !!passwordConfirmation.trim()){
+
                                     const dateEveryday = new Date();
+                                    const DOBformatted = (dateToday.getFullYear()+"-"+("0"+(dateToday.getMonth()+1)).slice(-2)+"-"+("0"+dateToday.getDate()).slice(-2));
+                                    const dtactive =  (dateEveryday.getFullYear()+"-"+("0"+(dateEveryday.getMonth()+1)).slice(-2)+"-"+("0"+dateEveryday.getDate()).slice(-2));
+
                                     if(password1 !== passwordConfirmation){
                                         setInValidPasswordConfirmation(true);
-                                        Toast.showToast("Invalid Input","Password Invalid!","The Password Confirmation do not match to the first Password field.");
+                                        Toast.showToast("Invalid Input","Password Invalid!","The Password Confirmation do not match to the first Password field. Make sure that both password are the same.");
+                                        setisRegistering(false);
                                         return;
                                     }
                                     if(!(GeneralUtils.validateEmail(email))) {
                                         setInvalidEmail(true);
-                                        Toast.showToast("Invalid Input","Email Invalid!","Wrong Email, please check it.");
+                                        Toast.showToast("Invalid Input","Email Invalid!","Wrong Email, please check it. Probably you forgot to type a character or something.");
+                                        setisRegistering(false);
                                         return;
                                     }
                                     if(dateToday.toString().substring(4, 15) === dateEveryday.toString().substring(4, 15)){
                                         Toast.showToast("Invalid Input","Date of Birth Invalid!","Check your date of birth, it will not be available for anyone but is necessary.");
                                         return;
                                     }
-                                    alert("ok");
-                                    return;
+                                    dbPeople.postRegisterPeople(name,email,phone,password1,DOBformatted,dtactive).then(response =>{
+                                        navigation.navigate("Drawer");
+                                    }).catch(erro =>{
+                                        setisRegistering(false);
+                                        console.log(erro);
+                                        return;
+                                    });
                                 }else if(!name.trim()){ 
                                     setInvalidName(true);
-                                    Toast.showToast("Invalid Input","Empty Field","You must fill the Name field.");
+                                    setisRegistering(false);
+                                    Toast.showToast("Invalid Input","Empty Field","You must fill the Name field. All fields must be filled without exception.");
                                     return;
                                 }else if(!phone.trim() || (phone.length !== 11)){
                                     setInvalidPhone(true);
-                                    Toast.showToast("Invalid Input","Empty Field or Incorrect Number","You must fill the Phone field.");
+                                    setisRegistering(false);
+                                    Toast.showToast("Invalid Input","Empty Field or Incorrect Number","You must fill the Phone field. All fields must be filled without exception.");
                                     return;
                                 }else if(!password1.trim()){
-                                    setInvalidPassword(true)
-                                    Toast.showToast("Invalid Input","Empty Field","You must fill the Password field.");
+                                    setInvalidPassword(true);
+                                    setisRegistering(false);
+                                    Toast.showToast("Invalid Input","Empty Field","You must fill the Password field. All fields must be filled without exception.");
                                     return;
                                 }else if(!passwordConfirmation.trim()){
                                     setInValidPasswordConfirmation(true);
-                                    Toast.showToast("Invalid Input","Empty Field","You must fill the Password Confirmation field.");
+                                    setisRegistering(false);
+                                    Toast.showToast("Invalid Input","Empty Field","You must fill the Password Confirmation field. All fields must be filled without exception.");
                                     return;
                                 }
                             }}

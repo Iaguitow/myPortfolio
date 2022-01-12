@@ -265,13 +265,11 @@ export default function Login({ navigation }){
                                     setIslogin(true);
                                     //verification if response type of is different of a object or object empy, then alert!
                                     dbLogin.postLogin(email,password).then(response =>{
-                                        if(typeof response === "boolean"){
-                                            setIslogin(false)
-                                            return;
-                                        }
                                         navigation.navigate("Drawer");
                                     }).catch(err =>{
+                                        setIslogin(false);
                                         console.log(err);
+                                        return;
                                     });
                                 }}
                                 marginTop={"10%"}

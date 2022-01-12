@@ -5,11 +5,11 @@ class Toasts extends Component {
 
   static showToast(alert, title = "", description = "") {
     switch (alert) {
-      case 'timeout exceeded':
+      case 'Error':
         Toast.show({
-            title: "Connection Failed, Timeout Exceeded",
+            title: title,
             status: "error",
-            description: "Check your Internet Connection or try later.",
+            description: description,
             duration: 2000000,
         })
       break;
