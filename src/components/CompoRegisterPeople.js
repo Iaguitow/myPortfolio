@@ -3,6 +3,7 @@ import { Animated, View, StyleSheet } from 'react-native';
 import { MaterialIcons } from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import GeneralUtils from "../utils/GeneralUtils"
+import Toast from "./CompoToast"
 import {
   KeyboardAvoidingView,
   Input,
@@ -38,7 +39,7 @@ export default function CompoRegisterPeople() {
 
 //////////////////////////// STATES AND FUNCTIONS TO DATEPICKER //////////////////////////////
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [dateToday, setDate] = useState(new Date(1598051730000));
+  const [dateToday, setDate] = useState(new Date());
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -328,37 +329,40 @@ export default function CompoRegisterPeople() {
                         <Button
                             onPress={() => {
                                 // TEST IMPLEMENTATION // 
-                                if(0 === 0){
-                                    if(!!name.trim() && !!phone.trim() && (phone.length === 11) && !!password1.trim() && !!passwordConfirmation.trim()){
-                                        if(password1 !== passwordConfirmation){
-                                            setInValidPasswordConfirmation(true);
-                                            console.log("Different password");
-                                            return;
-                                        }
-                                        if (!(GeneralUtils.validateEmail(email))) {
-                                            setInvalidEmail(true);
-                                            console.log("Wrong E-mail");
-                                            return;
-                                        };
-                                        console.log("ok");
-                                        return;
-                                    }else if(!name.trim()){ 
-                                        setInvalidName(true);
-                                        alert("fillup the name");
-                                        return;
-                                    }else if(!phone.trim() || (phone.length !== 11)){
-                                        setInvalidPhone(true);
-                                        alert("fillup phone")
-                                        return;
-                                    }else if(!password1.trim()){
-                                        setInvalidPassword(true)
-                                        alert("fillup password1");
-                                        return;
-                                    }else if(!passwordConfirmation.trim()){
+                                if(!!name.trim() && !!phone.trim() && (phone.length === 11) && !!password1.trim() && !!passwordConfirmation.trim()){
+                                    const dateEveryday = new Date();
+                                    if(password1 !== passwordConfirmation){
                                         setInValidPasswordConfirmation(true);
-                                        alert("fillup password confirmation");
+                                        Toast.showToast("Invalid Input","Password Invalid!","The Password Confirmation do not match to the first Password field.");
                                         return;
                                     }
+                                    if(!(GeneralUtils.validateEmail(email))) {
+                                        setInvalidEmail(true);
+                                        Toast.showToast("Invalid Input","Email Invalid!","Wrong Email, please check it.");
+                                        return;
+                                    }
+                                    if(dateToday.toString().substring(4, 15) === dateEveryday.toString().substring(4, 15)){
+                                        Toast.showToast("Invalid Input","Date of Birth Invalid!","Check your date of birth, it will not be available for anyone but is necessary.");
+                                        return;
+                                    }
+                                    alert("ok");
+                                    return;
+                                }else if(!name.trim()){ 
+                                    setInvalidName(true);
+                                    Toast.showToast("Invalid Input","Empty Field","You must fill the Name field.");
+                                    return;
+                                }else if(!phone.trim() || (phone.length !== 11)){
+                                    setInvalidPhone(true);
+                                    Toast.showToast("Invalid Input","Empty Field or Incorrect Number","You must fill the Phone field.");
+                                    return;
+                                }else if(!password1.trim()){
+                                    setInvalidPassword(true)
+                                    Toast.showToast("Invalid Input","Empty Field","You must fill the Password field.");
+                                    return;
+                                }else if(!passwordConfirmation.trim()){
+                                    setInValidPasswordConfirmation(true);
+                                    Toast.showToast("Invalid Input","Empty Field","You must fill the Password Confirmation field.");
+                                    return;
                                 }
                             }}
                             bgColor={"rgb(0,98,130)"}

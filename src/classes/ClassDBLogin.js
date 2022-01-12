@@ -1,5 +1,6 @@
 import axios from "axios";
 import LocalStorage from "../utils/LocalStorage";
+import Toast from "../components/CompoToast"
 
 class Login {
     postLogin(email, password){
@@ -24,15 +25,16 @@ class Login {
                     LocalStorage.storeUserSession(user.idpeople,user.email,user.name,user.tokenapi).then(() =>{
                         resolve(user);
                     });
-                    
                 }).catch(function (error){
-                    resolve(error);
+                    Toast.showToast(error.message);
+                    resolve(false);
                 }).finally(function (){
 
                 });
             }      
             catch (error) {
-                reject(error);
+                alert(error);
+                reject(false);
             }
         });
     }

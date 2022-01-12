@@ -71,12 +71,14 @@ export default function Login({ navigation }){
                     bgColor={"transparent"}
                     flex={1}
                     behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    
                 >{/*/////////////////////////////////// ANIMATION TO BOUNCE THE SCREEN WHEN IT LOADS /////////////////////////////////*/}
                     <Animated.View flex={1} style={{
                         opacity: opacity,
                         transform:[{translateY:offset.y}]
                     }}>
                         <Center flex={1} safeAreaTop>  </Center>
+
                         {/*/////////////////////////////////// LOGO IMAGE  /////////////////////////////////*/}
                         <Stack space={6} w="100%" alignItems="center" marginBottom={10}>
                             <Image
@@ -89,6 +91,7 @@ export default function Login({ navigation }){
                                 source= {require('../../assets/icon.png')}
                             />
                             <Text color={"#00b9f3"} fontWeight={"bold"} fontSize={16}> Welcome to IOwl </Text>
+
                             {/*/////////////////////////////////// EMAIL INPUT /////////////////////////////////*/}
                             <Animated.View style={{ transform: [{ scale: heightInput }] }}>
                                 <Input
@@ -138,6 +141,7 @@ export default function Login({ navigation }){
                                     placeholder="Email"
                                 />
                             </Animated.View>
+
                             {/*/////////////////////////////////// PASSWORD INPUT /////////////////////////////////*/}
                             <Animated.View style={{ transform: [{ scale: heightInput2 }] }}>
                                 <Input
@@ -204,7 +208,7 @@ export default function Login({ navigation }){
                                     }} 
                                     iconLeft 
                                     bgColor={"rgba(3,17,29,0.7)"} 
-                                    shadow={9} w={{ base: "45%" }} 
+                                    shadow={9} w={{ base: "43%" }} 
                                     h={{ base: "100%" }}
                                 >
                                     <HStack alignItems={"center"} space={1} paddingRight={2}>
@@ -223,6 +227,7 @@ export default function Login({ navigation }){
                                         </Text>
                                     </HStack>
                                 </Button>
+
                                 {/*/////////////////////////////////// LINKEDIN BUTTON /////////////////////////////////*/}
                                 <Button
                                     onPress={() => { 
@@ -233,7 +238,7 @@ export default function Login({ navigation }){
                                     }}
                                     iconLeft 
                                     bgColor={"rgba(3,17,29,0.7)"} 
-                                    w={{ base: "45%" }}
+                                    w={{ base: "43%" }}
                                     h={{ base: "100%" }}
                                     >
                                     <HStack alignItems={"center"} space={1} paddingRight={2}>
@@ -253,12 +258,17 @@ export default function Login({ navigation }){
                                     </HStack>
                                 </Button>
                             </HStack>
+
                             {/*/////////////////////////////////// BUTTON LOGIN /////////////////////////////////*/}
                             <Button
                                 onPress={() => { 
-                                    //setIslogin(true);
+                                    setIslogin(true);
                                     //verification if response type of is different of a object or object empy, then alert!
                                     dbLogin.postLogin(email,password).then(response =>{
+                                        if(typeof response === "boolean"){
+                                            setIslogin(false)
+                                            return;
+                                        }
                                         navigation.navigate("Drawer");
                                     }).catch(err =>{
                                         console.log(err);
