@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Animated, View, StyleSheet } from 'react-native';
 import { MaterialIcons } from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -18,39 +18,23 @@ export default function CompoRegisterPeople() {
 
 //////////////////////////// STATES FOR THE INPUTS //////////////////////////////
 // FULL NAME //
-  const [name, setName] = useState("");
-  const nameRef = useRef("");
+  const [invalidName, setInvalidName] = useState(false);
+  const [name, setName] = useState(""); 
 
 // EMAIL //
+  const [invalidEmail, setInvalidEmail] = useState(false);
   const [email, setEmail] = useState("");
-  const [emailValidStyle, setIvalidEmailStyle] = useState(false);
-  const emailRef = useRef("");
 
 // PHONE //
-  const [phone,Setphone] = useState(undefined);
-  const phoneRef = useRef(undefined);
-
+  const [InvalidPhone, setInvalidPhone] = useState(false);
+  const [phone,Setphone] = useState("");
 // PASSOWRD 01 //
+  const [InvalidPassword, setInvalidPassword] = useState(false);
   const [password1,SetPassword1] = useState("");
-  const password1Ref = useRef("");
 
 // PASSOWRD CONFIRMATION //
+  const [InvalidPasswordConfirmation, setInValidPasswordConfirmation] = useState(false)
   const [passwordConfirmation, SetPasswordConfirmation] = useState("");
-  const passwordConfirmationRef = useRef("");
-
-//////////////////////////// STATES FOR THE ANIMATION //////////////////////////////  
-  const [nameAnimation,] = useState(new Animated.Value(1));
-  const [emailAnimation,] = useState(new Animated.Value(1));
-  const [phoneAnimation,] = useState(new Animated.Value(1));
-  const [passwordAnimation,] = useState(new Animated.Value(1));
-  const [passwordAnimation2,] = useState(new Animated.Value(1));
-
-//////////////////////////// STATE FOR THE REGISTERING CONTROL //////////////////////////////
-  const [isRegistering, setisRegistering] = useState(false);
-
-  //////////////////////////// STATES FOR THE PASSWORD CONTROL //////////////////////////////
-  const [showPass, setShowPass] = useState(false)
-  const handleClick = () => setShowPass(!showPass)
 
 //////////////////////////// STATES AND FUNCTIONS TO DATEPICKER //////////////////////////////
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -69,6 +53,20 @@ export default function CompoRegisterPeople() {
     hideDatePicker();
   };
 
+//////////////////////////// STATES FOR THE ANIMATION //////////////////////////////  
+  const [nameAnimation,] = useState(new Animated.Value(1));
+  const [emailAnimation,] = useState(new Animated.Value(1));
+  const [phoneAnimation,] = useState(new Animated.Value(1));
+  const [passwordAnimation,] = useState(new Animated.Value(1));
+  const [passwordAnimation2,] = useState(new Animated.Value(1));
+
+//////////////////////////// STATE FOR THE REGISTERING CONTROL //////////////////////////////
+  const [isRegistering, setisRegistering] = useState(false);
+
+  //////////////////////////// STATES FOR THE PASSWORD CONTROL //////////////////////////////
+  const [showPass, setShowPass] = useState(false)
+  const handleClick = () => setShowPass(!showPass)
+
     return (
         <KeyboardAvoidingView
             flex={1}
@@ -81,10 +79,10 @@ export default function CompoRegisterPeople() {
 {/************************* FULL NAME INPUT *************************/}
                         <Animated.View style={{ transform: [{ scale: nameAnimation }] }}>
                             <Input
-                                onChangeText={(text) =>{
-                                    nameRef.current.Value = text;
+                                isInvalid={invalidName}
+                                onChangeText={(text) =>{                                    
+                                    setName(text);
                                 }}
-                                ref={nameRef}
                                 autoCompleteType='off'
                                 maxLength={50}
                                 onFocus={() => {
@@ -95,7 +93,6 @@ export default function CompoRegisterPeople() {
                                     }).start();
                                 }}
                                 onEndEditing={() => {
-                                    setName(nameRef.current.Value);
                                     Animated.timing(nameAnimation, {
                                         toValue: 1,
                                         duration: 300,
@@ -125,9 +122,9 @@ export default function CompoRegisterPeople() {
 {/************************* EMAIL INPUT *************************/}
                         <Animated.View style={{ transform: [{ scale: emailAnimation }] }}>
                             <Input
-                                ref={emailRef}
+                                isInvalid={invalidEmail}
                                 onChangeText={(text) =>{
-                                    emailRef.current.Value = text;
+                                    setEmail(text);
                                 }}
                                 autoCompleteType='off'
                                 maxLength={50}
@@ -139,7 +136,6 @@ export default function CompoRegisterPeople() {
                                     }).start();
                                 }}
                                 onEndEditing={() => {
-                                    setEmail(emailRef.current.Value);
                                     Animated.timing(emailAnimation, {
                                         toValue: 1,
                                         duration: 300,
@@ -148,8 +144,7 @@ export default function CompoRegisterPeople() {
                                 }}
                                 w={{
                                     base: "90%",
-                                }}
-                                isInvalid={emailValidStyle}
+                                }}                                
                                 autoCapitalize="none"
                                 borderRadius={100}
                                 borderColor={"rgb(0,185,243)"}
@@ -171,9 +166,9 @@ export default function CompoRegisterPeople() {
 {/************************* PHONE INPUT *************************/}
                         <Animated.View style={{ transform: [{ scale: phoneAnimation }] }}>
                             <Input
-                                ref={phoneRef}
-                                onChangeText={(text) => {
-                                    phoneRef.current.Value = text;
+                                isInvalid={InvalidPhone}
+                                onChangeText={(text) => {                                    
+                                    Setphone(text);
                                 }}
                                 keyboardType='numeric'
                                 maxLength={11}
@@ -185,7 +180,6 @@ export default function CompoRegisterPeople() {
                                     }).start();
                                 }}
                                 onEndEditing={() => {
-                                    Setphone(phoneRef.current.Value);
                                     Animated.timing(phoneAnimation, {
                                         toValue: 1,
                                         duration: 300,
@@ -216,9 +210,9 @@ export default function CompoRegisterPeople() {
 {/************************* PASSWORD INPUT *************************/}
                         <Animated.View style={{ transform: [{ scale: passwordAnimation }] }}>
                             <Input
-                                ref={password1Ref}
+                                isInvalid={InvalidPassword}
                                 onChangeText={(text) => {
-                                    password1Ref.current.Value = text;
+                                    SetPassword1(text);
                                 }}
                                 maxLength={25}
                                 onFocus={() => {
@@ -229,7 +223,6 @@ export default function CompoRegisterPeople() {
                                     }).start();
                                 }}
                                 onEndEditing={() => {
-                                    SetPassword1(password1Ref.current.Value);
                                     Animated.timing(passwordAnimation, {
                                         toValue: 1,
                                         duration: 300,
@@ -269,9 +262,9 @@ export default function CompoRegisterPeople() {
 {/************************* PASSWORD CONFIRMATION INPUT *************************/}
                         <Animated.View style={{ transform: [{ scale: passwordAnimation2 }] }}>
                             <Input
-                                ref={passwordConfirmationRef}
+                                isInvalid={InvalidPasswordConfirmation}
                                 onChangeText={(text)=>{
-                                    passwordConfirmationRef.current.Value = text;
+                                    SetPasswordConfirmation(text);
                                 }}
                                 maxLength={25}
                                 onFocus={() => {
@@ -282,7 +275,6 @@ export default function CompoRegisterPeople() {
                                     }).start();
                                 }}
                                 onEndEditing={() => {
-                                    SetPasswordConfirmation(passwordConfirmationRef.current.Value);
                                     Animated.timing(passwordAnimation2, {
                                         toValue: 1,
                                         duration: 300,
@@ -335,19 +327,39 @@ export default function CompoRegisterPeople() {
 {/************************* REGISTER BUTTON *************************/}
                         <Button
                             onPress={() => {
-
-                                // TETE IMPLEMENTATION // 
+                                // TEST IMPLEMENTATION // 
                                 if(0 === 0){
-                                    console.log("Password2:"+ passwordConfirmation);
-                                    return;
+                                    if(!!name.trim() && !!phone.trim() && (phone.length === 11) && !!password1.trim() && !!passwordConfirmation.trim()){
+                                        if(password1 !== passwordConfirmation){
+                                            setInValidPasswordConfirmation(true);
+                                            console.log("Different password");
+                                            return;
+                                        }
+                                        if (!(GeneralUtils.validateEmail(email))) {
+                                            setInvalidEmail(true);
+                                            console.log("Wrong E-mail");
+                                            return;
+                                        };
+                                        console.log("ok");
+                                        return;
+                                    }else if(!name.trim()){ 
+                                        setInvalidName(true);
+                                        alert("fillup the name");
+                                        return;
+                                    }else if(!phone.trim() || (phone.length !== 11)){
+                                        setInvalidPhone(true);
+                                        alert("fillup phone")
+                                        return;
+                                    }else if(!password1.trim()){
+                                        setInvalidPassword(true)
+                                        alert("fillup password1");
+                                        return;
+                                    }else if(!passwordConfirmation.trim()){
+                                        setInValidPasswordConfirmation(true);
+                                        alert("fillup password confirmation");
+                                        return;
+                                    }
                                 }
-                                if (!(GeneralUtils.validateEmail(email))) {
-                                    setIvalidEmailStyle(true);
-                                    console.log("Wrong E-mail");
-                                    return;
-                                };
-                                console.log("its all right");
-                                // implementation to the database.
                             }}
                             bgColor={"rgb(0,98,130)"}
                             marginTop={0}
