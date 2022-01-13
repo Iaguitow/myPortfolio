@@ -50,7 +50,7 @@ export default function RegisterPeople({ navigation }) {
             </VStack>
           </LinearGradient>
         </View>
-        <CompoRegisterPeople />
+        <CompoRegisterPeople navigation={navigation} />
       </View>
     </NativeBaseProvider>
   );

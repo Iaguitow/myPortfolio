@@ -21,28 +21,30 @@ class Toasts extends Component {
             duration: 2000000,
         })
       break;
-      case 'Refresh':
+      case 'User Not Found':
         Toast.show({
-            text: 'Data Updated!',
-            buttonText: "Okay",
-            duration: 3000,
-            //style: {width:500,alignItems:'center'}
+            title: "User Not Found!",
+            status: "error",
+            description: "Your E-mail or Password does not exist, please verify your credentials or try register yourself.",
+            duration: 2000000,
         })
-        break;
-      case 'Sucess':
+      break;
+      case "User Already Exists":
         Toast.show({
-            text: 'Sucessfully Updated.',
-            buttonText: "Okay",
-            duration: 3000
+            title: "User Already Exists",
+            status: "error",
+            description: "Your E-mail already exists, please verify your credentials or try register with another E-mail.",
+            duration: 2000000,
         })
-        break;
-      case 'WrongLogin':
+      break;
+      case "Sucessfully Registered":
         Toast.show({
-            text: 'Username or Password Incorrect',
-            buttonText: "Okay",
-            duration: 3000
+            title: "Sucessfully Registered",
+            status: "success",
+            description: "Sucessfully Registered, please finish your profile, then others will be able to see you.",
+            duration: 2000000,
         })
-        break;
+      break;
       default:
         Toast.show({
             text: 'Something Went Wrong',

@@ -5,6 +5,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import GeneralUtils from "../utils/GeneralUtils"
 import Toast from "./CompoToast"
 import dbPeople from "../classes/ClassDBPeople"
+import dbLogin from "../classes/ClassDBLogin"
 import {
   KeyboardAvoidingView,
   Input,
@@ -16,7 +17,7 @@ import {
   ScrollView
 } from "native-base";
 
-export default function CompoRegisterPeople() {
+export default function CompoRegisterPeople({ navigation }) {
 
 //////////////////////////// STATES FOR THE INPUTS //////////////////////////////
 // FULL NAME //
@@ -66,8 +67,8 @@ export default function CompoRegisterPeople() {
   const [isRegistering, setisRegistering] = useState(false);
 
   //////////////////////////// STATES FOR THE PASSWORD CONTROL //////////////////////////////
-  const [showPass, setShowPass] = useState(false)
-  const handleClick = () => setShowPass(!showPass)
+  const [showPass, setShowPass] = useState(false);
+  const handleClick = () => setShowPass(!showPass);
 
     return (
         <KeyboardAvoidingView
@@ -329,7 +330,6 @@ export default function CompoRegisterPeople() {
 {/************************* REGISTER BUTTON *************************/}
                         <Button
                             onPress={() => {
-                                // TEST IMPLEMENTATION //
                                 setisRegistering(true); 
                                 if(!!name.trim() && !!phone.trim() && (phone.length === 11) && !!password1.trim() && !!passwordConfirmation.trim()){
 
@@ -350,14 +350,28 @@ export default function CompoRegisterPeople() {
                                         return;
                                     }
                                     if(dateToday.toString().substring(4, 15) === dateEveryday.toString().substring(4, 15)){
+                                        setisRegistering(false);
                                         Toast.showToast("Invalid Input","Date of Birth Invalid!","Check your date of birth, it will not be available for anyone but is necessary.");
                                         return;
                                     }
-                                    dbPeople.postRegisterPeople(name,email,phone,password1,DOBformatted,dtactive).then(response =>{
-                                        navigation.navigate("Drawer");
+                                    dbPeople.postRegisterPeople(name.toUpperCase(),email.toLowerCase(),phone,password1,DOBformatted,dtactive).then(response =>{
+                                        
+                                        if(response === "User Already Exists"){
+                                            Toast.showToast("User Already Exists");
+                                            setisRegistering(false);
+                                            return;
+                                        }
+                                        Toast.showToast("Sucessfully Registered");
+                                        dbLogin.postLogin(email.toLowerCase(),password1).then(response =>{                                            
+                                            setisRegistering(false);
+                                            navigation.navigate("Drawer");
+                                        }).catch(erro =>{
+                                            alert(erro);
+                                            return;
+                                        });
+                                        
                                     }).catch(erro =>{
                                         setisRegistering(false);
-                                        console.log(erro);
                                         return;
                                     });
                                 }else if(!name.trim()){ 

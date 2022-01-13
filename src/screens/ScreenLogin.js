@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Animated } from "react-native";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
+import FootTabLogin from "../components/FootTabLogin";
+import dbLogin from "../classes/ClassDBLogin";
+import Toast from "../components/CompoToast"
 import { 
     Input, 
     Icon, 
@@ -14,9 +17,6 @@ import {
     Center, 
     Image 
 } from "native-base";
-
-import FootTabLogin from "../components/FootTabLogin";
-import dbLogin from "../classes/ClassDBLogin";
 
 export default function Login({ navigation }){
 
@@ -265,10 +265,15 @@ export default function Login({ navigation }){
                                     setIslogin(true);
                                     //verification if response type of is different of a object or object empy, then alert!
                                     dbLogin.postLogin(email,password).then(response =>{
+                                        if(typeof response === "string"){
+                                            Toast.showToast(response);
+                                            setIslogin(false);
+                                            return;
+                                        }
+                                        setIslogin(false);
                                         navigation.navigate("Drawer");
                                     }).catch(err =>{
                                         setIslogin(false);
-                                        console.log(err);
                                         return;
                                     });
                                 }}

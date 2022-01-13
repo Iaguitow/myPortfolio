@@ -8,18 +8,19 @@ class Login {
             try {
                 return axios({
                     method: "post",
-                    url: "http://192.168.1.144:3000/routes/login",
+                    //HOUSE IP
+                    //url: "http://192.168.1.144:3000/routes/login",
+                    //SCHOOL IP
+                    url: "http://172.26.192.140:3000/routes/login",
                     withCredentials: true,
                     params: {email, password},
                     headers: {
-                        'Access-Control-Allow-Origin': '*',
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
                     }
                 }).then(function (response){
                     if(typeof response.data !== "object"){
-                        alert(response.data);
-                        return;
+                        resolve(response.data);
                     }
                     const user = response.data[0];
                     LocalStorage.storeUserSession(user.idpeople,user.email,user.name,user.tokenapi).then(() =>{

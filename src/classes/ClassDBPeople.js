@@ -7,23 +7,19 @@ class People {
       try {
           return axios({
               method: "post",
-              url: "http://192.168.1.144:3000/routes/people",
+              //HOUSE IP
+              //url: "http://192.168.1.144:3000/routes/people",
+              //SCHOOL IP
+              url: "http://172.26.192.140:3000/routes/people",
               withCredentials: true,
               params: {name,email,phone,password,dateofbirth,dtactive},
               headers: {
-                  'Access-Control-Allow-Origin': '*',
                   'Accept': 'application/json',
                   'Content-Type': 'application/json',
               }
           }).then(function (response){
-              if(typeof response.data !== "object"){
-                  alert(response.data);
-                  return;
-              }
-              const user = response.data[0];
-              LocalStorage.storeUserSession(user.idpeople,user.email,user.name,user.tokenapi).then(() =>{
-                  resolve(user);
-              });
+              resolve(response.data);  
+            
           }).catch(function (error){
               Toast.showToast("Error","Connection Error",error.message+", If this error continue happening, please verify your connectionn or try again later. ");
               reject(false);
@@ -42,11 +38,13 @@ class People {
       try {
         return axios({
           method: 'get',
-          url: 'http://192.168.1.144:3000/routes/people',
+          //HOUSE IP
+          //url: "http://192.168.1.144:3000/routes/people",
+          //SCHOOL IP
+          url: "http://172.26.192.140:3000/routes/people",
           withCredentials: true,
           params: { listPeople, page, idPeople },
           headers: {
-            'Access-Control-Allow-Origin': '*',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           }
