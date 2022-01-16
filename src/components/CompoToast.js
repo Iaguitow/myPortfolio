@@ -42,7 +42,7 @@ class Toasts extends Component {
             title: "Sucessfully Registered",
             status: "success",
             description: "Sucessfully Registered, please finish your profile, then others will be able to see you.",
-            duration: 2000000,
+            duration: 5000,
         })
       break;
       default:

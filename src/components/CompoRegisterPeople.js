@@ -351,50 +351,44 @@ export default function CompoRegisterPeople({ navigation }) {
                                     }
                                     if(dateToday.toString().substring(4, 15) === dateEveryday.toString().substring(4, 15)){
                                         setisRegistering(false);
-                                        Toast.showToast("Invalid Input","Date of Birth Invalid!","Check your date of birth, it will not be available for anyone but is necessary.");
+                                        Toast.showToast("Invalid Input","Date of Birth Invalid!","Check your date of birth, it will not be available for anyone, but it is necessary.");
                                         return;
                                     }
+
                                     dbPeople.postRegisterPeople(name.toUpperCase(),email.toLowerCase(),phone,password1,DOBformatted,dtactive).then(response =>{
-                                        
                                         if(response === "User Already Exists"){
                                             Toast.showToast("User Already Exists");
                                             setisRegistering(false);
                                             return;
                                         }
                                         Toast.showToast("Sucessfully Registered");
-                                        dbLogin.postLogin(email.toLowerCase(),password1).then(response =>{                                            
-                                            setisRegistering(false);
-                                            navigation.navigate("Drawer");
+                                        dbLogin.postLogin(email.toLowerCase(),password1).then(response =>{
+                                            setTimeout(()=>{
+                                                navigation.navigate("Drawer");
+                                                setisRegistering(false);
+                                            },5000);                                            
                                         }).catch(erro =>{
                                             alert(erro);
                                             return;
                                         });
-                                        
                                     }).catch(erro =>{
                                         setisRegistering(false);
                                         return;
                                     });
                                 }else if(!name.trim()){ 
                                     setInvalidName(true);
-                                    setisRegistering(false);
-                                    Toast.showToast("Invalid Input","Empty Field","You must fill the Name field. All fields must be filled without exception.");
-                                    return;
+                                    Toast.showToast("Invalid Input","Empty Name","You must fill the Name field. All fields must be filled without exception.");
                                 }else if(!phone.trim() || (phone.length !== 11)){
                                     setInvalidPhone(true);
-                                    setisRegistering(false);
-                                    Toast.showToast("Invalid Input","Empty Field or Incorrect Number","You must fill the Phone field. All fields must be filled without exception.");
-                                    return;
+                                    Toast.showToast("Invalid Input","Empty Phone or Incorrect Number","You must fill the Phone field. All fields must be filled without exception.");
                                 }else if(!password1.trim()){
                                     setInvalidPassword(true);
-                                    setisRegistering(false);
-                                    Toast.showToast("Invalid Input","Empty Field","You must fill the Password field. All fields must be filled without exception.");
-                                    return;
+                                    Toast.showToast("Invalid Input","Empty Password","You must fill the Password field. All fields must be filled without exception.");
                                 }else if(!passwordConfirmation.trim()){
                                     setInValidPasswordConfirmation(true);
-                                    setisRegistering(false);
-                                    Toast.showToast("Invalid Input","Empty Field","You must fill the Password Confirmation field. All fields must be filled without exception.");
-                                    return;
+                                    Toast.showToast("Invalid Input","Empty Password Confirmation","You must fill the Password Confirmation field. All fields must be filled without exception.");
                                 }
+                                setisRegistering(false);
                             }}
                             bgColor={"rgb(0,98,130)"}
                             marginTop={0}

@@ -4,7 +4,8 @@ import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
 import FootTabLogin from "../components/FootTabLogin";
 import dbLogin from "../classes/ClassDBLogin";
-import Toast from "../components/CompoToast"
+import SocialMedia from "../classes/ClassSocialMedia";
+import Toast from "../components/CompoToast";
 import { 
     Input, 
     Icon, 
@@ -21,7 +22,10 @@ import {
 export default function Login({ navigation }){
 
     /////////////VARIABLE TO HANDLE THE EMAIL AND PASSWORD TO DB/////////////
+    const [invalidEmail, setInvalidEmail] = useState(false);
     const [email, setEmail] = useState("");
+
+    const [invalidPassword, setInvalidPassword] = useState(false);
     const [password, setPassword] = useState("");
 
     /////////////VARIABLE TO HANDLE THE PASSWORD VISUALIZATION /////////////
@@ -95,6 +99,7 @@ export default function Login({ navigation }){
                             {/*/////////////////////////////////// EMAIL INPUT /////////////////////////////////*/}
                             <Animated.View style={{ transform: [{ scale: heightInput }] }}>
                                 <Input
+                                    isInvalid={invalidEmail}
                                     onChangeText={(email) => {
                                         setEmail(email);
                                     }}
@@ -145,6 +150,7 @@ export default function Login({ navigation }){
                             {/*/////////////////////////////////// PASSWORD INPUT /////////////////////////////////*/}
                             <Animated.View style={{ transform: [{ scale: heightInput2 }] }}>
                                 <Input
+                                    isInvalid={invalidPassword}
                                     onChangeText={(password) =>{
                                         setPassword(password);
                                     }}
@@ -204,7 +210,10 @@ export default function Login({ navigation }){
                                         setSelectedSocialMedia(0);
                                         setTimeout(() =>{
                                             setSelectedSocialMedia(2);
-                                        },250)
+                                        },250);
+                                        /*SocialMedia.GoogleSignin().then(response =>{
+                                            console.log(response);
+                                        });*/
                                     }} 
                                     iconLeft 
                                     bgColor={"rgba(3,17,29,0.7)"} 
@@ -223,7 +232,7 @@ export default function Login({ navigation }){
                                             fontWeight={"bold"}
                                             fontSize={selectedSocialMedia===0?18:14}
                                         >
-                                            Google Sign Up
+                                            Google Sign In
                                         </Text>
                                     </HStack>
                                 </Button>
@@ -253,7 +262,7 @@ export default function Login({ navigation }){
                                             fontWeight={"bold"}
                                             fontSize={selectedSocialMedia===1?18:14}
                                         >
-                                            LinkedIn Sign Up
+                                            LinkedIn Sign In
                                         </Text>
                                     </HStack>
                                 </Button>
@@ -263,8 +272,9 @@ export default function Login({ navigation }){
                             <Button
                                 onPress={() => { 
                                     setIslogin(true);
-                                    //verification if response type of is different of a object or object empy, then alert!
-                                    dbLogin.postLogin(email,password).then(response =>{
+
+                                    if(!!email.trim() && !!password.trim()){
+                                        dbLogin.postLogin(email,password).then(response =>{
                                         if(typeof response === "string"){
                                             Toast.showToast(response);
                                             setIslogin(false);
@@ -274,8 +284,18 @@ export default function Login({ navigation }){
                                         navigation.navigate("Drawer");
                                     }).catch(err =>{
                                         setIslogin(false);
+                                        console.log(err);
                                         return;
                                     });
+                                    }
+                                    else if (!email.trim()){
+                                        setInvalidEmail(true);
+                                        Toast.showToast("Invalid Input","Empty E-mail","You must fill the E-mail field. All fields must be filled without exception.");
+                                    }else if (!password.trim()){
+                                        setInvalidPassword(true);
+                                        Toast.showToast("Invalid Input","Empty Password","You must fill the Password field. All fields must be filled without exception.");
+                                    }
+                                    setIslogin(false);
                                 }}
                                 marginTop={"10%"}
                                 alignSelf={"center"}
