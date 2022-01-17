@@ -1,4 +1,4 @@
-/*import * as Google from 'expo-google-app-auth';
+import * as Google from 'expo-google-app-auth';
 
 class SocialMedia{
     async GoogleSignin() {
@@ -10,11 +10,11 @@ class SocialMedia{
               });
               
               if (type === 'success') {
-                 /*`accessToken` is now valid and can be used to get data from the Google API with HTTP requests *//*
+                 /*`accessToken` is now valid and can be used to get data from the Google API with HTTP requests */
                 return user;
               }
               else{
-                  console.log("A Network Error Happens.");
+                  alert("A Network Error Happens.");
               }
 
         } catch (error) {
@@ -24,11 +24,12 @@ class SocialMedia{
 }
 
 var socialMedia = new SocialMedia();
-export default socialMedia;*/
+export default socialMedia;
 
 
 
 //host.exp.exponent
+/*
 import * as React from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
@@ -60,3 +61,4 @@ export default function App() {
     />
   );
 }
+*/

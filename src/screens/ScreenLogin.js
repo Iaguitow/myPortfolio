@@ -4,6 +4,7 @@ import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
 import FootTabLogin from "../components/FootTabLogin";
 import dbLogin from "../classes/ClassDBLogin";
+import dbPeople from "../classes/ClassDBPeople";
 import SocialMedia from "../classes/ClassSocialMedia";
 import Toast from "../components/CompoToast";
 import { 
@@ -211,9 +212,17 @@ export default function Login({ navigation }){
                                         setTimeout(() =>{
                                             setSelectedSocialMedia(2);
                                         },250);
-                                        /*SocialMedia.GoogleSignin().then(response =>{
-                                            console.log(response);
-                                        });*/
+                                        SocialMedia.GoogleSignin().then(response =>{
+                                            dbLogin.postLogin().then((response) => {
+                                                if(typeof response === "String"){
+                                                    if(response === "User Not Found"){
+                                                        dbPeople.postRegisterPeople().then((response) => {
+
+                                                        })
+                                                    }
+                                                }
+                                            });
+                                        });
                                     }} 
                                     iconLeft 
                                     bgColor={"rgba(3,17,29,0.7)"} 

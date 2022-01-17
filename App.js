@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from "./src/screens/ScreenLogin";
 import RegisterPeople from "./src/screens/ScreenRegisterPeople";
 import Drawer from "./src/components/Drawer";
-import Social from "./src/classes/ClassSocialMedia";
+//import Social from "./src/classes/ClassSocialMedia";
 
 LogBox.ignoreLogs(["The contrast ratio"]);
 
@@ -15,11 +15,11 @@ export default function App() {
   return (
     <NavigationContainer independent={true}>
       <StatusBar style="inverted"/>
-      <Stack.Navigator initialRouteName="Social" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Login' component={Login} />
         <Stack.Screen name='RegisterPeople' component={RegisterPeople}/>
         <Stack.Screen name='Drawer' component={Drawer}/>
-        <Stack.Screen name='Social' component={Social}/>
+        {/*<Stack.Screen name='Social' component={Social}/>**/}
       </Stack.Navigator>
     </NavigationContainer>
   )
