@@ -212,15 +212,27 @@ export default function Login({ navigation }){
                                         setTimeout(() =>{
                                             setSelectedSocialMedia(2);
                                         },250);
-                                        SocialMedia.GoogleSignin().then(response =>{
-                                            dbLogin.postLogin().then((response) => {
-                                                if(typeof response === "String"){
-                                                    if(response === "User Not Found"){
-                                                        dbPeople.postRegisterPeople().then((response) => {
+                                        SocialMedia.GoogleSignin().then(googleResponse =>{
+                                            dbLogin.postLogin(googleResponse.email,googleResponse.givenName).then((loginResponse) => {
+                                                if(typeof loginResponse === "string"){
+                                                    console.log(googleResponse);
+                                                    if(loginResponse === "User Not Found!"){
 
-                                                        })
+                                                        var dateToday = new Date();
+                                                        dateToday = (dateToday.getFullYear()+"-"+("0"+(dateToday.getMonth()+1)).slice(-2)+"-"+("0"+dateToday.getDate()).slice(-2));
+                                                        const name = googleResponse.familyName+", "+googleResponse.givenName;
+                                                        const email = googleResponse.email;
+                                                        const phone = null;
+                                                        const password = googleResponse.givenName;                                                        
+                                                        const dateofBirth = dateToday;
+                                                        const dtactive = dateToday;
+                                                        const googleId = googleResponse.id;
+                                                        dbPeople.postRegisterPeople(name,email,phone,password,dateofBirth,dtactive,googleId).then((response) => {
+                                                            //name,email,phone,password,dateofbirth,dtactive
+                                                        });
                                                     }
-                                                }
+                                                }                                                
+                                                navigation.navigate("Drawer");
                                             });
                                         });
                                     }} 

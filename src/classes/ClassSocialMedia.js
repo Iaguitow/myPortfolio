@@ -14,7 +14,7 @@ class SocialMedia{
                 return user;
               }
               else{
-                  alert("A Network Error Happens.");
+                  alert("A Network Error happens, try it later again.");
               }
 
         } catch (error) {

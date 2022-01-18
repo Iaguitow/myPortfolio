@@ -2,7 +2,7 @@ import axios from "axios";
 import Toast from "../components/CompoToast"
 
 class People {
-  postRegisterPeople(name,email,phone,password,dateofbirth,dtactive){
+  postRegisterPeople(name,email,phone,password,dateofbirth,dtactive,googleId = 0){
     return new Promise((resolve, reject) =>{
       try {
           return axios({
@@ -12,7 +12,7 @@ class People {
               //SCHOOL IP
               url: "http://172.26.192.140:3000/routes/people",
               withCredentials: true,
-              params: {name,email,phone,password,dateofbirth,dtactive},
+              params: {name,email,phone,password,dateofbirth,dtactive,googleId},
               headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json',
