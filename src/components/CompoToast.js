@@ -23,7 +23,7 @@ class Toasts extends Component {
       break;
       case 'User Not Found':
         Toast.show({
-            title: "User Not Found!",
+            title: "User Not Found",
             status: "error",
             description: "Your E-mail or Password does not exist, please verify your credentials or try register yourself.",
             duration: 2000000,
@@ -33,7 +33,7 @@ class Toasts extends Component {
         Toast.show({
             title: "User Already Exists",
             status: "error",
-            description: "Your E-mail already exists, please verify your credentials or try register with another E-mail.",
+            description: "Your E-mail already exists, please verify your credentials and try login normally, or try register with another E-mail.",
             duration: 2000000,
         })
       break;

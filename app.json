@@ -1,11 +1,13 @@
 {
   "expo": {
-    "name": "myPortfolio",
-    "slug": "myPortfolio",
+    "name": "IOwl",
+    "slug": "iowl",
+    "owner": "iaguitow",
     "version": "1.0.0",
     "userInterfaceStyle": "automatic",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "scheme": "iowl",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",

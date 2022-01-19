@@ -3,15 +3,15 @@ import LocalStorage from "../utils/LocalStorage";
 import Toast from "../components/CompoToast"
 
 class Login {
-    postLogin(email, password){
+    postLogin(email, password, googleAcessToken = ""){
         return new Promise((resolve, reject) =>{
             try {
                 return axios({
                     method: "post",
                     //HOUSE IP
-                    //url: "http://192.168.1.144:3000/routes/login",
+                    url: "http://192.168.1.144:3000/routes/login",
                     //SCHOOL IP
-                    url: "http://172.26.192.140:3000/routes/login",
+                    //url: "http://172.26.192.140:3000/routes/login",
                     withCredentials: true,
                     params: {email, password},
                     headers: {
@@ -23,9 +23,9 @@ class Login {
                         resolve(response.data);
                     }
                     const user = response.data[0];
-                    LocalStorage.storeUserSession(user.idpeople,user.email,user.name,user.tokenapi).then(() =>{
+                    LocalStorage.storeUserSession(user.idpeople,user.email,user.name,user.tokenapi, googleAcessToken).then(() =>{
                         resolve(user);
-                    });
+                    }).catch((error) => {reject(error)});
                 }).catch(function (error){
                     Toast.showToast("Error","Connection Error",error.message+", If this error continue happening, please verify your connectionn or try again later. ");
                     reject(false);

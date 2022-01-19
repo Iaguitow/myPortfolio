@@ -11,14 +11,20 @@ class SocialMedia{
               
               if (type === 'success') {
                  /*`accessToken` is now valid and can be used to get data from the Google API with HTTP requests */
-                return user;
+                const userInfo = {user,accessToken};
+                return userInfo;
+              }
+              else if(type === "cancel"){
+                  return type;
               }
               else{
-                  alert("A Network Error happens, try it later again.");
+                alert("Something Went Wrong");
+                return type;
               }
 
         } catch (error) {
-            alert(error);
+            alert(error+" A Network Error happens, try it later again.");
+            return error;
         }
     };
 }

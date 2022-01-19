@@ -7,6 +7,8 @@ import dbLogin from "../classes/ClassDBLogin";
 import dbPeople from "../classes/ClassDBPeople";
 import SocialMedia from "../classes/ClassSocialMedia";
 import Toast from "../components/CompoToast";
+import GeneralUtils from "../utils/GeneralUtils";
+
 import { 
     Input, 
     Icon, 
@@ -40,7 +42,7 @@ export default function Login({ navigation }){
     const [opacity] = useState(new Animated.Value(0));
     
     /////////////VARIABLE TO HANDLE THE STYLE CHANGING ON SOCIAL MEDIA BUTTONS /////////////
-    const [selectedSocialMedia,setSelectedSocialMedia] = useState(2);
+    const [isSignUping,setIsSignUping] = useState(false);
 
     /////////////VARIABLE TO HANDLE THE STYLE CHANGING ON LOGIN AND PASSWORD INPUTS /////////////
     const [borderFocusWidth, setBorderFocusWidth] = useState(1);
@@ -207,83 +209,93 @@ export default function Login({ navigation }){
                             <HStack space={1}>
                             {/*/////////////////////////////////// GOOGLE BUTTON /////////////////////////////////*/}
                                 <Button
-                                    onPress={() => { 
-                                        setSelectedSocialMedia(0);
-                                        setTimeout(() =>{
-                                            setSelectedSocialMedia(2);
-                                        },250);
+                                    isLoading={isSignUping}                                  
+                                    _loading={{
+                                        bg: "rgba(0,185,243,0.5)",
+                                        _text: { color: "rgb(0,185,243)", fontWeight: "bold", fontSize: "16" },
+                                        borderColor: "rgb(0,185,243)",
+                                        borderWidth: 1,
+                                    }}
+                                    _text={{
+                                        fontWeight: "bold",
+                                        fontSize: "16"
+                                    }}
+                                    _pressed={
+                                        {
+                                            bgColor: "rgba(0,185,243,0.5)",
+                                            borderColor: "rgba(0,185,243,0.5)"
+                                        }
+                                    }
+                                    onPress={() => {
+                                        setIsSignUping(true); 
                                         SocialMedia.GoogleSignin().then(googleResponse =>{
-                                            dbLogin.postLogin(googleResponse.email,googleResponse.givenName).then((loginResponse) => {
-                                                if(typeof loginResponse === "string"){
-                                                    console.log(googleResponse);
-                                                    if(loginResponse === "User Not Found!"){
-
-                                                        var dateToday = new Date();
-                                                        dateToday = (dateToday.getFullYear()+"-"+("0"+(dateToday.getMonth()+1)).slice(-2)+"-"+("0"+dateToday.getDate()).slice(-2));
-                                                        const name = googleResponse.familyName+", "+googleResponse.givenName;
-                                                        const email = googleResponse.email;
-                                                        const phone = null;
-                                                        const password = googleResponse.givenName;                                                        
-                                                        const dateofBirth = dateToday;
-                                                        const dtactive = dateToday;
-                                                        const googleId = googleResponse.id;
-                                                        dbPeople.postRegisterPeople(name,email,phone,password,dateofBirth,dtactive,googleId).then((response) => {
-                                                            //name,email,phone,password,dateofbirth,dtactive
-                                                        });
-                                                    }
-                                                }                                                
-                                                navigation.navigate("Drawer");
+                                            if(googleResponse === "cancel"){
+                                                setIsSignUping(false);
+                                                return;
+                                            }
+                                            var dateToday = new Date();
+                                            dateToday = (dateToday.getFullYear()+"-"+("0"+(dateToday.getMonth()+1)).slice(-2)+"-"+("0"+dateToday.getDate()).slice(-2));
+                                            const name = googleResponse.user.familyName+", "+googleResponse.user.givenName;
+                                            const email = googleResponse.user.email;
+                                            const phone = null;
+                                            const password = GeneralUtils.generatePassword(10);                                                        
+                                            const dateofBirth = dateToday;
+                                            const dtactive = dateToday;
+                                            const googleId = googleResponse.user.id;
+                                            const googleAcessToken = googleResponse.accessToken;
+                                            console.log(password);
+                                            dbPeople.postRegisterPeople(name.toUpperCase(),email.toLowerCase(),phone,password,dateofBirth,dtactive,googleId).then((response) => {
+                                                if(response === "User Already Exists"){
+                                                    Toast.showToast("User Already Exists");
+                                                    setIsSignUping(false);
+                                                    return;
+                                                 }
+                                                Toast.showToast("Sucessfully Registered");
+                                                dbLogin.postLogin(email.toLowerCase(),password.trim(), googleAcessToken).then(response =>{
+                                                    setTimeout(()=>{
+                                                        navigation.navigate("Drawer");
+                                                        setIsSignUping(false);
+                                                    },5000);                                            
+                                                }).catch(erro =>{
+                                                    alert(erro);
+                                                    setIsSignUping(false);
+                                                    return;
+                                                });
+                                            }).catch((error)=>{
+                                                console.log(error);
+                                                setIsSignUping(false);
                                             });
+                                            /*
+                                            if(typeof loginResponse === "string"){
+                                                alert(googleResponse);
+                                                if(loginResponse === "User Not Found!"){
+                                                    navigation.navigate("Drawer");
+                                                }
+                                            }*/                                                
+                                            
+                                        }).catch((error) =>{
+                                            alert(error);
+                                            setIsSignUping(false);
                                         });
                                     }} 
                                     iconLeft 
                                     bgColor={"rgba(3,17,29,0.7)"} 
-                                    shadow={9} w={{ base: "43%" }} 
+                                    shadow={9} w={{ base: "60%" }} 
                                     h={{ base: "100%" }}
                                 >
-                                    <HStack alignItems={"center"} space={1} paddingRight={2}>
+                                    <HStack alignItems={"flex-end"} space={1} paddingRight={2}>
                                         <Icon
-                                            color={selectedSocialMedia===0?"rgb(0,185,243)":"white"}
+                                            color={"white"}
                                             as={<AntDesign name="googleplus" />}
                                             size={7}
                                             ml="2"
                                         />
                                         <Text 
-                                            color={selectedSocialMedia===0?"rgb(0,185,243)":"white"} 
+                                            color={"white"} 
                                             fontWeight={"bold"}
-                                            fontSize={selectedSocialMedia===0?18:14}
+                                            fontSize={18}
                                         >
-                                            Google Sign In
-                                        </Text>
-                                    </HStack>
-                                </Button>
-
-                                {/*/////////////////////////////////// LINKEDIN BUTTON /////////////////////////////////*/}
-                                <Button
-                                    onPress={() => { 
-                                        setSelectedSocialMedia(1);
-                                        setTimeout(() => {
-                                            setSelectedSocialMedia(2);  
-                                        },250);
-                                    }}
-                                    iconLeft 
-                                    bgColor={"rgba(3,17,29,0.7)"} 
-                                    w={{ base: "43%" }}
-                                    h={{ base: "100%" }}
-                                    >
-                                    <HStack alignItems={"center"} space={1} paddingRight={2}>
-                                        <Icon
-                                            color={selectedSocialMedia===1?"rgb(0,185,243)":"white"}
-                                            as={<AntDesign name="linkedin-square" />}
-                                            size={7}
-                                            ml="2"
-                                        />
-                                        <Text 
-                                            color={selectedSocialMedia===1?"rgb(0,185,243)":"white"} 
-                                            fontWeight={"bold"}
-                                            fontSize={selectedSocialMedia===1?18:14}
-                                        >
-                                            LinkedIn Sign In
+                                            Google Sign Up
                                         </Text>
                                     </HStack>
                                 </Button>

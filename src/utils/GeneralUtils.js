@@ -9,6 +9,16 @@ class GeneralUtils {
         return false;
     };
 
+    generatePassword(length = 10){
+        const passwordPossibilities = "ABCDEFGHIJKLMNOPQRSTUVWYXZabcdefghijklmnopqrstuvwxyz0123456789!@#*";
+        let password = "";
+        for (let i = 0;i <= length; i++){
+            let letterAt = Math.floor(Math.random()*(passwordPossibilities.length+1));
+            password += passwordPossibilities.charAt(letterAt); 
+        }
+        return password;
+    }
+
 
 }
 

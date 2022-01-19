@@ -1,20 +1,21 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class LocalStorage {
-    async storeUserSession(idpeople,email,name,token){
+    async storeUserSession(idpeople,email,name,token, googleAcessToken){
         try {
             await AsyncStorage.setItem(
                 "jwt_token", JSON.stringify({
                     idpeople: idpeople,
                     email: email,
                     name: name,
-                    token: token
+                    token: token,
+                    googleAcessToken: googleAcessToken
                 })
             ).then(result =>{
                 return result;
             });
         } catch (error) {
-            alert(error);
+            return error;
         }
     }
     async retrieveUserSession(userSession = "jwt_token"){
