@@ -45,6 +45,14 @@ class Toasts extends Component {
             duration: 5000,
         })
       break;
+      case "Recovery Code":
+        Toast.show({
+            title: "Recovery Code",
+            status: "info",
+            description: "Your Recovery Code was sent to your registered mobile phone.",
+            duration: 2000000,
+        })
+      break;
       default:
         Toast.show({
             text: 'Something Went Wrong',

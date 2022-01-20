@@ -59,7 +59,7 @@ export default function FootTabLogin({ navigation }) {
               setSelected(1);
               setTimeout(()=>{
                   setSelected(2);
-                  //navigation.navigate("RegisterPeople");
+                  navigation.navigate("ScreenLoginRecovery");
                 },300);
               }}
           >
