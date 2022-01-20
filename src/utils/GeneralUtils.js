@@ -1,4 +1,14 @@
+import * as SMS from 'expo-sms';
+
 class GeneralUtils {
+
+    async sendSMS(code){
+        return await SMS.sendSMSAsync(
+            ['07497454528'],
+            'IOwl - Here is your Recovery Code: '+code,
+            
+        );
+    }
 
     validateEmail(email) {
         var re = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;

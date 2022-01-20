@@ -3,8 +3,7 @@ import React,{useState} from 'react';
 import {StyleSheet, Animated} from 'react-native'
 import { MaterialIcons } from "@expo/vector-icons";
 import Toast from "../components/CompoToast";
-import GeneratePassword from "../utils/GeneralUtils"
-import * as SMS from 'expo-sms';
+import GeneralUtils from "../utils/GeneralUtils"
 import {
     KeyboardAvoidingView,
     Input,
@@ -65,7 +64,7 @@ const [isResetingPassword,setIsResetingPassword] = useState(false);
                                     setEmail(text);
                                 }}
                                 autoCompleteType='off'
-                                maxLength={11}
+                                maxLength={50}
                                 onFocus={() => {
                                     Animated.timing(emailAnimation,{
                                         toValue: 1.1,
@@ -79,6 +78,7 @@ const [isResetingPassword,setIsResetingPassword] = useState(false);
                                         duration:300,
                                         useNativeDriver:true
                                     }).start();
+                                    setCode(GeneralUtils.generateResetCode(4));
                                 }}
                                 w={{
                                     base: "90%",
@@ -103,13 +103,20 @@ const [isResetingPassword,setIsResetingPassword] = useState(false);
 
 {/************************* CODE BUTTON *************************/}
                         <Button
-                            onPress={() => {                        
-                                Toast.showToast("Recovery Code");
-                                setIsSendingCode(true);
-                                setCode()
-                                setTimeout(() => {
-                                    setIsSendingCode(false);
-                                },5000);
+                            onPress={() => {
+                                if((!!email.trim()) && (GeneralUtils.validateEmail(email))){
+                                    Toast.showToast("Recovery Code");
+                                    setIsSendingCode(true);
+                                    GeneralUtils.sendSMS(code).then(response =>{
+                                        console.log(response);
+                                        setTimeout(() => {
+                                            setIsSendingCode(false);
+                                        },5000);
+                                        return;
+                                    });
+                                }
+                                setInvalidEmail(true);
+                                Toast.showToast("Invalid Input","Email Invalid!","Wrong Email, please check it. Probably you forgot to type a character or something.");                                
                             }}
                             bgColor={"rgb(0,98,130)"}
                             marginTop={0}
