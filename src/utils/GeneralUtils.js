@@ -1,14 +1,4 @@
-import * as SMS from 'expo-sms';
-
 class GeneralUtils {
-
-    async sendSMS(code){
-        return await SMS.sendSMSAsync(
-            ['07497454528'],
-            'IOwl - Here is your Recovery Code: '+code,
-            
-        );
-    }
 
     validateEmail(email) {
         var re = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
@@ -30,7 +20,7 @@ class GeneralUtils {
     }
 
     generateResetCode(length = 5){
-        const codePossibilities = "abcdefghijklmnopqrstuwxyz0123456789";
+        const codePossibilities = "ABCDEFGHIJKLMNOPQRSTUVWYXZ0123456789";
         let code = "";
         for(let i =0;i<=length;i++){
             let letterAt = Math.floor(Math.random()*(codePossibilities.length*1));

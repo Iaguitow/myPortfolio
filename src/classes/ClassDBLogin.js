@@ -39,6 +39,36 @@ class Login {
             }
         });
     }
+
+    getLoginRecovery(to, subject, text) {
+        return new Promise((resolve, reject) => {
+          try {
+            return axios({
+              method: 'get',
+              //HOUSE IP
+              url: "http://192.168.1.144:3000/routes/login/recovery",
+              //SCHOOL IP
+              //url: "http://172.26.192.140:3000/routes/login/recovery",
+              withCredentials: true,
+              params: { to, subject, text },
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              }
+            }).then(function (response) {
+              resolve(response.data);
+            }).catch(function (error) {
+              Toast.showToast("Error","Connection Error",error.message+", If this error continue happening, please verify your connectionn or try again later. ");
+              reject(false);
+            }).finally(function () {
+              
+            });
+          } catch (error) {
+            Toast.showToast("Error","Connection Error",error.message+", If this error continue happening, please verify your connectionn or try again later. ");
+            reject(false);
+          }
+        })
+      }
 }
 
 var login = new Login();

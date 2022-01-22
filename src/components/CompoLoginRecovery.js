@@ -3,7 +3,8 @@ import React,{useState} from 'react';
 import {StyleSheet, Animated} from 'react-native'
 import { MaterialIcons } from "@expo/vector-icons";
 import Toast from "../components/CompoToast";
-import GeneralUtils from "../utils/GeneralUtils"
+import GeneralUtils from "../utils/GeneralUtils";
+import dbLogin from "../classes/ClassDBLogin";
 import {
     KeyboardAvoidingView,
     Input,
@@ -39,6 +40,7 @@ const [invalidPasswordConfirmation, setInvalidPasswordConfirmation] = useState(f
 
 //STATE TO HANDLE THE SEND CODE BUTTON DESIGN WHEN PRESSED IT
 const [isSendingCode, setIsSendingCode] = useState(false);
+const [isSendCodeDisabled, setIsSendCodeDisabled] = useState(true);
 
 //STATE TO HANDLE THE SEND PASSWORD BUTTON DESGIN WHEN PRESSED IT
 const [isResetingPassword,setIsResetingPassword] = useState(false);
@@ -78,7 +80,17 @@ const [isResetingPassword,setIsResetingPassword] = useState(false);
                                         duration:300,
                                         useNativeDriver:true
                                     }).start();
+
+                                    if((!email.trim()) || (!GeneralUtils.validateEmail(email))){
+                                        Toast.showToast("Invalid Input","Email Invalid!","Wrong Email, please check it. Probably you forgot to type a character or something.");
+                                        setIsSendCodeDisabled(true);
+                                        setInvalidEmail(true);
+                                        return;
+                                    }
+                                    // TRY PUT THE SET CODE INSIDE THE CODE SEND BUTTON AND JUST AFTER CLEAN IT FROM THE MEMORY.
                                     setCode(GeneralUtils.generateResetCode(4));
+                                    setIsSendCodeDisabled(false);
+                                    setInvalidEmail(false);
                                 }}
                                 w={{
                                     base: "90%",
@@ -104,21 +116,27 @@ const [isResetingPassword,setIsResetingPassword] = useState(false);
 {/************************* CODE BUTTON *************************/}
                         <Button
                             onPress={() => {
+                                setIsSendingCode(true);
                                 if((!!email.trim()) && (GeneralUtils.validateEmail(email))){
-                                    Toast.showToast("Recovery Code");
-                                    setIsSendingCode(true);
-                                    GeneralUtils.sendSMS(code).then(response =>{
+                                    console.log("VERIFICATION - OK: " +email);
+                                    dbLogin.getLoginRecovery(email.trim(),"LOGIN RECOVERY.",code).then(response =>{
+                                        Toast.showToast("Recovery Code");
                                         console.log(response);
-                                        setTimeout(() => {
-                                            setIsSendingCode(false);
-                                        },5000);
-                                        return;
+                                        setIsSendingCode(false);
+
+                                    }).catch(err =>{
+                                        console.log(err);
+                                        setIsSendingCode(false);
                                     });
+                                    
+                                }else{
+                                    setIsSendingCode(false);
+                                    setInvalidEmail(true);
+                                    Toast.showToast("Invalid Input","Email Invalid!","Wrong Email, please check it. Probably you forgot to type a character or something.");
                                 }
-                                setInvalidEmail(true);
-                                Toast.showToast("Invalid Input","Email Invalid!","Wrong Email, please check it. Probably you forgot to type a character or something.");                                
                             }}
-                            bgColor={"rgb(0,98,130)"}
+                            isDisabled={isSendCodeDisabled}
+                            bgColor={isSendCodeDisabled===true?"rgba(0,98,130,0.4)":"rgb(0,98,130)"}
                             marginTop={0}
                             alignSelf={"center"}
                             borderRadius={100}
