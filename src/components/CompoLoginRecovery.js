@@ -27,23 +27,27 @@ const [invalidEmail,setInvalidEmail] = useState(false);
 const [codeAnimation,] = useState(new Animated.Value(1));
 const [code,setCode] = useState(0);
 const [invalidCode, setInvalidCode] = useState(false);
+const [isCodeInputDisabled, setIsCodeInputDisabled] = useState(true);
 
 //STATE TO HANDLE PASSWORD 1
 const [passwordAnimation] = useState(new Animated.Value(1));
 const [password1, setPassword1] = useState("");
 const [invalidPassword1, setInvalidPassword1] = useState(false);
+const [isPasswordInputDisabled, setIsPasswordInputDisabled] = useState(true);
 
 //STATE TO HANDLE PASSWORD 2
 const [passwordConfirmationAnimation] = useState(new Animated.Value(1));
 const [passwordConfirmation, setPasswordConfirmation] = useState("");
 const [invalidPasswordConfirmation, setInvalidPasswordConfirmation] = useState(false);
+const [isPasswordConfirmationInputDisabled, setIsPasswordConfirmationInputDisabled] = useState(true);
 
 //STATE TO HANDLE THE SEND CODE BUTTON DESIGN WHEN PRESSED IT
 const [isSendingCode, setIsSendingCode] = useState(false);
 const [isSendCodeDisabled, setIsSendCodeDisabled] = useState(true);
 
-//STATE TO HANDLE THE SEND PASSWORD BUTTON DESGIN WHEN PRESSED IT
+//STATE TO HANDLE THE SEND PASSWORD BUTTON ANIMATION WHEN PRESSED IT
 const [isResetingPassword,setIsResetingPassword] = useState(false);
+const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
 
 //STATES FOR THE PASSWORD CONTROL
   const [showPass, setShowPass] = useState(false);
@@ -88,7 +92,6 @@ const [isResetingPassword,setIsResetingPassword] = useState(false);
                                         return;
                                     }
                                     // TRY PUT THE SET CODE INSIDE THE CODE SEND BUTTON AND JUST AFTER CLEAN IT FROM THE MEMORY.
-                                    setCode(GeneralUtils.generateResetCode(4));
                                     setIsSendCodeDisabled(false);
                                     setInvalidEmail(false);
                                 }}
@@ -119,9 +122,13 @@ const [isResetingPassword,setIsResetingPassword] = useState(false);
                                 setIsSendingCode(true);
                                 if((!!email.trim()) && (GeneralUtils.validateEmail(email))){
                                     console.log("VERIFICATION - OK: " +email);
-                                    dbLogin.getLoginRecovery(email.trim(),"LOGIN RECOVERY.",code).then(response =>{
+                                    dbLogin.getLoginRecovery(email.trim(),"LOGIN RECOVERY.","HERE IS YOUR CODE: ").then(response =>{
+                                        if(typeof response === "string"){
+                                            Toast.showToast(response);
+                                            setIsSendingCode(false);
+                                            return;
+                                        }
                                         Toast.showToast("Recovery Code");
-                                        console.log(response);
                                         setIsSendingCode(false);
 
                                     }).catch(err =>{
@@ -168,12 +175,9 @@ const [isResetingPassword,setIsResetingPassword] = useState(false);
 {/************************* CODE INPUT *************************/}
                         <Animated.View style={{ transform: [{ scale: codeAnimation }] }}>
                             <Input
-                                isInvalid={invalidCode}
                                 onChangeText={(text) => {
                                     setCode(text);
                                 }}
-                                maxLength={25}
-                                keyboardType='numeric'
                                 onFocus={() => {
                                     Animated.timing(codeAnimation, {
                                         toValue: 1.1,
@@ -191,11 +195,15 @@ const [isResetingPassword,setIsResetingPassword] = useState(false);
                                 w={{
                                     base: "90%",
                                 }}
+                                isInvalid={invalidCode}
+                                maxLength={25}
+                                keyboardType='numeric'
+                                isDisabled={isCodeInputDisabled}
                                 autoCapitalize="none"
                                 selectionColor={"black"}
                                 color={"black"}
                                 borderRadius={100}
-                                borderColor={"rgb(0,185,243)"}
+                                borderColor={isCodeInputDisabled?"rgba(0,185,243,0.2)":"rgb(0,185,243)"}
                                 borderWidth={1}
                                 height={50}
                                 fontSize={"md"}
@@ -238,11 +246,12 @@ const [isResetingPassword,setIsResetingPassword] = useState(false);
                                 w={{
                                     base: "90%",
                                 }}
+                                isDisabled={isPasswordInputDisabled}
                                 autoCapitalize="none"
                                 selectionColor={"black"}
                                 color={"black"}
                                 borderRadius={100}
-                                borderColor={"rgb(0,185,243)"}
+                                borderColor={isPasswordInputDisabled?"rgba(0,185,243,0.2)":"rgb(0,185,243)"}
                                 borderWidth={1}
                                 height={50}
                                 fontSize={"md"}
@@ -255,7 +264,7 @@ const [isResetingPassword,setIsResetingPassword] = useState(false);
                                     />
                                 }
                                 InputRightElement={
-                                    <Button size="md" bg={"rgb(0,98,130)"} rounded="none" w="1/6" h="full" onPress={handleClick}>
+                                    <Button size="md" bg={isPasswordInputDisabled?"rgba(0,98,130,0.2)":"rgb(0,98,130)"} rounded="none" w="1/6" h="full" onPress={handleClick}>
                                         <Text color={"white"} fontWeight={"bold"} marginLeft={-2}> {showPass ? "Hide" : "Show"} </Text>
                                     </Button>
                                 }
@@ -264,14 +273,12 @@ const [isResetingPassword,setIsResetingPassword] = useState(false);
                             />
                         </Animated.View>
 
-{/************************* PASSWORD INPUT *************************/}
+{/************************* PASSWORD CONFIRMATION INPUT *************************/}
                         <Animated.View style={{ transform: [{ scale: passwordConfirmationAnimation }] }}>
                             <Input
-                                isInvalid={invalidPasswordConfirmation}
                                 onChangeText={(text) => {
                                     setPasswordConfirmation(text);
                                 }}
-                                maxLength={25}
                                 onFocus={() => {
                                     Animated.timing(passwordConfirmationAnimation, {
                                         toValue: 1.1,
@@ -290,11 +297,14 @@ const [isResetingPassword,setIsResetingPassword] = useState(false);
                                 w={{
                                     base: "90%",
                                 }}
+                                maxLength={25}
+                                isInvalid={invalidPasswordConfirmation}
+                                isDisabled={isPasswordConfirmationInputDisabled}
                                 autoCapitalize="none"
                                 selectionColor={"black"}
                                 color={"black"}
                                 borderRadius={100}
-                                borderColor={"rgb(0,185,243)"}
+                                borderColor={isPasswordConfirmationInputDisabled?"rgba(0,185,243,0.2)":"rgb(0,185,243)"}
                                 borderWidth={1}
                                 height={50}
                                 fontSize={"md"}
@@ -307,7 +317,7 @@ const [isResetingPassword,setIsResetingPassword] = useState(false);
                                     />
                                 }
                                 InputRightElement={
-                                    <Button size="md" bg={"rgb(0,98,130)"} rounded="none" w="1/6" h="full" onPress={handleClick}>
+                                    <Button size="md" bg={isPasswordConfirmationInputDisabled?"rgba(0,98,130,0.2)":"rgb(0,98,130)"} rounded="none" w="1/6" h="full" onPress={handleClick}>
                                         <Text color={"white"} fontWeight={"bold"} marginLeft={-2}> {showPass ? "Hide" : "Show"} </Text>
                                     </Button>
                                 }
@@ -325,7 +335,8 @@ const [isResetingPassword,setIsResetingPassword] = useState(false);
                                     setIsResetingPassword(false);
                                 },5000);
                             }}
-                            bgColor={"rgb(0,98,130)"}
+                            disabled={isResetButtonDisabled}
+                            bgColor={isResetButtonDisabled?"rgba(0,98,130,0.4)":"rgb(0,98,130)"}
                             marginTop={0}
                             alignSelf={"center"}
                             borderRadius={100}

@@ -44,11 +44,11 @@ class Login {
         return new Promise((resolve, reject) => {
           try {
             return axios({
-              method: 'get',
+              method: 'PUT',
               //HOUSE IP
-              url: "http://192.168.1.144:3000/routes/login/recovery",
+              url: "http://192.168.1.144:3000/routes/login/recoverycode",
               //SCHOOL IP
-              //url: "http://172.26.192.140:3000/routes/login/recovery",
+              //url: "http://172.26.192.140:3000/routes/login/recoverycode",
               withCredentials: true,
               params: { to, subject, text },
               headers: {

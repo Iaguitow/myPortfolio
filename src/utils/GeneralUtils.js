@@ -18,18 +18,6 @@ class GeneralUtils {
         }
         return password;
     }
-
-    generateResetCode(length = 5){
-        const codePossibilities = "ABCDEFGHIJKLMNOPQRSTUVWYXZ0123456789";
-        let code = "";
-        for(let i =0;i<=length;i++){
-            let letterAt = Math.floor(Math.random()*(codePossibilities.length*1));
-            code += codePossibilities.charAt(letterAt);
-        }
-        return code;
-    }
-
-
 }
 
 var generalUtils = new GeneralUtils();

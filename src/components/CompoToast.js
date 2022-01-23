@@ -49,7 +49,7 @@ class Toasts extends Component {
         Toast.show({
             title: "Recovery Code",
             status: "info",
-            description: "Your Recovery Code was sent to your registered mobile phone.",
+            description: "Your Recovery Code was sent to your registered E-mail.",
             duration: 2000000,
         })
       break;
