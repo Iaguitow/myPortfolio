@@ -339,7 +339,7 @@ export default function CompoRegisterPeople({ navigation }) {
 
                                     if(password1 !== passwordConfirmation){
                                         setInValidPasswordConfirmation(true);
-                                        Toast.showToast("Invalid Input","Password Invalid!","The Password Confirmation do not match to the first Password field. Make sure that both password are the same.");
+                                        Toast.showToast("Invalid Input","Password Invalid!","The Password Confirmation does not match to the first Password field. Make sure that both password are the same.");
                                         setisRegistering(false);
                                         return;
                                     }

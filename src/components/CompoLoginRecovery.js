@@ -22,6 +22,7 @@ export default function App() {
 const [emailAnimation,] = useState(new Animated.Value(1));
 const [email,setEmail] = useState("");
 const [invalidEmail,setInvalidEmail] = useState(false);
+const [isEmailDisabled, setIsEmailDisabled] = useState(false);
 
 //STATE TO HANDLE THE CODE VERIFICATION
 const [codeAnimation,] = useState(new Animated.Value(1));
@@ -64,13 +65,10 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
 
 {/***********************EMAIL INPUT*********************/}
                 <Animated.View style={{ transform:[{scale:emailAnimation}] }}>
-                            <Input
-                                isInvalid={invalidEmail}                            
+                            <Input                         
                                 onChangeText={(text) =>{
                                     setEmail(text);
                                 }}
-                                autoCompleteType='off'
-                                maxLength={50}
                                 onFocus={() => {
                                     Animated.timing(emailAnimation,{
                                         toValue: 1.1,
@@ -97,10 +95,14 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                                 }}
                                 w={{
                                     base: "90%",
-                                }}                                
+                                }}
+                                isInvalid={invalidEmail}
+                                autoCompleteType='off'
+                                maxLength={50}
+                                isDisabled={isEmailDisabled}                                
                                 autoCapitalize="none"
                                 borderRadius={100}
-                                borderColor={"rgb(0,185,243)"}
+                                borderColor={isEmailDisabled?"rgba(0,185,243,0.2)":"rgb(0,185,243)"}
                                 height={50}
                                 fontSize={"md"}
                                 InputLeftElement={
@@ -121,8 +123,7 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                             onPress={() => {
                                 setIsSendingCode(true);
                                 if((!!email.trim()) && (GeneralUtils.validateEmail(email))){
-                                    console.log("VERIFICATION - OK: " +email);
-                                    dbLogin.getLoginRecovery(email.trim(),"LOGIN RECOVERY.","HERE IS YOUR CODE: ").then(response =>{
+                                    dbLogin.getLoginRecoveryCode(email.trim(),"LOGIN RECOVERY.","HERE IS YOUR RECOVERY CODE: ").then(response =>{
                                         if(typeof response === "string"){
                                             Toast.showToast(response);
                                             setIsSendingCode(false);
@@ -130,6 +131,9 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                                         }
                                         Toast.showToast("Recovery Code");
                                         setIsSendingCode(false);
+                                        setIsEmailDisabled(true);
+                                        setIsCodeInputDisabled(false);
+                                        setIsSendCodeDisabled(true);
 
                                     }).catch(err =>{
                                         console.log(err);
@@ -191,13 +195,15 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                                         duration: 300,
                                         useNativeDriver: true
                                     }).start();
+                                    setIsPasswordInputDisabled(false);
+                                    setIsPasswordConfirmationInputDisabled(false);
+                                    setIsResetButtonDisabled(false);
                                 }}
                                 w={{
                                     base: "90%",
                                 }}
                                 isInvalid={invalidCode}
                                 maxLength={25}
-                                keyboardType='numeric'
                                 isDisabled={isCodeInputDisabled}
                                 autoCapitalize="none"
                                 selectionColor={"black"}
@@ -328,12 +334,40 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
 
 {/************************* RESET BUTTON *************************/}
                         <Button
-                            onPress={() => {                        
-                                Toast.showToast("Recovery Code");
+                            onPress={() => {        
+
                                 setIsResetingPassword(true);
-                                setTimeout(() => {
-                                    setIsResetingPassword(false);
-                                },5000);
+                                if(!!code.trim() && !!password1.trim() && !!passwordConfirmation.trim()){
+                                    if(password1 !== passwordConfirmation){
+                                        setIsResetingPassword(false);
+                                        setInvalidPasswordConfirmation(true);
+                                        Toast.showToast("Invalid Input","Password Invalid!","The Password Confirmation does not match to the first Password field. Make sure that both password are the same.");
+                                    }
+                                    dbLogin.postNewPassword(code,password1,email).then(response =>{
+                                        if(typeof response === "string"){
+                                            Toast.showToast(response);
+                                            setIsResetingPassword(false);
+                                            return;
+                                        }
+                                        Toast.showToast("Sucessfully Registered");
+
+                                    }).catch(err =>{
+                                        console.log(err);
+                                        setIsResetingPassword(false);
+                                    });
+                                }else if(!code.trim()){
+                                    Toast.showToast("Invalid Input", "Empty Code", "You must type a code, the recovery code was sent to your E-mail, please check this out.");
+                                    setInvalidCode(true);
+                                }else if(!password1.trim()){
+                                    Toast.showToast("Invalid Input", "Empty Password Confirmation", "You must fill the Password field. All fields must be filled without exception.");
+                                    setInvalidPassword1(true);
+                                    
+                                }else if(!passwordConfirmation.trim()){
+                                    Toast.showToast("Invalid Input","Empty Password Confirmation","You must fill the Password Confirmation field. All fields must be filled without exception.");
+                                    setInvalidPasswordConfirmation(true);
+                                    
+                                }
+                                setIsResetingPassword(false);
                             }}
                             disabled={isResetButtonDisabled}
                             bgColor={isResetButtonDisabled?"rgba(0,98,130,0.4)":"rgb(0,98,130)"}

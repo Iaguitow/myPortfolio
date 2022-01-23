@@ -15,6 +15,7 @@ class Toasts extends Component {
       break;
       case 'Invalid Input':
         Toast.show({
+            zIndex:100,
             title: title,
             status: "error",
             description: description,
