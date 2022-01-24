@@ -4,11 +4,9 @@ import ListPeople from "../components/CompoListPeople";
 
 const ScreenListPeople = () => {
     return (
-        <NativeBaseProvider>
-            <Center flex={1}>
-                <ListPeople />
-            </Center>
-        </NativeBaseProvider>
+        <Center flex={1}>
+            <ListPeople />
+        </Center>
     );
 };
 

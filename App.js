@@ -5,6 +5,11 @@ import Login from "./src/screens/ScreenLogin";
 import RegisterPeople from "./src/screens/ScreenRegisterPeople";
 import ScreenLoginRecovery from "./src/screens/ScreenLoginRecovery"
 import Drawer from "./src/components/Drawer";
+import {
+  NativeBaseProvider,
+  View,
+  Box
+} from 'native-base';
 //import Social from "./src/classes/ClassSocialMedia";
 
 LogBox.ignoreLogs(["The contrast ratio"]);
@@ -14,6 +19,8 @@ StatusBar.setHidden(false);
 
 export default function App() {
   return (
+    <NativeBaseProvider>
+    <View flex={1}>
     <NavigationContainer independent={true}>
       <StatusBar style="inverted"/>
       <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
@@ -24,5 +31,7 @@ export default function App() {
         {/*<Stack.Screen name='Social' component={Social}/>**/}
       </Stack.Navigator>
     </NavigationContainer>
+    </View>
+    </NativeBaseProvider>
   )
 }

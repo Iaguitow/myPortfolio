@@ -16,7 +16,7 @@ import {
     View
   } from "native-base";
 
-export default function App() {
+export default function App({ navigation }) {
 
 //STATES TO HANDLE THE EMAIL
 const [emailAnimation,] = useState(new Animated.Value(1));
@@ -342,6 +342,7 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                                         setIsResetingPassword(false);
                                         setInvalidPasswordConfirmation(true);
                                         Toast.showToast("Invalid Input","Password Invalid!","The Password Confirmation does not match to the first Password field. Make sure that both password are the same.");
+                                        return;
                                     }
                                     dbLogin.postNewPassword(code,password1,email).then(response =>{
                                         if(typeof response === "string"){
@@ -349,8 +350,8 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                                             setIsResetingPassword(false);
                                             return;
                                         }
+                                        navigation.goBack();
                                         Toast.showToast("Sucessfully Registered");
-
                                     }).catch(err =>{
                                         console.log(err);
                                         setIsResetingPassword(false);
@@ -358,8 +359,9 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                                 }else if(!code.trim()){
                                     Toast.showToast("Invalid Input", "Empty Code", "You must type a code, the recovery code was sent to your E-mail, please check this out.");
                                     setInvalidCode(true);
+                                    
                                 }else if(!password1.trim()){
-                                    Toast.showToast("Invalid Input", "Empty Password Confirmation", "You must fill the Password field. All fields must be filled without exception.");
+                                    Toast.showToast("Invalid Input", "Empty Password", "You must fill the Password field. All fields must be filled without exception.");
                                     setInvalidPassword1(true);
                                     
                                 }else if(!passwordConfirmation.trim()){

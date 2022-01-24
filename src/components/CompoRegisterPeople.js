@@ -310,7 +310,7 @@ export default function CompoRegisterPeople({ navigation }) {
                                     </Button>
                                 }
                                 placeholderTextColor={"rgb(0,185,243)"}
-                                placeholder="Confirm the Password"
+                                placeholder="Password Confirmation"
                             />
                         </Animated.View>
 

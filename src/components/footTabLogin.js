@@ -14,7 +14,6 @@ export default function FootTabLogin({ navigation }) {
   const [selected, setSelected] = React.useState(2);
   return (
       <Box flex={0} bg="transparent">
-        
         <HStack bg="rgb(3,17,29)" alignItems="center" shadow={6}>
         {/*****************************  REGISTER BUTTON *************************/}
           <Pressable
