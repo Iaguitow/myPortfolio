@@ -1,15 +1,15 @@
+//PACKAGES
 import { StatusBar,LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NativeBaseProvider, View} from 'native-base';
+import 'react-native-gesture-handler';
+
+// SCREENS
 import Login from "./src/screens/ScreenLogin";
 import RegisterPeople from "./src/screens/ScreenRegisterPeople";
 import ScreenLoginRecovery from "./src/screens/ScreenLoginRecovery"
-import Drawer from "./src/components/Drawer";
-import {
-  NativeBaseProvider,
-  View,
-  Box
-} from 'native-base';
+import Drawer from "./src/components/CompoDrawer";
 //import Social from "./src/classes/ClassSocialMedia";
 
 LogBox.ignoreLogs(["The contrast ratio"]);

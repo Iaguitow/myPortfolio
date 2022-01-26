@@ -15,7 +15,6 @@ import {
     Stack,
     Button,
     Text,
-    NativeBaseProvider,
     HStack,
     KeyboardAvoidingView,
     Center,
@@ -66,9 +65,8 @@ export default function Login({ navigation }) {
             })
         ]).start();
     }, [])
-
+    
     return (
-
         <LinearGradient style={{ flex: 1 }}
             colors={['#00b9f3', '#061b21', '#061b21']}
             start={[1, 0]} end={[0, 3]}
@@ -78,31 +76,22 @@ export default function Login({ navigation }) {
                 bgColor={"transparent"}
                 flex={1}
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
-
-            >{/*/////////////////////////////////// ANIMATION TO BOUNCE THE SCREEN WHEN IT LOADS /////////////////////////////////*/}
+            >
+{/*/////////////////////////////////// ANIMATION TO BOUNCE THE SCREEN WHEN IT LOADS /////////////////////////////////*/}
                 <Animated.View flex={1} style={{
                     opacity: opacity,
                     transform: [{ translateY: offset.y }]
                 }}>
                     <Center flex={1} safeAreaTop>  </Center>
 
-                    {/*/////////////////////////////////// LOGO IMAGE  /////////////////////////////////*/}
+{/*/////////////////////////////////// LOGO IMAGE  /////////////////////////////////*/}
                     <Stack space={6} w="100%" alignItems="center" marginBottom={10}>
-                        <Image
-                            marginTop={0}
-                            alignSelf={"center"}
-                            marginBottom={0}
-                            size={150}
-                            alt="fallback text"
-                            borderRadius={100}
-                            source={require('../../assets/icon.png')}
-                        />
+                        <Image {...styless.IMG} source={require('../../assets/icon.png')}/>
                         <Text color={"#00b9f3"} fontWeight={"bold"} fontSize={16}> Welcome to IOwl </Text>
 
-                        {/*/////////////////////////////////// EMAIL INPUT /////////////////////////////////*/}
+{/*/////////////////////////////////// EMAIL INPUT /////////////////////////////////*/}
                         <Animated.View style={{ transform: [{ scale: heightInput }] }}>
                             <Input
-                                isInvalid={invalidEmail}
                                 onChangeText={(email) => {
                                     setEmail(email);
                                 }}
@@ -126,34 +115,21 @@ export default function Login({ navigation }) {
                                     }
                                     ).start();
                                 }}
-                                w={{
-                                    base: "90%",
-                                }}
-                                autoCapitalize="none"
-                                selectionColor={"white"}
-                                color={"white"}
-                                borderRadius={100}
-                                borderColor={"rgb(0,185,243)"}
+                                {...styless.INPUTS}
+                                isInvalid={invalidEmail}
                                 borderWidth={borderFocusWidth}
-                                height={50}
-                                fontSize={"md"}
                                 InputLeftElement={
                                     <Icon
-                                        color={"rgb(0,185,243)"}
+                                        {...styless.ICON}
                                         as={<MaterialIcons name="person" />}
-                                        size={6}
-                                        ml="2"
                                     />
                                 }
-                                placeholderTextColor={"rgb(0,185,243)"}
-                                placeholder="Email"
                             />
                         </Animated.View>
 
-                        {/*/////////////////////////////////// PASSWORD INPUT /////////////////////////////////*/}
+{/*/////////////////////////////////// PASSWORD INPUT /////////////////////////////////*/}
                         <Animated.View style={{ transform: [{ scale: heightInput2 }] }}>
                             <Input
-                                isInvalid={invalidPassword}
                                 onChangeText={(password) => {
                                     setPassword(password);
                                 }}
@@ -178,23 +154,13 @@ export default function Login({ navigation }) {
                                     ).start();
                                 }}
                                 type={show ? "text" : "password"}
-                                w={{
-                                    base: "90%",
-                                }}
-                                autoCapitalize="none"
-                                selectionColor={"white"}
-                                color={"white"}
-                                borderRadius={100}
-                                borderColor={"rgb(0,185,243)"}
+                                isInvalid={invalidPassword}
                                 borderWidth={borderFocusWidth2}
-                                height={50}
-                                fontSize={"md"}
+                                {...styless.INPUTS}
                                 InputLeftElement={
                                     <Icon
-                                        color={"rgb(0,185,243)"}
                                         as={<MaterialIcons name="lock" />}
-                                        size={6}
-                                        ml="2"
+                                        {...styless.ICON}
                                     />
                                 }
                                 InputRightElement={
@@ -207,25 +173,11 @@ export default function Login({ navigation }) {
                             />
                         </Animated.View>
                         <HStack space={1}>
-                            {/*/////////////////////////////////// GOOGLE BUTTON /////////////////////////////////*/}
+
+{/*/////////////////////////////////// GOOGLE BUTTON /////////////////////////////////*/}
                             <Button
                                 isLoading={isSignUping}
-                                _loading={{
-                                    bg: "rgba(0,185,243,0.5)",
-                                    _text: { color: "rgb(0,185,243)", fontWeight: "bold", fontSize: "16" },
-                                    borderColor: "rgb(0,185,243)",
-                                    borderWidth: 1,
-                                }}
-                                _text={{
-                                    fontWeight: "bold",
-                                    fontSize: "16"
-                                }}
-                                _pressed={
-                                    {
-                                        bgColor: "rgba(0,185,243,0.5)",
-                                        borderColor: "rgba(0,185,243,0.5)"
-                                    }
-                                }
+                                {...styless.BUTTON.GOOGLE}
                                 onPress={() => {
                                     setIsSignUping(true);
                                     SocialMedia.GoogleSignin().then(googleResponse => {
@@ -265,30 +217,18 @@ export default function Login({ navigation }) {
                                             console.log(error);
                                             setIsSignUping(false);
                                         });
-                                        /*
-                                        if(typeof loginResponse === "string"){
-                                            alert(googleResponse);
-                                            if(loginResponse === "User Not Found!"){
-                                                navigation.navigate("Drawer");
-                                            }
-                                        }*/
-
                                     }).catch((error) => {
                                         alert(error);
                                         setIsSignUping(false);
                                     });
                                 }}
-                                iconLeft
-                                bgColor={"rgba(3,17,29,0.7)"}
-                                shadow={9} w={{ base: "60%" }}
-                                h={{ base: "100%" }}
                             >
-                                <HStack alignItems={"flex-end"} space={1} paddingRight={2}>
+                                <HStack alignItems={"flex-end"} space={3} paddingRight={2}>
                                     <Icon
-                                        color={"white"}
                                         as={<AntDesign name="googleplus" />}
+                                        color={"white"}
                                         size={7}
-                                        ml="2"
+                                        ml="3"
                                     />
                                     <Text
                                         color={"white"}
@@ -305,8 +245,13 @@ export default function Login({ navigation }) {
                         <Button
                             onPress={() => {
                                 setIslogin(true);
-
                                 if (!!email.trim() && !!password.trim()) {
+                                    if(!GeneralUtils.validateEmail(email.trim())){
+                                        setInvalidEmail(true);
+                                        Toast.showToast("Invalid Input", "Invalid Input", "Wrong Email, please check it. Probably you forgot to type a character or something.");
+                                        setIslogin(false);
+                                        return;
+                                    }
                                     dbLogin.postLogin(email, password).then(response => {
                                         if (typeof response === "string") {
                                             Toast.showToast(response);
@@ -324,38 +269,18 @@ export default function Login({ navigation }) {
                                 else if (!email.trim()) {
                                     setInvalidEmail(true);
                                     Toast.showToast("Invalid Input", "Empty E-mail", "You must fill the E-mail field. All fields must be filled without exception.");
+                                    setIslogin(false);
+                                    return;
                                 } else if (!password.trim()) {
                                     setInvalidPassword(true);
                                     Toast.showToast("Invalid Input", "Empty Password", "You must fill the Password field. All fields must be filled without exception.");
+                                    setIslogin(false);
+                                    return;
                                 }
-                                setIslogin(false);
+                                
                             }}
-                            marginTop={"10%"}
-                            alignSelf={"center"}
-                            borderRadius={100}
-                            borderColor={"rgb(0,185,243)"}
-                            borderWidth={2}
-                            w={{ base: "70%" }}
-                            height={50}
                             isLoading={isLogin}
-                            isLoadingText="Submitting"
-                            variant="outline"
-                            _loading={{
-                                bg: "rgba(0,185,243,0.5)",
-                                _text: { color: "rgb(0,185,243)", fontWeight: "bold", fontSize: "16" },
-                                borderColor: "rgb(0,185,243)",
-                                borderWidth: 1,
-                            }}
-                            _text={{
-                                fontWeight: "bold",
-                                fontSize: "16"
-                            }}
-                            _pressed={
-                                {
-                                    bgColor: "rgba(0,185,243,0.5)",
-                                    borderColor: "rgba(0,185,243,0.5)"
-                                }
-                            }
+                            {...styless.BUTTON.LOGIN}
                         >
                             Login...
                         </Button>
@@ -365,4 +290,78 @@ export default function Login({ navigation }) {
             <FootTabLogin navigation={navigation} />
         </LinearGradient>
     )
+}
+
+const styless = {
+    BUTTON:{
+        LOGIN:{
+            marginTop:"10%",
+            alignSelf:"center",
+            borderRadius:10,
+            borderColor:"rgb(0,185,243)",
+            borderWidth:2,
+            w:"60%",
+            height:50,
+            isLoadingText:"Submitting",
+            variant:"outline",
+            _loading:{
+                bg: "rgba(0,185,243,0.5)",
+                _text: { color: "rgb(0,185,243)", fontWeight: "bold", fontSize: "16" },
+                borderColor: "rgb(0,185,243)",
+                borderWidth: 1,
+            },
+            _text:{
+                fontWeight: "bold",
+                fontSize: "16"
+            },
+            _pressed:{
+                bgColor: "rgba(0,185,243,0.5)",
+                borderColor: "rgba(0,185,243,0.5)"
+            }
+        },
+        GOOGLE:{
+            _loading:{
+                bg: 'rgba(0,185,243,0.5)',
+                _text: { color: "rgb(0,185,243)", fontWeight: "bold", fontSize: "16" },
+                borderColor: "rgb(0,185,243)",
+                borderWidth: 1,
+            },
+            _text:{
+                fontWeight: "bold",
+                fontSize: "16"
+            },
+            _pressed:{
+                    bgColor: "rgba(0,185,243,0.5)",
+                    borderColor: "rgba(0,185,243,0.5)"
+                },
+            bgColor:'rgba(3,17,29,0.7)',
+            shadow:9, w:"60%",
+            h:"100%",
+        }
+    },
+    INPUTS:{
+        borderColor: "{'rgb(0,185,243)'}",
+        w:"90%",
+        autoCapitalize:"none",
+        selectionColor:'white',
+        color:'white',
+        borderRadius:10,
+        placeholderTextColor:"{'rgb(0,185,243)'}",
+        placeholder:"Email",
+        height:50,
+        fontSize:"md",
+    },
+    ICON:{
+        color:"{'rgb(0,185,243)'}",
+        size:6,
+        ml:"2"
+    },
+    IMG:{
+        marginTop:0,
+        alignSelf:"center",
+        marginBottom:0,
+        size:150,
+        alt:"LOGO",
+        borderRadius:100
+    }
 }

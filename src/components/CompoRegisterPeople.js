@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { Animated, View, StyleSheet } from 'react-native';
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import GeneralUtils from "../utils/GeneralUtils"
-import Toast from "./CompoToast"
-import dbPeople from "../classes/ClassDBPeople"
-import dbLogin from "../classes/ClassDBLogin"
+import GeneralUtils from "../utils/GeneralUtils";
+import Toast from "./CompoToast";
+import dbPeople from "../classes/ClassDBPeople";
+import dbLogin from "../classes/ClassDBLogin";
 import {
   KeyboardAvoidingView,
   Input,
   Icon,
   Stack,
-  HStack,
   Button,
   Text,
   ScrollView
@@ -41,18 +40,16 @@ export default function CompoRegisterPeople({ navigation }) {
 
 //////////////////////////// STATES AND FUNCTIONS TO DATEPICKER //////////////////////////////
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isDatePickerSelected, setDatePickerSelected] = useState(false);
   const [dateToday, setDate] = useState(new Date());
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
 
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
 
   const handleConfirm = (date) => {
-    setDate(date)
+    setDate(date);
+    setDatePickerSelected(true)
     hideDatePicker();
   };
 
@@ -82,12 +79,9 @@ export default function CompoRegisterPeople({ navigation }) {
 {/************************* FULL NAME INPUT *************************/}
                         <Animated.View style={{ transform: [{ scale: nameAnimation }] }}>
                             <Input
-                                isInvalid={invalidName}
                                 onChangeText={(text) =>{                                    
                                     setName(text);
                                 }}
-                                autoCompleteType='off'
-                                maxLength={50}
                                 onFocus={() => {
                                     Animated.timing(nameAnimation, {
                                         toValue: 1.1,
@@ -102,22 +96,15 @@ export default function CompoRegisterPeople({ navigation }) {
                                         useNativeDriver: true
                                     }).start();
                                 }}
-                                w={{
-                                    base: "90%",
-                                }}
-                                borderRadius={100}
-                                borderColor={"rgb(0,185,243)"}
-                                height={50}
-                                fontSize={"md"}
                                 InputLeftElement={
                                     <Icon
-                                        color={"rgb(0,185,243)"}
-                                        as={<MaterialIcons name="person" />}
-                                        size={6}
-                                        ml="2"
+                                        as={<MaterialIcons name='person' />}
+                                        {...styless.ICON}
                                     />
                                 }
-                                placeholderTextColor={"rgb(0,185,243)"}
+                                isInvalid={invalidName}
+                                {...styless.INPUT}
+                                maxLength={50}
                                 placeholder="Full Name"
                             />
                         </Animated.View>
@@ -125,12 +112,9 @@ export default function CompoRegisterPeople({ navigation }) {
 {/************************* EMAIL INPUT *************************/}
                         <Animated.View style={{ transform: [{ scale: emailAnimation }] }}>
                             <Input
-                                isInvalid={invalidEmail}
                                 onChangeText={(text) =>{
                                     setEmail(text);
                                 }}
-                                autoCompleteType='off'
-                                maxLength={50}
                                 onFocus={() => {
                                     Animated.timing(emailAnimation, {
                                         toValue: 1.1,
@@ -145,36 +129,25 @@ export default function CompoRegisterPeople({ navigation }) {
                                         useNativeDriver: true
                                     }).start();
                                 }}
-                                w={{
-                                    base: "90%",
-                                }}                                
-                                autoCapitalize="none"
-                                borderRadius={100}
-                                borderColor={"rgb(0,185,243)"}
-                                height={50}
-                                fontSize={"md"}
                                 InputLeftElement={
                                     <Icon
-                                        color={"rgb(0,185,243)"}
                                         as={<MaterialIcons name="mail" />}
-                                        size={6}
-                                        ml="2"
+                                        {...styless.ICON}
                                     />
                                 }
-                                placeholderTextColor={"rgb(0,185,243)"}
+                                isInvalid={invalidEmail}
+                                {...styless.INPUT}
                                 placeholder="Email"
+                                maxLength={50}
                             />
                         </Animated.View>
 
 {/************************* PHONE INPUT *************************/}
                         <Animated.View style={{ transform: [{ scale: phoneAnimation }] }}>
                             <Input
-                                isInvalid={InvalidPhone}
                                 onChangeText={(text) => {                                    
                                     Setphone(text);
                                 }}
-                                keyboardType='numeric'
-                                maxLength={11}
                                 onFocus={() => {
                                     Animated.timing(phoneAnimation, {
                                         toValue: 1.1,
@@ -189,35 +162,27 @@ export default function CompoRegisterPeople({ navigation }) {
                                         useNativeDriver: true
                                     }).start();
                                 }}
-                                w={{
-                                    base: "90%",
-                                }}
-                                type='1234567890'
-                                borderRadius={100}
-                                borderColor={"rgb(0,185,243)"}
-                                height={50}
-                                fontSize={"md"}
                                 InputLeftElement={
                                     <Icon
-                                        color={"rgb(0,185,243)"}
                                         as={<MaterialIcons name="phone" />}
-                                        size={6}
-                                        ml="2"
+                                        {...styless.ICON}
                                     />
                                 }
-                                placeholderTextColor={"rgb(0,185,243)"}
+                                isInvalid={InvalidPhone}
+                                {...styless.INPUT}
+                                keyboardType='numeric'
                                 placeholder="Phone"
+                                maxLength={11}
                             />
                         </Animated.View>
 
 {/************************* PASSWORD INPUT *************************/}
                         <Animated.View style={{ transform: [{ scale: passwordAnimation }] }}>
                             <Input
-                                isInvalid={InvalidPassword}
                                 onChangeText={(text) => {
                                     SetPassword1(text);
                                 }}
-                                maxLength={25}
+                                
                                 onFocus={() => {
                                     Animated.timing(passwordAnimation, {
                                         toValue: 1.1,
@@ -232,24 +197,11 @@ export default function CompoRegisterPeople({ navigation }) {
                                         useNativeDriver: true
                                     }).start();
                                 }}
-                                type={showPass ? "text" : "password"}
-                                w={{
-                                    base: "90%",
-                                }}
-                                autoCapitalize="none"
-                                selectionColor={"black"}
-                                color={"black"}
-                                borderRadius={100}
-                                borderColor={"rgb(0,185,243)"}
-                                borderWidth={1}
-                                height={50}
-                                fontSize={"md"}
+
                                 InputLeftElement={
                                     <Icon
-                                        color={"rgb(0,185,243)"}
                                         as={<MaterialIcons name="lock" />}
-                                        size={6}
-                                        ml="2"
+                                        {...styless.ICON}
                                     />
                                 }
                                 InputRightElement={
@@ -257,19 +209,20 @@ export default function CompoRegisterPeople({ navigation }) {
                                         <Text color={"white"} fontWeight={"bold"} marginLeft={-2}> {showPass ? "Hide" : "Show"} </Text>
                                     </Button>
                                 }
-                                placeholderTextColor={"rgb(0,185,243)"}
+                                type={showPass ? "text" : "password"}
+                                isInvalid={InvalidPassword}
+                                {...styless.INPUT}
                                 placeholder="Password"
+                                maxLength={25}
                             />
                         </Animated.View>
 
 {/************************* PASSWORD CONFIRMATION INPUT *************************/}
                         <Animated.View style={{ transform: [{ scale: passwordAnimation2 }] }}>
                             <Input
-                                isInvalid={InvalidPasswordConfirmation}
                                 onChangeText={(text)=>{
                                     SetPasswordConfirmation(text);
                                 }}
-                                maxLength={25}
                                 onFocus={() => {
                                     Animated.timing(passwordAnimation2, {
                                         toValue: 1.1,
@@ -284,24 +237,10 @@ export default function CompoRegisterPeople({ navigation }) {
                                         useNativeDriver: true
                                     }).start();
                                 }}
-                                type={showPass ? "text" : "password"}
-                                w={{
-                                    base: "90%",
-                                }}
-                                autoCapitalize="none"
-                                selectionColor={"black"}
-                                color={"black"}
-                                borderRadius={100}
-                                borderColor={"rgb(0,185,243)"}
-                                borderWidth={1}
-                                height={50}
-                                fontSize={"md"}
                                 InputLeftElement={
                                     <Icon
-                                        color={"rgb(0,185,243)"}
                                         as={<MaterialIcons name="lock" />}
-                                        size={6}
-                                        ml="2"
+                                        {...styless.ICON}
                                     />
                                 }
                                 InputRightElement={
@@ -309,15 +248,30 @@ export default function CompoRegisterPeople({ navigation }) {
                                         <Text color={"white"} fontWeight={"bold"} marginLeft={-2}> {showPass ? "Hide" : "Show"} </Text>
                                     </Button>
                                 }
-                                placeholderTextColor={"rgb(0,185,243)"}
+                                type={showPass ? "text" : "password"}
+                                isInvalid={InvalidPasswordConfirmation}
+                                maxLength={25}
                                 placeholder="Password Confirmation"
+                                {...styless.INPUT}
                             />
                         </Animated.View>
 
 {/************************* DATE OF BIRTH BUTTON *************************/}
-                        <HStack space={2} alignItems={"center"}>
-                            <Text style={styles.TextDateofBirth}>Date of Birth:</Text>
-                            <Button onPress={showDatePicker} bg={"rgb(0,98,130)"} _text={{ fontWeight: "bold" }}>{dateToday.toString().substring(4, 15)}</Button>
+                        <View alignItems={"center"}>
+                        <Stack>
+                            <Input
+                                onTouchStart={()=>{setDatePickerVisibility(true);}}
+                                borderWidth={isDatePickerVisible?3:1}
+                                {...styless.DATEOFBIRTH}
+                                InputLeftElement={
+                                    <Icon
+                                        as={<AntDesign name="calendar" />}
+                                        {...styless.ICON}
+                                    />
+                                }
+                            >
+                                {isDatePickerSelected && dateToday.toString().substring(4, 15)}
+                            </Input>
                             <DateTimePickerModal
                                 isVisible={isDatePickerVisible}
                                 mode="date"
@@ -325,7 +279,8 @@ export default function CompoRegisterPeople({ navigation }) {
                                 onCancel={hideDatePicker}
                                 locale="en_GB"
                             />
-                        </HStack>
+                            </Stack>
+                        </View>
 
 {/************************* REGISTER BUTTON *************************/}
                         <Button
@@ -390,31 +345,8 @@ export default function CompoRegisterPeople({ navigation }) {
                                 }
                                 setisRegistering(false);
                             }}
-                            bgColor={"rgb(0,98,130)"}
-                            marginTop={0}
-                            alignSelf={"center"}
-                            borderRadius={100}
-                            borderColor={"white"}
-                            w={{ base: "70%" }}
-                            height={50}
                             isLoading={isRegistering}
-                            isLoadingText="Submitting"
-                            variant="outline"
-                            _loading={{
-                                bg: "rgba(0,185,243,0.5)",
-                                _text: { color: "rgb(0,185,243)", fontWeight: "bold", fontSize: "16" },
-                                borderWidth: 1,
-                            }}
-                            _text={{
-                                fontWeight: "bold",
-                                fontSize: "16",
-                                color: "white"
-                            }}
-                            _pressed={
-                                {
-                                    bgColor: "rgba(0,185,243,0.5)",
-                                }
-                            }
+                            {...styless.BUTTON}
                         >
                             Register
                         </Button>
@@ -425,10 +357,60 @@ export default function CompoRegisterPeople({ navigation }) {
     )
 }
 
-const styles = StyleSheet.create({
-    TextDateofBirth: {
-      fontWeight: "bold",
-      fontSize: 18,
-      color: "rgb(0,185,243)"
-    }
-  });
+const styless = {
+        ICON:{
+            color:"rgb(0,185,243)",
+            size:6,
+            ml:"2"
+        },
+        INPUT:{
+            w:"90%",
+            autoCapitalize:"none",
+            selectionColor:"black",
+            color:"black",
+            borderRadius:10,
+            borderColor:"rgb(0,185,243)",
+            borderWidth:1,
+            height:50,
+            fontSize:"md",
+            placeholderTextColor:"rgb(0,185,243)",
+            autoCompleteType:'off'
+        },
+        DATEOFBIRTH:{
+            w:"90%",
+            isReadOnly:true,
+            autoCapitalize:"none",
+            selectionColor:"black",
+            color:"black",
+            borderRadius:10,
+            borderColor:"rgb(0,185,243)",
+            height:50,
+            fontSize:"md",
+            placeholderTextColor:"rgb(0,185,243)",
+            placeholder:"Date of Birth"
+        },
+        BUTTON:{
+            bgColor:"rgb(0,98,130)",
+            marginTop:0,
+            alignSelf:"center",
+            borderRadius:10,
+            borderColor:"white",
+            w: "70%",
+            height:50,
+            isLoadingText:"Submitting",
+            variant:"outline",
+            _loading:{
+                bg: "rgba(0,185,243,0.5)",
+                _text: { color: "rgb(0,185,243)", fontWeight: "bold", fontSize: "16" },
+                borderWidth: 1,
+            },
+            _text:{
+                fontWeight: "bold",
+                fontSize: "16",
+                color: "white"
+            },
+            _pressed:{
+                gColor: "rgba(0,185,243,0.5)",
+            }
+        }
+  }

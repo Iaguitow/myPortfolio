@@ -93,18 +93,11 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                                     setIsSendCodeDisabled(false);
                                     setInvalidEmail(false);
                                 }}
-                                w={{
-                                    base: "90%",
-                                }}
                                 isInvalid={invalidEmail}
-                                autoCompleteType='off'
-                                maxLength={50}
-                                isDisabled={isEmailDisabled}                                
-                                autoCapitalize="none"
-                                borderRadius={100}
+                                isDisabled={isEmailDisabled}
                                 borderColor={isEmailDisabled?"rgba(0,185,243,0.2)":"rgb(0,185,243)"}
-                                height={50}
-                                fontSize={"md"}
+                                maxLength={50}
+                                {...styless.INPUT}
                                 InputLeftElement={
                                     <Icon
                                         color={"rgb(0,185,243)"}
@@ -113,8 +106,6 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                                         ml="2"
                                     />
                                 }
-                                placeholderTextColor={"rgb(0,185,243)"}
-                                placeholder=" Type E-mail registered"
                             />
                         </Animated.View>
 
@@ -146,32 +137,10 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                                     Toast.showToast("Invalid Input","Email Invalid!","Wrong Email, please check it. Probably you forgot to type a character or something.");
                                 }
                             }}
-                            isDisabled={isSendCodeDisabled}
-                            bgColor={isSendCodeDisabled===true?"rgba(0,98,130,0.4)":"rgb(0,98,130)"}
-                            marginTop={0}
-                            alignSelf={"center"}
-                            borderRadius={100}
-                            borderColor={"white"}
-                            w={{ base: "70%" }}
-                            height={50}
                             isLoading={isSendingCode}
-                            isLoadingText="Submitting"
-                            variant="outline"
-                            _loading={{
-                                bg: "rgba(0,185,243,0.5)",
-                                _text: { color: "rgb(0,185,243)", fontWeight: "bold", fontSize: "16" },
-                                borderWidth: 1,
-                            }}
-                            _text={{
-                                fontWeight: "bold",
-                                fontSize: "16",
-                                color: "white"
-                            }}
-                            _pressed={
-                                {
-                                    bgColor: "rgba(0,185,243,0.5)",
-                                }
-                            }
+                            isDisabled={isSendCodeDisabled}
+                            bgColor={isSendCodeDisabled?"rgba(0,98,130,0.4)":"rgb(0,98,130)"}
+                            {...styless.BUTTON}
                         >
                             Send Code
                         </Button>
@@ -199,20 +168,12 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                                     setIsPasswordConfirmationInputDisabled(false);
                                     setIsResetButtonDisabled(false);
                                 }}
-                                w={{
-                                    base: "90%",
-                                }}
                                 isInvalid={invalidCode}
-                                maxLength={25}
                                 isDisabled={isCodeInputDisabled}
-                                autoCapitalize="none"
-                                selectionColor={"black"}
-                                color={"black"}
-                                borderRadius={100}
                                 borderColor={isCodeInputDisabled?"rgba(0,185,243,0.2)":"rgb(0,185,243)"}
-                                borderWidth={1}
-                                height={50}
-                                fontSize={"md"}
+                                {...styless.INPUT}
+                                maxLength={25}
+                                placeholder="Verification Code"
                                 InputLeftElement={
                                     <Icon
                                         color={"rgb(0,185,243)"}
@@ -221,19 +182,16 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                                         ml="2"
                                     />
                                 }
-                                placeholderTextColor={"rgb(0,185,243)"}
-                                placeholder="Verification Code"
+
                             />
                         </Animated.View>
 
 {/************************* PASSWORD INPUT *************************/}
                         <Animated.View style={{ transform: [{ scale: passwordAnimation }] }}>
                             <Input
-                                isInvalid={invalidPassword1}
                                 onChangeText={(text) => {
                                     setPassword1(text);
                                 }}
-                                maxLength={25}
                                 onFocus={() => {
                                     Animated.timing(passwordAnimation, {
                                         toValue: 1.1,
@@ -252,15 +210,11 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                                 w={{
                                     base: "90%",
                                 }}
+                                isInvalid={invalidPassword1}
                                 isDisabled={isPasswordInputDisabled}
-                                autoCapitalize="none"
-                                selectionColor={"black"}
-                                color={"black"}
-                                borderRadius={100}
                                 borderColor={isPasswordInputDisabled?"rgba(0,185,243,0.2)":"rgb(0,185,243)"}
-                                borderWidth={1}
-                                height={50}
-                                fontSize={"md"}
+                                {...styless.INPUT}
+                                maxLength={25}
                                 InputLeftElement={
                                     <Icon
                                         color={"rgb(0,185,243)"}
@@ -303,17 +257,11 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                                 w={{
                                     base: "90%",
                                 }}
-                                maxLength={25}
                                 isInvalid={invalidPasswordConfirmation}
                                 isDisabled={isPasswordConfirmationInputDisabled}
-                                autoCapitalize="none"
-                                selectionColor={"black"}
-                                color={"black"}
-                                borderRadius={100}
                                 borderColor={isPasswordConfirmationInputDisabled?"rgba(0,185,243,0.2)":"rgb(0,185,243)"}
-                                borderWidth={1}
-                                height={50}
-                                fontSize={"md"}
+                                {...styless.INPUT}
+                                maxLength={25}
                                 InputLeftElement={
                                     <Icon
                                         color={"rgb(0,185,243)"}
@@ -335,7 +283,6 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
 {/************************* RESET BUTTON *************************/}
                         <Button
                             onPress={() => {        
-
                                 setIsResetingPassword(true);
                                 if(!!code.trim() && !!password1.trim() && !!passwordConfirmation.trim()){
                                     if(password1 !== passwordConfirmation){
@@ -372,31 +319,9 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                                 setIsResetingPassword(false);
                             }}
                             disabled={isResetButtonDisabled}
-                            bgColor={isResetButtonDisabled?"rgba(0,98,130,0.4)":"rgb(0,98,130)"}
-                            marginTop={0}
-                            alignSelf={"center"}
-                            borderRadius={100}
-                            borderColor={"white"}
-                            w={{ base: "70%" }}
-                            height={50}
+                            bgColor={isResetButtonDisabled?"rgba(0,98,130,0.2)":"rgb(0,98,130)"}
                             isLoading={isResetingPassword}
-                            isLoadingText="Submitting"
-                            variant="outline"
-                            _loading={{
-                                bg: "rgba(0,185,243,0.5)",
-                                _text: { color: "rgb(0,185,243)", fontWeight: "bold", fontSize: "16" },
-                                borderWidth: 1,
-                            }}
-                            _text={{
-                                fontWeight: "bold",
-                                fontSize: "16",
-                                color: "white"
-                            }}
-                            _pressed={
-                                {
-                                    bgColor: "rgba(0,185,243,0.5)",
-                                }
-                            }
+                            {...styless.BUTTON}
                         >
                             Reset Password
                         </Button>
@@ -408,9 +333,41 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'transparent',
-  },
-});
+const styless = {
+    INPUT:{
+        w:"90%",
+        autoCompleteType:'off',            
+        autoCapitalize:"none",
+        borderRadius:10,
+        height:50,
+        fontSize:"md",
+        placeholderTextColor:"rgb(0,185,243)",
+        placeholder:" Type E-mail registered",
+        borderWidth:1,
+        selectionColor:"black",
+        color:"black",
+    },
+    BUTTON:{
+        marginTop:0,
+        alignSelf:"center",
+        borderRadius:10,
+        borderColor:"white",
+        w:"70%",
+        height:50,
+        isLoadingText:"Submitting",
+        variant:"outline",
+        _loading:{
+            bg: "rgba(0,185,243,0.5)",
+            _text: { color: "rgb(0,185,243)", fontWeight: "bold", fontSize: "16" },
+            borderWidth: 1,
+        },
+        _text:{
+            fontWeight: "bold",
+            fontSize: "16",
+            color: "white"
+        },
+        _pressed:{
+            bgColor: "rgba(0,185,243,0.5)",
+        }
+    }
+}
