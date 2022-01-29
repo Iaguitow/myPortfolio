@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import CompoRegisterPeople from '../components/CompoRegisterPeople';
+import { connect } from 'react-redux';
 import {
   Image,
   VStack,
@@ -10,7 +11,7 @@ import {
   Text
 } from "native-base";
 
-export default function RegisterPeople({ navigation }) {
+function RegisterPeople({ navigation, user }) {
 
   const [TextRegisterColor, setTextRegisterColor] = useState(true);
   const [TextLoginColor, setTextLoginColor] = useState(false);
@@ -33,7 +34,7 @@ export default function RegisterPeople({ navigation }) {
               source={require('../../assets/icon.png')}
             />
             <HStack alignSelf={"flex-end"} space={2} marginRight={5}>
-              <Text style={{ fontWeight: "bold", fontSize: 18, color: TextRegisterColor ? "rgb(0,185,243)" : "white" }}>Register</Text>
+              <Text style={{ fontWeight: "bold", fontSize: 18, color: TextRegisterColor ? "rgb(0,185,243)" : "white" }}>Register {user}</Text>
               <Divider bgColor={"gray.300"} thickness="2" mx="1" orientation="vertical" />
               <Text style={{ fontWeight: "bold", fontSize: 18, color: TextLoginColor ? "rgb(0,185,243)" : "white" }} onPress={() => {
                 setTextRegisterColor(false);
@@ -52,6 +53,12 @@ export default function RegisterPeople({ navigation }) {
     </View>
   );
 }
+
+const mapStateToProps = state => ({
+  user: state.reducerLogin.user
+});
+
+export default connect(mapStateToProps)(RegisterPeople);
 
 const styles = StyleSheet.create({
   Header: {

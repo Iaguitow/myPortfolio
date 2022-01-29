@@ -3,6 +3,8 @@ import { StatusBar,LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NativeBaseProvider, View} from 'native-base';
+import { Provider } from "react-redux";
+import { store } from "./store"
 import 'react-native-gesture-handler';
 
 // SCREENS
@@ -20,18 +22,20 @@ StatusBar.setHidden(false);
 export default function App() {
   return (
     <NativeBaseProvider>
-    <View flex={1}>
-    <NavigationContainer independent={true}>
-      <StatusBar style="inverted"/>
-      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name='Login' component={Login} />
-        <Stack.Screen name='RegisterPeople' component={RegisterPeople}/>
-        <Stack.Screen name='Drawer' component={Drawer}/>
-        <Stack.Screen name='ScreenLoginRecovery' component={ScreenLoginRecovery}/>
-        {/*<Stack.Screen name='Social' component={Social}/>**/}
-      </Stack.Navigator>
-    </NavigationContainer>
-    </View>
+      <Provider store={store}>
+        <View flex={1}>
+          <NavigationContainer independent={true}>
+            <StatusBar style="inverted"/>
+            <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+              <Stack.Screen name='Login' component={Login} />
+              <Stack.Screen name='RegisterPeople' component={RegisterPeople}/>
+              <Stack.Screen name='Drawer' component={Drawer}/>
+              <Stack.Screen name='ScreenLoginRecovery' component={ScreenLoginRecovery}/>
+              {/*<Stack.Screen name='Social' component={Social}/>**/}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </View>
+      </Provider>
     </NativeBaseProvider>
   )
 }

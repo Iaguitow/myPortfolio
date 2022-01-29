@@ -8,6 +8,8 @@ import dbPeople from "../classes/ClassDBPeople";
 import SocialMedia from "../classes/ClassSocialMedia";
 import Toast from "../components/CompoToast";
 import GeneralUtils from "../utils/GeneralUtils";
+import { actions } from "../Actions/ActionLogin";
+import { connect } from "react-redux";
 
 import {
     Input,
@@ -21,7 +23,7 @@ import {
     Image
 } from "native-base";
 
-export default function Login({ navigation }) {
+function Login({ navigation, user, login, logout }) {
 
     /////////////VARIABLE TO HANDLE THE EMAIL AND PASSWORD TO DB/////////////
     const [invalidEmail, setInvalidEmail] = useState(false);
@@ -87,7 +89,7 @@ export default function Login({ navigation }) {
 {/*/////////////////////////////////// LOGO IMAGE  /////////////////////////////////*/}
                     <Stack space={6} w="100%" alignItems="center" marginBottom={10}>
                         <Image {...styless.IMG} source={require('../../assets/icon.png')}/>
-                        <Text color={"#00b9f3"} fontWeight={"bold"} fontSize={16}> Welcome to IOwl </Text>
+                        <Text color={"#00b9f3"} fontWeight={"bold"} fontSize={16}> Welcome to IOwl {user} </Text>
 
 {/*/////////////////////////////////// EMAIL INPUT /////////////////////////////////*/}
                         <Animated.View style={{ transform: [{ scale: heightInput }] }}>
@@ -179,6 +181,8 @@ export default function Login({ navigation }) {
                                 isLoading={isSignUping}
                                 {...styless.BUTTON.GOOGLE}
                                 onPress={() => {
+                                    logout();
+                                    return;
                                     setIsSignUping(true);
                                     SocialMedia.GoogleSignin().then(googleResponse => {
                                         if (googleResponse === "cancel") {
@@ -244,6 +248,8 @@ export default function Login({ navigation }) {
                         {/*/////////////////////////////////// BUTTON LOGIN /////////////////////////////////*/}
                         <Button
                             onPress={() => {
+                                login();
+                                return
                                 setIslogin(true);
                                 if (!!email.trim() && !!password.trim()) {
                                     if(!GeneralUtils.validateEmail(email.trim())){
@@ -291,6 +297,17 @@ export default function Login({ navigation }) {
         </LinearGradient>
     )
 }
+
+const mapStateToProps = state => ({
+    user: state.reducerLogin.user
+});
+
+const mapDispatchToProps = dispatch => ({
+    login: () => dispatch(actions.login()),
+    logout: () => dispatch(actions.logout())
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(Login);
 
 const styless = {
     BUTTON:{
