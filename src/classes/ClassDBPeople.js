@@ -8,9 +8,9 @@ class People {
           return axios({
               method: "post",
               //HOUSE IP
-              //url: "http://192.168.1.144:3000/routes/people",
+              url: "http://192.168.1.144:3000/routes/people",
               //SCHOOL IP
-              url: "http://172.26.192.140:3000/routes/people",
+              //url: "http://172.26.192.140:3000/routes/people",
               withCredentials: true,
               params: {name,email,phone,password,dateofbirth,dtactive,googleId},
               headers: {

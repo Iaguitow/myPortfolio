@@ -9,6 +9,12 @@ class GeneralUtils {
         return false;
     };
 
+    date_DBformat(dateToday){
+        var newDateToday = new Date();
+        newDateToday = dateToday.getFullYear() + "-" + ("0" + (dateToday.getMonth() + 1)).slice(-2) + "-" + ("0" + dateToday.getDate()).slice(-2);
+        return newDateToday;
+    };
+
     generatePassword(length = 10){
         const passwordPossibilities = "ABCDEFGHIJKLMNOPQRSTUVWYXZabcdefghijklmnopqrstuvwxyz0123456789!@#*";
         let password = "";

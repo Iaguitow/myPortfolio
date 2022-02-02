@@ -3,13 +3,13 @@ import { Animated } from "react-native";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
 import FootTabLogin from "../components/FootTabLogin";
-import dbLogin from "../classes/ClassDBLogin";
 import dbPeople from "../classes/ClassDBPeople";
 import SocialMedia from "../classes/ClassSocialMedia";
 import Toast from "../components/CompoToast";
 import GeneralUtils from "../utils/GeneralUtils";
+import { actionsTypesAPI } from "../Actions/ConstActionsApi";
 import { actions } from "../Actions/ActionLogin";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
     Input,
@@ -23,7 +23,7 @@ import {
     Image
 } from "native-base";
 
-function Login({ navigation, user, login, logout }) {
+function Login({ navigation }) {
 
     /////////////VARIABLE TO HANDLE THE EMAIL AND PASSWORD TO DB/////////////
     const [invalidEmail, setInvalidEmail] = useState(false);
@@ -52,7 +52,26 @@ function Login({ navigation, user, login, logout }) {
     /////////////VARIABLE TO HANDLE THE LOGIN BUTTON STATUS /////////////
     const [isLogin, setIslogin] = useState(false);
 
+    /////////////VARIABLE AND FUNCTIONS TO HANDLE THE LOGIN BUTTON WITH REDUX /////////////
+    const user = useSelector(state => state.reducerLogin);
+    const dispatch = useDispatch();
+    const handleLogin = (userDt) => {dispatch(actions.login(userDt))}
+
     useEffect(() => {
+        setIslogin(false);
+        setIsSignUping(false);
+        if(user.api_status === actionsTypesAPI.STATUS_ERRO){
+            console.log(user);
+            return;
+        }
+        else if(user.api_status === actionsTypesAPI.STATUS_USER_NOT_FOUND){
+            console.log(user);
+            return;
+        }
+        else if(user.api_status === actionsTypesAPI.STATUS_OK){
+            navigation.navigate("Drawer");
+        }
+
         Animated.parallel([
             Animated.spring(offset.y, {
                 toValue: 0,
@@ -66,7 +85,8 @@ function Login({ navigation, user, login, logout }) {
                 useNativeDriver: true
             })
         ]).start();
-    }, [])
+    }, [user.login_attempts]);
+
     
     return (
         <LinearGradient style={{ flex: 1 }}
@@ -89,7 +109,7 @@ function Login({ navigation, user, login, logout }) {
 {/*/////////////////////////////////// LOGO IMAGE  /////////////////////////////////*/}
                     <Stack space={6} w="100%" alignItems="center" marginBottom={10}>
                         <Image {...styless.IMG} source={require('../../assets/icon.png')}/>
-                        <Text color={"#00b9f3"} fontWeight={"bold"} fontSize={16}> Welcome to IOwl {user} </Text>
+                        <Text color={"#00b9f3"} fontWeight={"bold"} fontSize={16}> Welcome to IOwl </Text>
 
 {/*/////////////////////////////////// EMAIL INPUT /////////////////////////////////*/}
                         <Animated.View style={{ transform: [{ scale: heightInput }] }}>
@@ -181,8 +201,6 @@ function Login({ navigation, user, login, logout }) {
                                 isLoading={isSignUping}
                                 {...styless.BUTTON.GOOGLE}
                                 onPress={() => {
-                                    logout();
-                                    return;
                                     setIsSignUping(true);
                                     SocialMedia.GoogleSignin().then(googleResponse => {
                                         if (googleResponse === "cancel") {
@@ -190,16 +208,16 @@ function Login({ navigation, user, login, logout }) {
                                             return;
                                         }
                                         var dateToday = new Date();
-                                        dateToday = (dateToday.getFullYear() + "-" + ("0" + (dateToday.getMonth() + 1)).slice(-2) + "-" + ("0" + dateToday.getDate()).slice(-2));
+                                        dateToday = GeneralUtils.date_DBformat(dateToday);
                                         const name = googleResponse.user.familyName + ", " + googleResponse.user.givenName;
                                         const email = googleResponse.user.email;
                                         const phone = null;
-                                        const password = GeneralUtils.generatePassword(10);
+                                        const password = GeneralUtils.generatePassword(5);
                                         const dateofBirth = dateToday;
                                         const dtactive = dateToday;
                                         const googleId = googleResponse.user.id;
                                         const googleAcessToken = googleResponse.accessToken;
-                                        console.log(password);
+                                        console.log(dateToday);
                                         dbPeople.postRegisterPeople(name.toUpperCase(), email.toLowerCase(), phone, password, dateofBirth, dtactive, googleId).then((response) => {
                                             if (response === "User Already Exists") {
                                                 Toast.showToast("User Already Exists");
@@ -207,16 +225,8 @@ function Login({ navigation, user, login, logout }) {
                                                 return;
                                             }
                                             Toast.showToast("Sucessfully Registered");
-                                            dbLogin.postLogin(email.toLowerCase(), password.trim(), googleAcessToken).then(response => {
-                                                setTimeout(() => {
-                                                    navigation.navigate("Drawer");
-                                                    setIsSignUping(false);
-                                                }, 5000);
-                                            }).catch(erro => {
-                                                alert(erro);
-                                                setIsSignUping(false);
-                                                return;
-                                            });
+                                            const userDt = {email: email, password: password, googleAcessToken: googleAcessToken}
+                                            handleLogin(userDt);
                                         }).catch((error) => {
                                             console.log(error);
                                             setIsSignUping(false);
@@ -248,8 +258,6 @@ function Login({ navigation, user, login, logout }) {
                         {/*/////////////////////////////////// BUTTON LOGIN /////////////////////////////////*/}
                         <Button
                             onPress={() => {
-                                login();
-                                return
                                 setIslogin(true);
                                 if (!!email.trim() && !!password.trim()) {
                                     if(!GeneralUtils.validateEmail(email.trim())){
@@ -258,19 +266,8 @@ function Login({ navigation, user, login, logout }) {
                                         setIslogin(false);
                                         return;
                                     }
-                                    dbLogin.postLogin(email, password).then(response => {
-                                        if (typeof response === "string") {
-                                            Toast.showToast(response);
-                                            setIslogin(false);
-                                            return;
-                                        }
-                                        setIslogin(false);
-                                        navigation.navigate("Drawer");
-                                    }).catch(err => {
-                                        setIslogin(false);
-                                        console.log(err);
-                                        return;
-                                    });
+                                    const userDt = {email: email, password: password, googleAcessToken: ""}
+                                    handleLogin(userDt);
                                 }
                                 else if (!email.trim()) {
                                     setInvalidEmail(true);
@@ -298,16 +295,7 @@ function Login({ navigation, user, login, logout }) {
     )
 }
 
-const mapStateToProps = state => ({
-    user: state.reducerLogin.user
-});
-
-const mapDispatchToProps = dispatch => ({
-    login: () => dispatch(actions.login()),
-    logout: () => dispatch(actions.logout())
-});
-
-export default connect(mapStateToProps,mapDispatchToProps)(Login);
+export default Login;
 
 const styless = {
     BUTTON:{

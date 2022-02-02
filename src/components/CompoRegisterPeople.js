@@ -332,18 +332,26 @@ export default function CompoRegisterPeople({ navigation }) {
                                     });
                                 }else if(!name.trim()){ 
                                     setInvalidName(true);
+                                    setisRegistering(false);
                                     Toast.showToast("Invalid Input","Empty Name","You must fill the Name field. All fields must be filled without exception.");
+                                    return;
                                 }else if(!phone.trim() || (phone.length !== 11)){
                                     setInvalidPhone(true);
+                                    setisRegistering(false);
                                     Toast.showToast("Invalid Input","Empty Phone or Incorrect Number","You must fill the Phone field. All fields must be filled without exception.");
+                                    return;
                                 }else if(!password1.trim()){
                                     setInvalidPassword(true);
+                                    setisRegistering(false);
                                     Toast.showToast("Invalid Input","Empty Password","You must fill the Password field. All fields must be filled without exception.");
+                                    return;
                                 }else if(!passwordConfirmation.trim()){
                                     setInValidPasswordConfirmation(true);
+                                    setisRegistering(false);
                                     Toast.showToast("Invalid Input","Empty Password Confirmation","You must fill the Password Confirmation field. All fields must be filled without exception.");
+                                    return;
                                 }
-                                setisRegistering(false);
+                                
                             }}
                             isLoading={isRegistering}
                             {...styless.BUTTON}

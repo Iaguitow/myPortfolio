@@ -9,9 +9,9 @@ class Login {
                 return axios({
                     method: "post",
                     //HOUSE IP
-                    //url: "http://192.168.1.144:3000/routes/login",
+                    url: "http://192.168.1.144:3000/routes/login",
                     //SCHOOL IP
-                    url: "http://172.26.192.140:3000/routes/login",
+                    //url: "http://172.26.192.140:3000/routes/login",
                     withCredentials: true,
                     params: {email, password},
                     headers: {
@@ -19,7 +19,8 @@ class Login {
                         'Content-Type': 'application/json',
                     }
                 }).then(function (response){
-                    if(typeof response.data !== "object"){
+                    if(typeof response.data === "string"){
+                        Toast.showToast(response.data);
                         resolve(response.data);
                     }
                     const user = response.data[0];
