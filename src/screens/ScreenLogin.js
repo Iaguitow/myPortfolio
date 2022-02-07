@@ -9,6 +9,7 @@ import Toast from "../components/CompoToast";
 import GeneralUtils from "../utils/GeneralUtils";
 import { actionsTypesAPI } from "../Actions/ConstActionsApi";
 import { actions } from "../Actions/ActionLogin";
+import CompoApiLoadingView from "../components/CompoApiLoadingView";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -61,11 +62,11 @@ function Login({ navigation }) {
         setIslogin(false);
         setIsSignUping(false);
         if(user.api_status === actionsTypesAPI.STATUS_ERRO){
-            console.log(user);
+            console.log("ERRO: "+user);
             return;
         }
         else if(user.api_status === actionsTypesAPI.STATUS_USER_NOT_FOUND){
-            console.log(user);
+            console.log("NOT FOUND: "+user);
             return;
         }
         else if(user.api_status === actionsTypesAPI.STATUS_OK){
@@ -87,18 +88,19 @@ function Login({ navigation }) {
         ]).start();
     }, [user.login_attempts]);
 
-    
     return (
         <LinearGradient style={{ flex: 1 }}
             colors={['#00b9f3', '#061b21', '#061b21']}
             start={[1, 0]} end={[0, 3]}
             locations={[0.7, 0.1, 0.2]}
         >
+        
             <KeyboardAvoidingView
                 bgColor={"transparent"}
                 flex={1}
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
             >
+            
 {/*/////////////////////////////////// ANIMATION TO BOUNCE THE SCREEN WHEN IT LOADS /////////////////////////////////*/}
                 <Animated.View flex={1} style={{
                     opacity: opacity,
@@ -201,8 +203,9 @@ function Login({ navigation }) {
                                 isLoading={isSignUping}
                                 {...styless.BUTTON.GOOGLE}
                                 onPress={() => {
-                                    setIsSignUping(true);
+                                    
                                     SocialMedia.GoogleSignin().then(googleResponse => {
+                                        setIsSignUping(true);
                                         if (googleResponse === "cancel") {
                                             setIsSignUping(false);
                                             return;
@@ -290,7 +293,8 @@ function Login({ navigation }) {
                     </Stack>
                 </Animated.View>
             </KeyboardAvoidingView>
-            <FootTabLogin navigation={navigation} />
+            {isLogin || isSignUping? <CompoApiLoadingView/>: null}
+            <FootTabLogin navigation={navigation} isLogin={isLogin} isSignUping={isSignUping} />
         </LinearGradient>
     )
 }

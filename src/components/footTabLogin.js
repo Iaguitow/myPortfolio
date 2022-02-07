@@ -10,23 +10,24 @@ import {
 } from 'native-base';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-export default function FootTabLogin({ navigation }) {
+export default function FootTabLogin({ navigation, isLogin, isSignUping }) {
   const [selected, setSelected] = React.useState(2);
   return (
       <Box flex={0} bg="transparent">
         <HStack bg="rgb(3,17,29)" alignItems="center" shadow={6}>
         {/*****************************  REGISTER BUTTON *************************/}
           <Pressable
+            disabled={isLogin || isSignUping? true:false}
             opacity={selected === 0 ? 1 : 0.5}
             py="3"
             flex={1}
             onPress={() => {
               try{
                 setSelected(0);
-                setTimeout(()=>{
-                  setSelected(2);
-                  navigation.navigate("RegisterPeople");
-                },300);
+                  setTimeout(() =>{
+                    setSelected(2);
+                    navigation.navigate("RegisterPeople");
+                  },300);
               }
               catch(err){
                 console.log(err);
@@ -51,12 +52,13 @@ export default function FootTabLogin({ navigation }) {
           {/*****************************  LOST PASSWORD BUTTON *************************/}
           <Divider bgColor={"gray.700"} thickness="2" mx="1" orientation="vertical" />
           <Pressable
+            disabled={isLogin || isSignUping? true:false}
             opacity={selected === 1 ? 1 : 0.5}
             py="2"
             flex={1}
             onPress={() => {
               setSelected(1);
-              setTimeout(()=>{
+                setTimeout(() => {
                   setSelected(2);
                   navigation.navigate("ScreenLoginRecovery");
                 },300);

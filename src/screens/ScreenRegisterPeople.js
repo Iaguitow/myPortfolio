@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import CompoRegisterPeople from '../components/CompoRegisterPeople';
-import { connect } from 'react-redux';
+import CompoApiLoadingView from "../components/CompoApiLoadingView"
+
 import {
   Image,
   VStack,
@@ -11,10 +12,11 @@ import {
   Text
 } from "native-base";
 
-function RegisterPeople({ navigation, user }) {
+function RegisterPeople({ navigation }) {
 
   const [TextRegisterColor, setTextRegisterColor] = useState(true);
   const [TextLoginColor, setTextLoginColor] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
 
   return (
     ///////////////////////// HEADER AND LOGO /////////////////////////
@@ -25,6 +27,7 @@ function RegisterPeople({ navigation, user }) {
           start={[1, 0]} end={[0, 3]}
           locations={[0.7, 0.1, 0.2]}
         >
+        
           <VStack safeAreaTop>
             <Image
               alignSelf={"center"}
@@ -34,7 +37,7 @@ function RegisterPeople({ navigation, user }) {
               source={require('../../assets/icon.png')}
             />
             <HStack alignSelf={"flex-end"} space={2} marginRight={5}>
-              <Text style={{ fontWeight: "bold", fontSize: 18, color: TextRegisterColor ? "rgb(0,185,243)" : "white" }}>Register {user}</Text>
+              <Text style={{ fontWeight: "bold", fontSize: 18, color: TextRegisterColor ? "rgb(0,185,243)" : "white" }}>Register</Text>
               <Divider bgColor={"gray.300"} thickness="2" mx="1" orientation="vertical" />
               <Text style={{ fontWeight: "bold", fontSize: 18, color: TextLoginColor ? "rgb(0,185,243)" : "white" }} onPress={() => {
                 setTextRegisterColor(false);
@@ -49,16 +52,13 @@ function RegisterPeople({ navigation, user }) {
           </VStack>
         </LinearGradient>
       </View>
-      <CompoRegisterPeople navigation={navigation} />
+      <CompoRegisterPeople navigation={navigation} sendIsRegisteringStateToParent={isRegistering => {setIsRegistering(isRegistering)}} />
+      {isRegistering? <CompoApiLoadingView />:null}
     </View>
   );
 }
 
-const mapStateToProps = state => ({
-  user: state.reducerLogin.user
-});
-
-export default connect(mapStateToProps)(RegisterPeople);
+export default RegisterPeople;
 
 const styles = StyleSheet.create({
   Header: {

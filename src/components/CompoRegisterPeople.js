@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
-import { Animated, View, StyleSheet } from 'react-native';
+import React, { useState,useEffect } from 'react';
+import { Animated, View } from 'react-native';
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import GeneralUtils from "../utils/GeneralUtils";
 import Toast from "./CompoToast";
 import dbPeople from "../classes/ClassDBPeople";
-import dbLogin from "../classes/ClassDBLogin";
+import { actionsTypesAPI } from "../Actions/ConstActionsApi";
+import { actions } from "../Actions/ActionLogin";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   KeyboardAvoidingView,
   Input,
@@ -16,7 +19,31 @@ import {
   ScrollView
 } from "native-base";
 
-export default function CompoRegisterPeople({ navigation }) {
+export default function CompoRegisterPeople(props, { navigation }) {
+
+    /////////////VARIABLE AND FUNCTIONS TO HANDLE THE LOGIN BUTTON WITH REDUX /////////////
+    const user = useSelector(state => state.reducerLogin);
+    const dispatch = useDispatch();
+    const handleLogin = (userDt) => {dispatch(actions.login(userDt))}
+
+    useEffect(() => {
+        setisRegistering(false);
+        props.sendIsRegisteringStateToParent(false);
+        if(user.api_status === actionsTypesAPI.STATUS_ERRO){
+            return;
+        }
+        else if(user.api_status === actionsTypesAPI.STATUS_USER_NOT_FOUND){
+            console.log("NOT FOUND: "+user);
+            return;
+        }
+        else if(user.api_status === actionsTypesAPI.STATUS_OK){
+            Toast.showToast("Sucessfully Registered");
+            setTimeout(()=>{
+                navigation.navigate("Drawer");
+            },5000);
+        }
+
+    }, [user.login_attempts]);
 
 //////////////////////////// STATES FOR THE INPUTS //////////////////////////////
 // FULL NAME //
@@ -54,18 +81,18 @@ export default function CompoRegisterPeople({ navigation }) {
   };
 
 //////////////////////////// STATES FOR THE ANIMATION //////////////////////////////  
-  const [nameAnimation,] = useState(new Animated.Value(1));
-  const [emailAnimation,] = useState(new Animated.Value(1));
-  const [phoneAnimation,] = useState(new Animated.Value(1));
-  const [passwordAnimation,] = useState(new Animated.Value(1));
-  const [passwordAnimation2,] = useState(new Animated.Value(1));
+    const [nameAnimation,] = useState(new Animated.Value(1));
+    const [emailAnimation,] = useState(new Animated.Value(1));
+    const [phoneAnimation,] = useState(new Animated.Value(1));
+    const [passwordAnimation,] = useState(new Animated.Value(1));
+    const [passwordAnimation2,] = useState(new Animated.Value(1));
 
-//////////////////////////// STATE FOR THE REGISTERING CONTROL //////////////////////////////
-  const [isRegistering, setisRegistering] = useState(false);
+    //////////////////////////// STATE FOR THE REGISTERING CONTROL //////////////////////////////
+    const [isRegistering, setisRegistering] = useState(false);
 
-  //////////////////////////// STATES FOR THE PASSWORD CONTROL //////////////////////////////
-  const [showPass, setShowPass] = useState(false);
-  const handleClick = () => setShowPass(!showPass);
+    //////////////////////////// STATES FOR THE PASSWORD CONTROL //////////////////////////////
+    const [showPass, setShowPass] = useState(false);
+    const handleClick = () => setShowPass(!showPass);
 
     return (
         <KeyboardAvoidingView
@@ -196,6 +223,7 @@ export default function CompoRegisterPeople({ navigation }) {
                                         duration: 300,
                                         useNativeDriver: true
                                     }).start();
+    
                                 }}
 
                                 InputLeftElement={
@@ -309,25 +337,19 @@ export default function CompoRegisterPeople({ navigation }) {
                                         Toast.showToast("Invalid Input","Date of Birth Invalid!","Check your date of birth, it will not be available for anyone, but it is necessary.");
                                         return;
                                     }
-
+                                    props.sendIsRegisteringStateToParent(true);
                                     dbPeople.postRegisterPeople(name.toUpperCase(),email.toLowerCase(),phone,password1,DOBformatted,dtactive).then(response =>{
-                                        if(response === "User Already Exists"){
+                                        if(response === actionsTypesAPI.STATUS_USER_ALREADY_EXIST){
                                             Toast.showToast("User Already Exists");
                                             setisRegistering(false);
+                                            props.sendIsRegisteringStateToParent(false);
                                             return;
                                         }
-                                        Toast.showToast("Sucessfully Registered");
-                                        dbLogin.postLogin(email.toLowerCase(),password1).then(response =>{
-                                            setTimeout(()=>{
-                                                navigation.navigate("Drawer");
-                                                setisRegistering(false);
-                                            },5000);                                            
-                                        }).catch(erro =>{
-                                            alert(erro);
-                                            return;
-                                        });
+                                        const userDt = {email: email.toLowerCase(), password: password1, googleAcessToken: ""}
+                                        handleLogin(userDt);
                                     }).catch(erro =>{
                                         setisRegistering(false);
+                                        props.sendIsRegisteringStateToParent(false);
                                         return;
                                     });
                                 }else if(!name.trim()){ 

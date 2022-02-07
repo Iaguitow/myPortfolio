@@ -1,8 +1,10 @@
-import * as React from "react";
+import React, {useEffect, useRef} from "react";
 import { StatusBar } from 'react-native';
 import { NavigationContainer, DrawerActions, useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons,MaterialIcons } from "@expo/vector-icons";
 import { createDrawerNavigator, DrawerContentScrollView } from "@react-navigation/drawer";
+import { useSelector } from "react-redux";
+
 import {
   Box,
   Pressable,
@@ -48,7 +50,7 @@ const getIcon = (screenName) => {
 /*****************************  NAVIGATION POINTING ****************************/  
 function MyDrawer() {
   const navigation = useNavigation();
-
+  
   return (
     <Box safeArea flex={1} bg={"white"}>
     {/* CustomDrawerContent => Takes the props from the Drawer.Screen and send it to customDrawerContent through the {...props} */ }
@@ -216,10 +218,22 @@ function CustomDrawerContent(props) {
   );
 }
 
-export default function Example() {
+export default function CompoDrawer() {
+
+  const user = useSelector(state => state.reducerLogin)
+  const isMounted = useRef(false)
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => { isMounted.current = false }
+  }, []);
+
+  console.log(isMounted.current);
+
   return (
     <NavigationContainer independent={true}>
         <MyDrawer/>
     </NavigationContainer>
   );
+
 }
