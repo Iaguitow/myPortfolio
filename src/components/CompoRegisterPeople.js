@@ -317,8 +317,8 @@ export default function CompoRegisterPeople(props, { navigation }) {
                                 if(!!name.trim() && !!phone.trim() && (phone.length === 11) && !!password1.trim() && !!passwordConfirmation.trim()){
 
                                     const dateEveryday = new Date();
-                                    const DOBformatted = (dateToday.getFullYear()+"-"+("0"+(dateToday.getMonth()+1)).slice(-2)+"-"+("0"+dateToday.getDate()).slice(-2));
-                                    const dtactive =  (dateEveryday.getFullYear()+"-"+("0"+(dateEveryday.getMonth()+1)).slice(-2)+"-"+("0"+dateEveryday.getDate()).slice(-2));
+                                    const DOBformatted = GeneralUtils.date_DBformat(dateToday);
+                                    const dtactive =  GeneralUtils.date_DBformat(dateEveryday);
 
                                     if(password1 !== passwordConfirmation){
                                         setInValidPasswordConfirmation(true);

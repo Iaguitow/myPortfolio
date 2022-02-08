@@ -220,7 +220,7 @@ function Login({ navigation }) {
                                         const dtactive = dateToday;
                                         const googleId = googleResponse.user.id;
                                         const googleAcessToken = googleResponse.accessToken;
-                                        console.log(dateToday);
+                                        
                                         dbPeople.postRegisterPeople(name.toUpperCase(), email.toLowerCase(), phone, password, dateofBirth, dtactive, googleId).then((response) => {
                                             if (response === "User Already Exists") {
                                                 Toast.showToast("User Already Exists");
@@ -293,8 +293,9 @@ function Login({ navigation }) {
                     </Stack>
                 </Animated.View>
             </KeyboardAvoidingView>
-            {isLogin || isSignUping? <CompoApiLoadingView/>: null}
+            
             <FootTabLogin navigation={navigation} isLogin={isLogin} isSignUping={isSignUping} />
+            {isLogin || isSignUping? <CompoApiLoadingView/>: null}
         </LinearGradient>
     )
 }

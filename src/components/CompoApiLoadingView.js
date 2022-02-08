@@ -1,21 +1,60 @@
-import { View, StyleSheet, Text } from 'react-native';
-import React from 'react';
+import { View, StyleSheet, Text, Animated } from 'react-native';
+import React, {useEffect, useRef} from 'react';
 import LottieView from 'lottie-react-native';
+import { BlurView } from "expo-blur";
 
 export default function ApiLoading() {
+
+  const fadeEffect = useRef(new Animated.Value(0)).current;
+
+  useEffect(() =>{
+    Animated.timing(fadeEffect,{
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true
+    }).start();   
+  },[]);
+
   return (
-    <View style={ [StyleSheet.absoluteFillObject,styles.container]}>
-        <LottieView style={{width:200, height:200}} source={require("../../assets/clock-loading.json")} autoPlay loop/>
-    </View>
+    <Animated.View style={[StyleSheet.absoluteFillObject,{opacity:fadeEffect},styles.animatedView]}>
+      <View style={ [StyleSheet.absoluteFillObject,styles.container]}>
+          <BlurView intensity={10} style={styles.blur} >
+            <LottieView style={styles.lottie} source={require("../../assets/loader2.json")} autoPlay loop/>
+            <Text style={styles.text}> Loading... </Text>
+          </BlurView>
+      </View>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
+    animatedView:{
+      width:"100%", 
+      flex:1, 
+      alignItems:"center", 
+      justifyContent:"center"
+    },  
+    blur:{
+      height:"100%", 
+      width:"100%", 
+      alignItems:"center", 
+      justifyContent:"center"
+    },
+    lottie:{
+      width: 225,
+      height: 225
+    },
+    text:{
+      color:"white",
+      fontSize: 20,
+      fontWeight: "bold",
+      margin: -50
+    },  
     container:{
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "rgba(255,255,255,0.3)",
         zIndex: 1,
-        flex: 1, 
-    }
+        flex: 1,
+    },
 });
