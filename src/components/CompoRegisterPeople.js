@@ -19,7 +19,7 @@ import {
   ScrollView
 } from "native-base";
 
-export default function CompoRegisterPeople(props, { navigation }) {
+export default function CompoRegisterPeople(props) {
 
     /////////////VARIABLE AND FUNCTIONS TO HANDLE THE LOGIN BUTTON WITH REDUX /////////////
     const user = useSelector(state => state.reducerLogin);
@@ -29,20 +29,6 @@ export default function CompoRegisterPeople(props, { navigation }) {
     useEffect(() => {
         setisRegistering(false);
         props.sendIsRegisteringStateToParent(false);
-        if(user.api_status === actionsTypesAPI.STATUS_ERRO){
-            return;
-        }
-        else if(user.api_status === actionsTypesAPI.STATUS_USER_NOT_FOUND){
-            console.log("NOT FOUND: "+user);
-            return;
-        }
-        else if(user.api_status === actionsTypesAPI.STATUS_OK){
-            Toast.showToast("Sucessfully Registered");
-            setTimeout(()=>{
-                navigation.navigate("Drawer");
-            },5000);
-        }
-
     }, [user.login_attempts]);
 
 //////////////////////////// STATES FOR THE INPUTS //////////////////////////////
