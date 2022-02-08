@@ -20,7 +20,6 @@ export default function ApiLoading() {
       <View style={ [StyleSheet.absoluteFillObject,styles.container]}>
           <BlurView intensity={10} style={styles.blur} >
             <LottieView style={styles.lottie} source={require("../../assets/loader2.json")} autoPlay loop/>
-            <Text style={styles.text}> Loading... </Text>
           </BlurView>
       </View>
     </Animated.View>
@@ -41,8 +40,8 @@ const styles = StyleSheet.create({
       justifyContent:"center"
     },
     lottie:{
-      width: 225,
-      height: 225
+      width: 270,
+      height: 270
     },
     text:{
       color:"white",
