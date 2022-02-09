@@ -1,10 +1,11 @@
-import React, {useEffect, useRef} from "react";
-import { StatusBar } from 'react-native';
+import React, { useEffect, useRef } from "react";
+import { StatusBar, StyleSheet } from 'react-native';
 import { NavigationContainer, DrawerActions, useNavigation } from "@react-navigation/native";
-import { MaterialCommunityIcons,MaterialIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons, AntDesign, Ionicons, FontAwesome5, EvilIcons } from "@expo/vector-icons";
 import { createDrawerNavigator, DrawerContentScrollView } from "@react-navigation/drawer";
 import { useSelector } from "react-redux";
-
+import { LinearGradient } from 'expo-linear-gradient';
+import CompoLoadingView from "./CompoApiLoadingView"
 import {
   Box,
   Pressable,
@@ -14,6 +15,8 @@ import {
   HStack,
   Divider,
   Icon,
+  Image,
+  Badge
 } from "native-base";
 
 const Drawer = createDrawerNavigator();
@@ -30,38 +33,54 @@ function Component(props) {
 
 const getIcon = (screenName) => {
   switch (screenName) {
-    case "Inbox":
-      return "email";
-    case "Outbox":
-      return "send";
-    case "Favorites":
-      return "heart";
-    case "Archive":
-      return "archive";
-    case "Trash":
-      return "trash-can";
-    case "Spam":
-      return "alert-circle";
+    case "Profile":
+      return "profile";
+    case "Experience":
+      return "work-outline";
+    case "School":
+      return "ios-school-outline";
+    case "Skills":
+      return "head-check-outline";
+    case "Projects":
+      return "laptop-code";
+    case "Configuration":
+      return "gear";
+    case "Logout":
+      return "logout"
     default:
       return undefined;
   }
 };
 
-/*****************************  NAVIGATION POINTING ****************************/  
+/*****************************  NAVIGATION POINTING ****************************/
 function MyDrawer() {
   const navigation = useNavigation();
-  
+
   return (
     <Box safeArea flex={1} bg={"white"}>
-    {/* CustomDrawerContent => Takes the props from the Drawer.Screen and send it to customDrawerContent through the {...props} */ }
+      {/* CustomDrawerContent => Takes the props from the Drawer.Screen and send it to customDrawerContent through the {...props} */}
       <Drawer.Navigator
         screenOptions={{
           headerTransparent: false,
-          headerTitle:(title) => {
-            if(title.children === "Inbox"){
+          headerTitle: (title) => {
+            if (title.children === "Inbox") {
               return (
+                <Icon
+                  onPress={() => {
+                    navigation.dispatch(DrawerActions.openDrawer());
+                  }}
+                  color={"rgb(0,185,243)"}
+                  as={<MaterialIcons name="menu" />}
+                  size={9}
+                  mb={6}
+                />
+              );
+            }
+          },
+          headerRight: () => {
+            return (
               <Icon
-                onPress={()=>{
+                onPress={() => {
                   navigation.dispatch(DrawerActions.openDrawer());
                 }}
                 color={"rgb(0,185,243)"}
@@ -69,171 +88,178 @@ function MyDrawer() {
                 size={9}
                 mb={6}
               />
-              );
-            }
-          },
-          headerRight:() => {
-            return (
-            <Icon
-              onPress={()=>{
-                navigation.dispatch(DrawerActions.openDrawer());
-              }}
-              color={"rgb(0,185,243)"}
-              as={<MaterialIcons name="menu" />}
-              size={9}
-              mb={6}
-            />
             );
           },
-          headerLeft:() => {
+          headerLeft: () => {
             return (
-            <Icon
-              onPress={()=>{
-                navigation.dispatch(DrawerActions.openDrawer());
-              }}
-              color={"rgb(0,185,243)"}
-              as={<MaterialIcons name="menu" />}
-              size={9}
-              mb={6}
-            />
+              <Icon
+                onPress={() => {
+                  navigation.dispatch(DrawerActions.openDrawer());
+                }}
+                color={"rgb(0,185,243)"}
+                as={<MaterialIcons name="menu" />}
+                size={9}
+                mb={6}
+              />
             );
           },
         }}
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
-        <Drawer.Screen name="Inbox" component={Component} />
-        <Drawer.Screen name="Outbox" component={Component} />
-        <Drawer.Screen name="Favorites" component={Component} />
-        <Drawer.Screen name="Archive" component={Component} />
-        <Drawer.Screen name="Trash" component={Component} />
-        <Drawer.Screen name="Spam" component={Component} />
+        <Drawer.Screen name="Profile" component={Component} />
+        <Drawer.Screen name="Experience" component={Component} />
+        <Drawer.Screen name="School" component={Component} />
+        <Drawer.Screen name="Skills" component={Component} />
+        <Drawer.Screen name="Projects" component={Component} />
+        <Drawer.Screen name="Configuration" component={Component} />
+        <Drawer.Screen name="Logout" component={Component} />
       </Drawer.Navigator>
     </Box>
   );
 }
 
 function CustomDrawerContent(props) {
+  const user = useSelector(state => state.reducerLogin);
   return (
-
-/*****************************  HEADER ****************************/    
+    <LinearGradient style={{ flex: 1 }}
+      colors={['#00b9f3', '#061b21', '#061b21']}
+      start={[1, 0]} end={[0, 3]}
+      locations={[0.7, 0.1, 0.2]}
+    >
     <DrawerContentScrollView {...props}>
-      <VStack space="6" my="2" mx="1">
-        <Box px="4">
-          <Text bold color="gray.700">
-            Mail
-          </Text>
-          <Text fontSize="14" mt="1" color="gray.500" fontWeight="500">
-            john_doe@gmail.com
-          </Text>
-        </Box>
+      <VStack space="4" my="6" mx="1">
 
-{/*****************************  DRAWER BODY ****************************/}
-        <VStack divider={<Divider />} space="4">
-          <VStack space="3">
-          <StatusBar barStyle={"dark-content"} />
-          {/* Props CAME FROM THE DRAWERNAVIGATOR WITH THE LIST OF SCREEN. USING MAP TO LIST IT. routeNames is a prop from the drawer. */ }
-            {props.state.routeNames.map((name, index) => (
-              <Pressable
-                px="5"
-                py="3"
-                rounded="md"
-                bg={
-                  index === props.state.index
-                    ? "rgba(6, 182, 212, 0.1)"
-                    : "transparent"
-                }
-                onPress={(event) => {
-                  props.navigation.navigate(name);
-                }}
-                key={index}
-              >
-                <HStack space="7" alignItems="center">
-                  <Icon
-                    color={
-                      index === props.state.index ? "primary.500" : "gray.500"
-                    }
-                    size="5"
-                    as={<MaterialCommunityIcons name={getIcon(name)} />}
-                  />
-                  <Text
-                    fontWeight="500"
-                    color={
-                      index === props.state.index ? "primary.500" : "gray.700"
-                    }
-                  >
-                    {name}
-                  </Text>
-                </HStack>
-              </Pressable>
-            ))}
-          </VStack>
+{/*****************************  HEADER ****************************/}
 
-{/*****************************  SECOND BODY ****************************/}
-          <VStack space="5">
-            <Text fontWeight="500" fontSize="14" px="5" color="gray.500">
-              Labels
+          <Image {...nativeBaseProps.IMG} source={require('../../assets/icon.png')} />
+          <Box px="4">
+            <Text bold fontSize={18} color="gray.100">
+              {user.payload.name}
             </Text>
-            <VStack space="3">
-              <Pressable px="5" py="3">
-                <HStack space="7" alignItems="center">
-                  <Icon
-                    color="gray.500"
-                    size="5"
-                    as={<MaterialCommunityIcons name="bookmark" />}
-                  />
-                  <Text color="gray.700" fontWeight="500">
-                    Family
-                  </Text>
-                </HStack>
-              </Pressable>
-              <Pressable px="5" py="2">
-                <HStack space="7" alignItems="center">
-                  <Icon
-                    color="gray.500"
-                    size="5"
-                    as={<MaterialCommunityIcons name="bookmark" />}
-                  />
-                  <Text color="gray.700" fontWeight="500">
-                    Friends
-                  </Text>
-                </HStack>
-              </Pressable>
-              <Pressable px="5" py="3">
-                <HStack space="7" alignItems="center">
-                  <Icon
-                    color="gray.500"
-                    size="5"
-                    as={<MaterialCommunityIcons name="bookmark" />}
-                  />
-                  <Text fontWeight="500" color="gray.700">
-                    Work
-                  </Text>
-                </HStack>
-              </Pressable>
-            </VStack>
+            <Text
+              marginLeft={-1} 
+              p={1}
+              borderWidth={2} 
+              borderColor={"rgb(0,185,243)"}
+              borderRadius={17}
+              alignSelf={"flex-start"} 
+              fontSize={14} 
+              mt="1" 
+              color="gray.200" 
+              fontWeight="500"
+            >
+              {user.payload.email}
+            </Text>
+          </Box>
+          <Divider {...nativeBaseProps.Dividers} />
+        
+        {/*****************************  DRAWER BODY ****************************/}
+        <VStack divider={<Divider {...nativeBaseProps.Dividers} />} space="2">
+          <VStack space="3">
+            <StatusBar barStyle={"dark-content"} />
+            {/* Props CAME FROM THE DRAWERNAVIGATOR WITH THE LIST OF SCREEN. USING MAP TO LIST IT. routeNames is a prop from the drawer. */}
+            {props.state.routeNames.map((name, index) => {
+              return (
+                <Box key={index}>
+                  {name==="Logout"?<Divider {...nativeBaseProps.Dividers} />:null}
+                  <Pressable
+                    px="5"
+                    py={name==="Logout"?"3":"2"}
+                    my={name==="Logout"?"2":"0"}
+                    rounded="md"
+                    bg={
+                      index === props.state.index
+                        ? "rgba(0,185,243,0.5)"
+                        : "transparent"
+                    }
+                    onPress={(event) => {
+                      props.navigation.navigate(name);
+                    }}
+                    key={index}
+                  >
+                    <HStack space="7" alignItems="center">
+                      <Icon
+                        as={() => {
+                            if (name === "Profile") {
+                              return (<AntDesign size={30}  color={index === props.state.index ? nativeBaseProps.OptionsColor.selected : nativeBaseProps.OptionsColor.unselected} name={getIcon(name)} />)
+                            } else if (name === ("Experience" || "Logout")) {
+                              return (<MaterialIcons size={30} color={index === props.state.index ? nativeBaseProps.OptionsColor.selected : nativeBaseProps.OptionsColor.unselected} name={getIcon(name)} />)
+                            } else if (name === "School") {
+                              return (<Ionicons size={30} color={index === props.state.index ? nativeBaseProps.OptionsColor.selected : nativeBaseProps.OptionsColor.unselected} name={getIcon(name)} />)
+                            } else if (name === "Projects") {
+                              return (<FontAwesome5 size={25} color={index === props.state.index ? nativeBaseProps.OptionsColor.selected : nativeBaseProps.OptionsColor.unselected} name={getIcon(name)} />)
+                            } else if (name === "Configuration") {
+                              return (<EvilIcons size={35} color={index === props.state.index ? nativeBaseProps.OptionsColor.selected : nativeBaseProps.OptionsColor.unselected} name={getIcon(name)} />)
+                            }
+                            else {
+                              return (<MaterialCommunityIcons color={index === props.state.index ? nativeBaseProps.OptionsColor.selected : nativeBaseProps.OptionsColor.unselected} size={30} name={getIcon(name)} />)
+                            }
+                          }
+                        }
+                      />
+                      <Text
+                        style={styles.textOptionDrawer}
+                        color={
+                          index === props.state.index ? nativeBaseProps.OptionsColor.selected : nativeBaseProps.OptionsColor.unselected
+                        }
+                      >
+                        {name}
+                      </Text>
+                    </HStack>
+                  </Pressable>
+                </Box>
+              )
+            })}
           </VStack>
         </VStack>
       </VStack>
     </DrawerContentScrollView>
+    </LinearGradient>
   );
 }
 
-export default function CompoDrawer() {
-
-  const user = useSelector(state => state.reducerLogin)
+export default function CompoDrawer(nativeBaseProps) {
   const isMounted = useRef(false)
 
   useEffect(() => {
     isMounted.current = true;
-    return () => { isMounted.current = false }
-  }, []);
+    return () => { <CompoLoadingView /> }
+  }, [isMounted.current]);
 
   console.log(isMounted.current);
 
   return (
     <NavigationContainer independent={true}>
-        <MyDrawer/>
+      <MyDrawer nativeBaseProps = { nativeBaseProps } />
     </NavigationContainer>
   );
-
 }
+
+const nativeBaseProps = {
+  OptionsColor:{
+    unselected: "rgba(255, 255, 255, 0.9)",
+    selected:"rgb(0,185,243)",
+  },
+  Dividers:{
+    alignSelf:"center", 
+    bgColor:"gray.300", 
+    thickness:"2", 
+    mx:"1", 
+    orientation:"horizontal"
+  },
+  IMG: {
+    marginTop: 0,
+    alignSelf: "center",
+    marginBottom: 0,
+    size: 140,
+    alt: "LOGO",
+    borderRadius: 100
+  }
+}
+
+const styles = StyleSheet.create({
+  textOptionDrawer: {
+    fontSize: 15,
+    fontWeight: "bold",
+  }
+});
