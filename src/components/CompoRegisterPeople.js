@@ -25,10 +25,15 @@ export default function CompoRegisterPeople(props) {
     const user = useSelector(state => state.reducerLogin);
     const dispatch = useDispatch();
     const handleLogin = (userDt) => {dispatch(actions.login(userDt))}
-
+    
     useEffect(() => {
         setisRegistering(false);
         props.sendIsRegisteringStateToParent(false);
+
+        if(user.api_status === actionsTypesAPI.STATUS_OK){
+            Toast.showToast("Sucessfully Registered");
+        }
+
     }, [user.login_attempts]);
 
 //////////////////////////// STATES FOR THE INPUTS //////////////////////////////
@@ -43,6 +48,7 @@ export default function CompoRegisterPeople(props) {
 // PHONE //
   const [InvalidPhone, setInvalidPhone] = useState(false);
   const [phone,Setphone] = useState("");
+
 // PASSOWRD 01 //
   const [InvalidPassword, setInvalidPassword] = useState(false);
   const [password1,SetPassword1] = useState("");

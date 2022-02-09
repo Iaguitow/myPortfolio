@@ -2,15 +2,15 @@ import axios from "axios";
 import Toast from "../components/CompoToast"
 
 class People {
-  postRegisterPeople(name,email,phone,password,dateofbirth,dtactive,googleId = 0){
+  postRegisterPeople(name,email,phone,password,dateofbirth,dtactive,googleId = null){
     return new Promise((resolve, reject) =>{
       try {
           return axios({
               method: "post",
               //HOUSE IP
-              //url: "http://192.168.1.144:3000/routes/people",
+              url: "http://192.168.1.144:3000/routes/people",
               //SCHOOL IP
-              url: "http://172.26.192.211:3000/routes/people",
+              //url: "http://172.26.192.211:3000/routes/people",
               withCredentials: true,
               params: {name,email,phone,password,dateofbirth,dtactive,googleId},
               headers: {
@@ -39,9 +39,9 @@ class People {
         return axios({
           method: 'get',
           //HOUSE IP
-          //url: "http://192.168.1.144:3000/routes/people",
+          url: "http://192.168.1.144:3000/routes/people",
           //SCHOOL IP
-          url: "http://172.26.192.211:3000/routes/people",
+          //url: "http://172.26.192.211:3000/routes/people",
           withCredentials: true,
           params: { listPeople, page, idPeople },
           headers: {
