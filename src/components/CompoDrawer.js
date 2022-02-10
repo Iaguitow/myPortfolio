@@ -140,7 +140,7 @@ function CustomDrawerContent(props) {
               {user.payload.name}
             </Text>
             <Text {...nativeBaseProps.TextProfession}>
-              {user.payload.email}
+              {user.payload.profession}
             </Text>
           </Box>
           <Divider {...nativeBaseProps.Dividers} />
