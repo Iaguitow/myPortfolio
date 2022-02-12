@@ -10,9 +10,10 @@ import 'react-native-gesture-handler';
 // SCREENS
 import Login from "./src/screens/ScreenLogin";
 import RegisterPeople from "./src/screens/ScreenRegisterPeople";
-import ScreenLoginRecovery from "./src/screens/ScreenLoginRecovery"
-import Drawer from "./src/components/CompoDrawer";
-import CompoApiLoadingView from "./src/components/CompoApiLoadingView"
+import ScreenLoginRecovery from "./src/screens/ScreenLoginRecovery";
+import Drawer from "./src/components/CompoDrawer"
+import ScreenProfile from "./src/screens/ScreenProfile";
+
 //import Social from "./src/classes/ClassSocialMedia";
 
 LogBox.ignoreLogs(["The contrast ratio"]);
@@ -27,12 +28,12 @@ export default function App() {
         <View flex={1}>
           <NavigationContainer independent={true}>
             <StatusBar style="inverted"/>
-            <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+            <Stack.Navigator initialRouteName="ScreenProfile" screenOptions={{ headerShown: false }}>
               <Stack.Screen name='Login' component={Login} />
               <Stack.Screen name='RegisterPeople' component={RegisterPeople}/>
               <Stack.Screen name='Drawer' component={Drawer}/>
               <Stack.Screen name='ScreenLoginRecovery' component={ScreenLoginRecovery}/>
-              <Stack.Screen name='CompoApiLoadingView' component={CompoApiLoadingView}/>
+              <Stack.Screen name='ScreenProfile' component={ScreenProfile}/>
               {/*<Stack.Screen name='Social' component={Social}/>**/}
             </Stack.Navigator>
           </NavigationContainer>
