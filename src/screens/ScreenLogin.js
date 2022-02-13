@@ -141,7 +141,7 @@ function Login({ navigation }) {
                                 }}
                                 {...styless.INPUTS}
                                 isInvalid={invalidEmail}
-                                borderWidth={borderFocusWidth}
+                                borderWidth={borderFocusWidth}                               
                                 InputLeftElement={
                                     <Icon
                                         {...styless.ICON}
@@ -360,6 +360,7 @@ const styless = {
         placeholder:"Email",
         height:50,
         fontSize:"md",
+        keyboardType:"email-address",
     },
     ICON:{
         color:"{'rgb(0,185,243)'}",

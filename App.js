@@ -28,12 +28,12 @@ export default function App() {
         <View flex={1}>
           <NavigationContainer independent={true}>
             <StatusBar style="inverted"/>
-            <Stack.Navigator initialRouteName="ScreenProfile" screenOptions={{ headerShown: false }}>
+            <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
               <Stack.Screen name='Login' component={Login} />
               <Stack.Screen name='RegisterPeople' component={RegisterPeople}/>
               <Stack.Screen name='Drawer' component={Drawer}/>
               <Stack.Screen name='ScreenLoginRecovery' component={ScreenLoginRecovery}/>
-              <Stack.Screen name='ScreenProfile' component={ScreenProfile}/>
+              
               {/*<Stack.Screen name='Social' component={Social}/>**/}
             </Stack.Navigator>
           </NavigationContainer>

@@ -6,7 +6,8 @@ import { createDrawerNavigator, DrawerContentScrollView, useDrawerStatus } from 
 import { useSelector } from "react-redux";
 import { LinearGradient } from 'expo-linear-gradient';
 import CompoLoadingView from "./CompoApiLoadingView";
-import { allDrawerScreens } from "../utils/ConstDrawerScreens"
+import { allDrawerScreens } from "../utils/ConstDrawerScreens";
+import ScreenProfile from "../screens/ScreenProfile";
 import {
   Box,
   Pressable,
@@ -109,7 +110,7 @@ function MyDrawer() {
         }}
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
-        <Drawer.Screen name={allDrawerScreens.PROFILE} component={Component} />
+        <Drawer.Screen name={allDrawerScreens.PROFILE} component={ScreenProfile} />
         <Drawer.Screen name={allDrawerScreens.EXPERIENCE} component={Component} />
         <Drawer.Screen name={allDrawerScreens.SCHOOL} component={Component} />
         <Drawer.Screen name={allDrawerScreens.SKILLS} component={Component} />

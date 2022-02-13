@@ -11,95 +11,149 @@ import {
     Icon,
     Badge,
     VStack,
-    FlatList
+    View,
+    ScrollView,
+    Button,
+    Divider
 } from "native-base";
 
 const ScreenProfile = () => {
+
+    const data = ["React Native", "JavaScript", "C#", "Flutter", "Ionic", "DotNet", "MySQL", "Oracle", "SQL SERVER",
+                  "Java", "Go", "Swift", "Android", "C/C++", "Pthon", "Django", "Ruby", "Ruby on Rails", "Kivy", "Rust",
+                  "Delphi","Docker","Machine Learning", "CSS", "HTML", "TypeScript", "ReactJS", "Web Developer Full Stack ",
+                  "Mobile Developer", "Front-End Developer", "Back-End Developer", "Desktop Developer", "IA Developer", "Data Science",
+                  "Data Analysis"]
+
     return (
-        <Stack space={2}>
-            <Box {...nativeBaseProps.FIRST_BOX}>
-                <Box >
-                    <Box>
-                        <AspectRatio {...nativeBaseProps.ASPECT_RATIO}>
-                            <Image source={{
-                                uri: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg"
-                            }} alt="Background" />
-                        </AspectRatio>
-                        <Image {...nativeBaseProps.IMG} source={require('../../assets/icon.png')} />
-                        <Badge {...nativeBaseProps.PLUS_ICON_BADGE}>
-                            <Icon {...nativeBaseProps.ICON_COLOR} as={<Entypo name={"plus"}/>} />
-                        </Badge>
-                        <Badge {...nativeBaseProps.BG_ICON_BADGE}>
-                            <Icon {...nativeBaseProps.ICON_COLOR} as={<MaterialIcons name={"add-a-photo"}/>} />
-                        </Badge>
-                    </Box>
-                    <Icon {...nativeBaseProps.EDIT_ICON} as={<AntDesign name={"edit"}/>} />        
-                    <Stack {...nativeBaseProps.STACK_INFO}>
-                        <Stack>
-                            <Heading {...nativeBaseProps.NAME}>
-                                IAGO SILVA VIEIRA
-                            </Heading>
-                            <Text {...nativeBaseProps.SCHOOL_INFO}>
-                                COMPUTER SCIENCE | FACULDADE PITAGORAS
-                            </Text>
-                        </Stack>
-                        <Stack space={1}>
-                            <Text {...nativeBaseProps.ADDRESS_CONTACT}>
-                                    London, England, United Kingdom
-                            </Text>
-                            <Text {...nativeBaseProps.ADDRESS_CONTACT}>
-                                    vieiras.igs@gmail.com
-                            </Text>
-                            <Text {...nativeBaseProps.ADDRESS_CONTACT}>
-                                    07497454528
-                            </Text>
-                        </Stack>
-                        <VStack>
-                            <Text {...nativeBaseProps.TITLE_TEXT}>
-                                    PROFESSION:
-                            </Text>
-                            <Text {...nativeBaseProps.INFO_TEXT}>
-                                    REACT NATIVE DEVELOPER
-                            </Text>
-                        </VStack>
-                        <VStack>
-                            <Text {...nativeBaseProps.TITLE_TEXT}>
-                                    ABOUT YOU:
-                            </Text>
-                            <Text {...nativeBaseProps.INFO_TEXT}>
-                                    Bengaluru (also called Bangalore) is the center of India's high-tech
-                                    industry. The city is also known for its parks and nightlife.
-                            </Text>
-                        </VStack>
-                        <VStack>
-                            <Text {...nativeBaseProps.TITLE_TEXT}>
-                                    MY GOAL:
-                            </Text>
-                            <Text {...nativeBaseProps.INFO_TEXT}>
-                                    Bengaluru (also called Bangalore) is the center of India's high-tech
-                                    industry. The city is also known for its parks and nightlife.
-                            </Text>
-                        </VStack>
-                        <HStack>
-                            <HStack>
-                                <Text {...nativeBaseProps.EDIT_DATE_TEXT}>
-                                    LAST EDIT: 15/10/1991
+        <ScrollView>
+            <Stack width={"98%"} alignSelf="center">
+                <Box {...nativeBaseProps.FIRST_BOX}>
+                    <Box >
+                        <Box>
+                            <AspectRatio {...nativeBaseProps.ASPECT_RATIO}>
+                                <Image source={{
+                                    uri: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg"
+                                }} alt="Background" />
+                            </AspectRatio>
+                            <Image {...nativeBaseProps.IMG} source={require('../../assets/icon.png')} />
+                            <Badge {...nativeBaseProps.PLUS_ICON_BADGE}>
+                                <Icon {...nativeBaseProps.ICON_COLOR} as={<Entypo name={"plus"}/>} />
+                            </Badge>
+                            <Badge {...nativeBaseProps.BG_ICON_BADGE}>
+                                <Icon {...nativeBaseProps.ICON_COLOR} as={<MaterialIcons name={"add-a-photo"}/>} />
+                            </Badge>
+                        </Box>
+                        <Icon {...nativeBaseProps.EDIT_ICON} as={<AntDesign name={"edit"}/>} />        
+                        <Stack {...nativeBaseProps.STACK_INFO}>
+                            <Stack>
+                                <Heading {...nativeBaseProps.NAME}>
+                                    IAGO SILVA VIEIRA
+                                </Heading>
+                                <Text {...nativeBaseProps.SCHOOL_INFO}>
+                                    COMPUTER SCIENCE | FACULDADE PITAGORAS
                                 </Text>
+                            </Stack>
+                            <Stack space={1}>
+                                <Text {...nativeBaseProps.ADDRESS_CONTACT}>
+                                        London, England, United Kingdom
+                                </Text>
+                                <Text {...nativeBaseProps.ADDRESS_CONTACT}>
+                                        vieiras.igs@gmail.com
+                                </Text>
+                                <Text {...nativeBaseProps.ADDRESS_CONTACT}>
+                                        07497454528
+                                </Text>
+                            </Stack>
+                            <Divider {...nativeBaseProps.DIVIDERS} />
+                            <VStack>
+                                <Text {...nativeBaseProps.TITLE_TEXT}>
+                                        PROFESSION:
+                                </Text>
+                                <Text {...nativeBaseProps.INFO_TEXT}>
+                                        REACT NATIVE DEVELOPER
+                                </Text>
+                            </VStack>
+                            <VStack>
+                                <Text {...nativeBaseProps.TITLE_TEXT}>
+                                        ABOUT YOU:
+                                </Text>
+                                <Text {...nativeBaseProps.INFO_TEXT}>
+                                        Bengaluru (also called Bangalore) is the center of India's high-tech
+                                        industry. The city is also known for its parks and nightlife.
+                                </Text>
+                            </VStack>
+                            <VStack>
+                                <Text {...nativeBaseProps.TITLE_TEXT}>
+                                        MY GOAL:
+                                </Text>
+                                <Text {...nativeBaseProps.INFO_TEXT}>
+                                        Bengaluru (also called Bangalore) is the center of India's high-tech
+                                        industry. The city is also known for its parks and nightlife.
+                                </Text>
+                            </VStack>
+                            <HStack>
+                                <HStack>
+                                    <Text {...nativeBaseProps.EDIT_DATE_TEXT}>
+                                        LAST EDIT: 15/10/1991
+                                    </Text>
+                                </HStack>
                             </HStack>
-                        </HStack>
-                    </Stack>
+                        </Stack>
+                    </Box>
                 </Box>
-            </Box>
-            <Box {...nativeBaseProps.FIRST_BOX}>
-                <Text>
-                    I HAVE PUT THE FLAT LIST HERE: FLEXDIRECTION: ROW
-                </Text>
-            </Box>
-        </Stack>
+                    <Box {...nativeBaseProps.FIRST_BOX}>
+                        <Icon {...nativeBaseProps.EDIT_ICON} as={<AntDesign name={"edit"}/>} />
+                        <Heading {...nativeBaseProps.INTERESETED}>
+                                    INTERESTING TAGS:
+                         </Heading>
+                         <Divider {...nativeBaseProps.DIVIDERS} />
+                        <View
+                            flexDirection={"row"}
+                            flexGrow={10}
+                            maxW={"100%"}
+                            alignItems={"flex-start"}
+                            flexWrap={"wrap"}
+                            mb={4}
+                            mt={2}
+                        >
+                            {data.map((item,index) => {
+                                return(
+                                    <Button
+                                        rightIcon={<Icon size={5} as={<AntDesign name={"check"}/>} />}
+                                        borderColor={"coolGray.600"}
+                                        _text={{fontWeight:"bold"}} 
+                                        borderWidth="2"
+                                        backgroundColor={"rgb(0,185,243)"}
+                                        color={"white"}
+                                        borderRadius={"20"}
+                                        p={1}
+                                        marginTop={2} 
+                                        flexDirection={"column"} 
+                                        marginLeft={1} 
+                                        key={index}>
+                                        {item}
+                                    </Button>
+                                )
+                            })}
+                        </View>
+                    </Box>
+            </Stack>
+        </ScrollView>
     )
 };
 
 const nativeBaseProps = {
+    DIVIDERS:{
+        alignSelf:"center", 
+        bgColor:"coolGray.300", 
+        thickness:"3",
+        orientation:"horizontal",
+        w:"98%"
+      },
+    TAGS:{
+        
+    },
     EDIT_DATE_TEXT:{
         color:"rgb(0,185,243)", 
         fontWeight:"700"
@@ -112,12 +166,13 @@ const nativeBaseProps = {
         left:2
     },
     FIRST_BOX:{
+        mb:2,
         alignItems:"center", 
         backgroundColor:"white", 
         rounded:"lg", 
         overflow:"hidden", 
-        borderColor:"coolGray.200", 
-        borderWidth:"1"
+        borderColor:"coolGray.300", 
+        borderWidth:"2",
     },
     ASPECT_RATIO:{
         w:"100%", 
@@ -131,12 +186,18 @@ const nativeBaseProps = {
         size:"lg", 
         ml:"-1"
     },
+    INTERESETED:{
+        size:"lg", 
+        marginTop:-6, marginBottom:2, marginLeft:2,
+        alignSelf:"flex-start"
+    },
     SCHOOL_INFO:{
         fontSize:"md", 
         color:"gray.600", 
         fontWeight:"500", 
         ml:"-0.5", 
-        mt:"-1"
+        mt:"-1",
+        numberOfLines:1
     },
     ADDRESS_CONTACT:{
         fontSize:"sm", 
