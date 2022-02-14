@@ -66,44 +66,47 @@ function MyDrawer() {
       <Drawer.Navigator
         screenOptions={{
           headerTransparent: false,
+          headerBackground: () =>{
+            return(
+              <LinearGradient {...nativeBaseProps.HeaderBackgroundColor}/>
+            );
+          },
           headerTitle: (title) => {
-            if (title.children === "Inbox") {
+            if (title.children !== allDrawerScreens.COMPETITORS) {
               return (
+                // NECESSARY PUT DYNAMIC, CREATE A FILE WITH SWITCH CASE TAKING THE CURRENTLY HOUR AND RETURNING THE GREEDING.
+                <Text color={"white"}>
+                  Good Morning Iago
+                </Text>
+              );
+            }else if(title.children === allDrawerScreens.COMPETITORS){
+              return (
+                //WHEN SHOW COMPETITOR IT IS NECESSARY SHOW ALSO THE SERCH BAR, CHANGE THE ICON BY SERACH BAR 
                 <Icon
                   onPress={() => {
                     navigation.dispatch(DrawerActions.openDrawer());
                   }}
-                  color={"rgb(0,185,243)"}
+                  color={"rgb(255,255,255)"}
                   as={<MaterialIcons name="menu" />}
                   size={9}
-                  mb={6}
+                  mb={2}
                 />
               );
             }
           },
           headerRight: () => {
             return (
-              <Icon
-                onPress={() => {
-                  navigation.dispatch(DrawerActions.openDrawer());
-                }}
-                color={"rgb(0,185,243)"}
-                as={<MaterialIcons name="menu" />}
-                size={9}
-                mb={6}
-              />
+              <Icon {...nativeBaseProps.HeaderIconsProps} as={<MaterialIcons name="notifications-active" />}/>
             );
           },
           headerLeft: () => {
             return (
               <Icon
+                {...nativeBaseProps.HeaderIconsProps}
                 onPress={() => {
                   navigation.dispatch(DrawerActions.openDrawer());
                 }}
-                color={"rgb(0,185,243)"}
                 as={<MaterialIcons name="menu" />}
-                size={9}
-                mb={6}
               />
             );
           },
@@ -130,7 +133,7 @@ function CustomDrawerContent(props) {
   const isOpen = useDrawerStatus() === "open";
 
   return (
-    <LinearGradient style={{ flex: 1 }} {...nativeBaseProps.LinearGradientProps}>
+    <LinearGradient {...nativeBaseProps.DrawerBackgroundColor}>
       <DrawerContentScrollView {...props}>
         <VStack space="4" my="5" mx="1">
 
@@ -149,7 +152,7 @@ function CustomDrawerContent(props) {
 {/*****************************  DRAWER BODY ****************************/}
           <VStack divider={<Divider {...nativeBaseProps.Dividers} />} space="0">
             <VStack space="2">
-              <StatusBar barStyle={isOpen?"light-content":"dark-content"} />
+              <StatusBar barStyle={isOpen?"light-content":"light-content"} />
               {/* Props CAME FROM THE DRAWERNAVIGATOR WITH THE LIST OF SCREEN. USING MAP TO LIST IT. routeNames is a prop from the drawer. */}
               {props.state.routeNames.map((name, index) => {
                 return (
@@ -225,11 +228,24 @@ export default function CompoDrawer(nativeBaseProps) {
 }
 
 const nativeBaseProps = {
-  LinearGradientProps:{
+  HeaderIconsProps:{
+    color:"rgb(255,255,255)",
+    size:9,
+    m:2,
+  },
+  DrawerBackgroundColor:{
     colors:['#00b9f3', '#061b21', '#061b21'],
     start:[1, 0], 
     end:[0, 3],
     locations:[0.7, 0.1, 0.2],
+    style:{ flex: 1 },
+  },
+  HeaderBackgroundColor:{
+    colors:['#061b21', '#00b9f3', '#00b9f3'],
+    start:[1, 0], 
+    end:[0, 3],
+    locations:[0.7, 0.1, 0.2],
+    style:{ flex: 1 },
   },
   TextName:{
     fontWeight:"bold", 

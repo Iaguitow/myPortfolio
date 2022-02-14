@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { MaterialIcons, Entypo, AntDesign } from "@expo/vector-icons";
+import ImagePicker from "../utils/ImagePicker"
 import {
     Stack,
     Text,
@@ -19,6 +20,8 @@ import {
 
 const ScreenProfile = () => {
 
+    const [imgProfile, setImgProfile] = useState(null);
+
     const data = ["React Native", "JavaScript", "C#", "Flutter", "Ionic", "DotNet", "MySQL", "Oracle", "SQL SERVER",
                   "Java", "Go", "Swift", "Android", "C/C++", "Pthon", "Django", "Ruby", "Ruby on Rails", "Kivy", "Rust",
                   "Delphi","Docker","Machine Learning", "CSS", "HTML", "TypeScript", "ReactJS", "Web Developer Full Stack ",
@@ -27,17 +30,32 @@ const ScreenProfile = () => {
 
     return (
         <ScrollView>
-            <Stack width={"98%"} alignSelf="center">
+            <Stack alignSelf="center">
                 <Box {...nativeBaseProps.FIRST_BOX}>
                     <Box >
                         <Box>
-                            <AspectRatio {...nativeBaseProps.ASPECT_RATIO}>
-                                <Image source={{
-                                    uri: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg"
-                                }} alt="Background" />
+                            <AspectRatio 
+                                {...nativeBaseProps.ASPECT_RATIO}
+                                
+                                >
+                                <Image 
+                                    source={{uri: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg"}}
+                                    key={1} 
+                                    alt="Background"    
+                                />
                             </AspectRatio>
-                            <Image {...nativeBaseProps.IMG} source={require('../../assets/icon.png')} />
-                            <Badge {...nativeBaseProps.PLUS_ICON_BADGE}>
+                            <Image 
+                                {...nativeBaseProps.IMG} 
+                                source={imgProfile === null?require('../../assets/icon.png'):{uri:imgProfile}}
+                                key={imgProfile} 
+                            />
+                            <Badge {...nativeBaseProps.PLUS_ICON_BADGE}
+                                onTouchEnd={() =>{
+                                    ImagePicker.imagePicker().then(imgCaptured =>{
+                                        setImgProfile(imgCaptured);
+                                    });
+                                }}
+                            >
                                 <Icon {...nativeBaseProps.ICON_COLOR} as={<Entypo name={"plus"}/>} />
                             </Badge>
                             <Badge {...nativeBaseProps.BG_ICON_BADGE}>
