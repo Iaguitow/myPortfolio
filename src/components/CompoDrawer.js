@@ -213,7 +213,7 @@ function CustomDrawerContent(props) {
 }
 
 export default function CompoDrawer(nativeBaseProps) {
-  const isMounted = useRef(false)
+  const isMounted = useRef(false);
 
   useEffect(() => {
     isMounted.current = true;

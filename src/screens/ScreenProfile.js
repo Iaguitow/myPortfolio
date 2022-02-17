@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { MaterialIcons, Entypo, AntDesign } from "@expo/vector-icons";
 import ImagePicker from "../utils/ImagePicker"
 import gdriverService from "../classes/ClassGDrive"
 import { useSelector } from "react-redux";
 import { allFilesTypeNames } from "../utils/ConstFilesTypeNames"
-
+import CompoLoadingView from "../components/CompoApiLoadingView";
 import {
     Stack,
     Text,
@@ -22,18 +22,42 @@ import {
     Divider
 } from "native-base";
 
-const ScreenProfile = () => {
+const ScreenProfile = ({ setIsMounted }) => {
 
     const [imgProfile, setImgProfile] = useState(null);
     const [imgBackProfile, setImgBackProfile] = useState(null);
 
     const user = useSelector(state => state.reducerLogin);
 
+    useEffect(() => {
+        setIsMounted(false);
+
+        const imgprofID = user.payload.fileidimgprofile;
+        const imgbackprofID = user.payload.fileidimgbackprofile;
+
+        if(imgprofID !== null){
+            gdriverService.getFile(imgprofID).then(file => {
+                setImgProfile(file.data);
+                setIsMounted(true);
+            }).catch(error => {console.log(error);});
+        }else{setIsMounted(true);}
+
+        setIsMounted(false);
+        if(imgbackprofID !== null){
+            gdriverService.getFile(imgbackprofID).then(file => {
+                setImgBackProfile(file.data);
+                setIsMounted(true);
+                
+            }).catch(error => {console.log(error);});
+        }else{setIsMounted(true);}
+        
+    },[]);
+
     const data = ["React Native", "JavaScript", "C#", "Flutter", "Ionic", "DotNet", "MySQL", "Oracle", "SQL SERVER",
                   "Java", "Go", "Swift", "Android", "C/C++", "Pthon", "Django", "Ruby", "Ruby on Rails", "Kivy", "Rust",
                   "Delphi","Docker","Machine Learning", "CSS", "HTML", "TypeScript", "ReactJS", "Web Developer Full Stack ",
                   "Mobile Developer", "Front-End Developer", "Back-End Developer", "Desktop Developer", "IA Developer", "Data Science",
-                  "Data Analysis"]
+                  "Data Analysis"];
 
     return (
         <ScrollView>
@@ -190,6 +214,16 @@ const ScreenProfile = () => {
     )
 };
 
+export default function Profile() {
+    const [isMounted, setIsMounted] = useState(false);
+
+    return (
+      <View>
+        <ScreenProfile setIsMounted={ setIsMounted }/>
+        {!isMounted && <CompoLoadingView />}
+      </View>
+    );
+  }
 const nativeBaseProps = {
     DIVIDERS:{
         alignSelf:"center", 
@@ -302,4 +336,3 @@ const nativeBaseProps = {
         zIndex:1
     }
 }
-export default ScreenProfile;

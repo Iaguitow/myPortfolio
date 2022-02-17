@@ -34,6 +34,35 @@ class GDrive{
             }
         });
     }
+
+    getFile(fileid){
+        
+        return new Promise((resolve, reject) =>{
+            try {
+                return axios({
+                    method: "get",
+                    //HOUSE IP
+                    url:"http://192.168.1.144:3000/routes/gdrive",
+                    //SCHOOL IP
+                    //url: "http://192.168.1.144:3000/routes/gdrive",
+                    withCredentials: true,
+                    params: {fileid},
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    }
+                }).then(function (response) {
+                    resolve(response);
+                }).catch(function (error){
+                    Toast.showToast("Error","Connection Error",error.message+", If this error continue happening, please verify your connectionn or try again later. ");
+                    reject(error);
+                });
+            } catch (error) {
+                Toast.showToast("Error","Connection Error",error.message+", If this error continue happening, please verify your connectionn or try again later. ");
+                reject(false);
+            }
+        });
+    }
 }
 
 var GoogleDrive = new GDrive();
