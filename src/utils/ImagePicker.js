@@ -26,8 +26,9 @@ class Image{
             try {
                 const manipResult = ImageManipulator.manipulateAsync(
                     image.localUri || image.uri,
-                    [{ resize: {height:160} }],
-                    { compress: 1, base64:false, format: ImageManipulator.SaveFormat.PNG }
+                    //[{ resize: {height:50, width:180} }],
+                    [],
+                    { compress: 1, base64:true, format: ImageManipulator.SaveFormat.PNG }
                   );
                   resolve(manipResult);
             } catch (error) {
@@ -36,18 +37,20 @@ class Image{
         });
       }
 
-    imagePicker() {
+    imagePicker(bg = false) {
         return new Promise((resolve, reject) =>{
             try {
                 this.imagePermission().then(permission =>{
                     ImagePicker.launchImageLibraryAsync({
                         mediaTypes: ImagePicker.MediaTypeOptions.Images,
                         allowsEditing: true,
-                        aspect: [4, 3],
+                        aspect: bg?[16, 9]:[4, 3],
                         quality: 1,
                       }).then(imgPicked =>{
                         if (!imgPicked.cancelled) {
-                            resolve(imgPicked.uri);
+                            this.resizeImage(imgPicked).then(imageBase64 => {
+                                resolve(imageBase64);
+                            });
                         }
                       });
                 })

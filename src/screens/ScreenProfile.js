@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { MaterialIcons, Entypo, AntDesign } from "@expo/vector-icons";
 import ImagePicker from "../utils/ImagePicker"
+import gdriverService from "../classes/ClassGDrive"
+import { useSelector } from "react-redux";
+import { allFilesTypeNames } from "../utils/ConstFilesTypeNames"
+
 import {
     Stack,
     Text,
@@ -21,6 +25,9 @@ import {
 const ScreenProfile = () => {
 
     const [imgProfile, setImgProfile] = useState(null);
+    const [imgBackProfile, setImgBackProfile] = useState(null);
+
+    const user = useSelector(state => state.reducerLogin);
 
     const data = ["React Native", "JavaScript", "C#", "Flutter", "Ionic", "DotNet", "MySQL", "Oracle", "SQL SERVER",
                   "Java", "Go", "Swift", "Android", "C/C++", "Pthon", "Django", "Ruby", "Ruby on Rails", "Kivy", "Rust",
@@ -34,13 +41,15 @@ const ScreenProfile = () => {
                 <Box {...nativeBaseProps.FIRST_BOX}>
                     <Box >
                         <Box>
-                            <AspectRatio 
-                                {...nativeBaseProps.ASPECT_RATIO}
-                                
-                                >
+                            <AspectRatio
+                                borderBottomWidth={3}
+                                borderColor={"coolGray.300"}
+                                borderBottomRadius={5} 
+                                {...nativeBaseProps.ASPECT_RATIO}>
                                 <Image 
-                                    source={{uri: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg"}}
-                                    key={1} 
+                                    source={imgBackProfile === null?{uri: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg"}:
+                                    {uri: imgBackProfile}}
+                                    key={imgBackProfile} 
                                     alt="Background"    
                                 />
                             </AspectRatio>
@@ -52,13 +61,33 @@ const ScreenProfile = () => {
                             <Badge {...nativeBaseProps.PLUS_ICON_BADGE}
                                 onTouchEnd={() =>{
                                     ImagePicker.imagePicker().then(imgCaptured =>{
-                                        setImgProfile(imgCaptured);
+                                        const filetypename = user.payload.idpeople+allFilesTypeNames.IMGPROF;
+                                        const folderid = user.payload.folderid;
+
+                                        gdriverService.sendFile(imgCaptured.base64,folderid,filetypename).then(result => {
+                                            setImgProfile('data:image/png;base64,'+imgCaptured.base64);
+                                        }).catch(error=>{
+                                            console.log(error);
+                                        });
                                     });
                                 }}
                             >
                                 <Icon {...nativeBaseProps.ICON_COLOR} as={<Entypo name={"plus"}/>} />
                             </Badge>
-                            <Badge {...nativeBaseProps.BG_ICON_BADGE}>
+                            <Badge {...nativeBaseProps.BG_ICON_BADGE}
+                                onTouchEnd={() =>{
+                                    ImagePicker.imagePicker(true).then(imgCaptured =>{
+                                        const filetypename = user.payload.idpeople+allFilesTypeNames.IMGBACKPROF;
+                                        const folderid = user.payload.folderid;
+
+                                        gdriverService.sendFile(imgCaptured.base64,folderid,filetypename).then(result => {
+                                            setImgBackProfile('data:image/png;base64,'+imgCaptured.base64);
+                                        }).catch(error=>{
+                                            console.log(error);
+                                        });
+                                    });
+                                }}
+                            >
                                 <Icon {...nativeBaseProps.ICON_COLOR} as={<MaterialIcons name={"add-a-photo"}/>} />
                             </Badge>
                         </Box>

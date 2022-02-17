@@ -12,6 +12,14 @@ class Toasts extends Component {
             duration: 2000000,
         })
       break;
+      case 'toobigimg':
+        Toast.show({
+            title: "Image too big.",
+            status: "error",
+            description: "This image is bigger than 1mb, please try compress it before upload on your profile, more than 1mb is too big for a profile image.",
+            duration: 2000000,
+        })
+      break;
       case 'Invalid Input':
         Toast.show({
             title: title,
