@@ -34,9 +34,10 @@ const ScreenProfile = ({ setIsMounted }) => {
 
         const imgprofID = user.payload.fileidimgprofile;
         const imgbackprofID = user.payload.fileidimgbackprofile;
+        const token_api = user.payload.tokenapi; 
 
         if(imgprofID !== null){
-            gdriverService.getFile(imgprofID).then(file => {
+            gdriverService.getFile(imgprofID,token_api).then(file => {
                 setImgProfile(file.data);
                 setIsMounted(true);
             }).catch(error => {console.log(error);});
@@ -44,7 +45,7 @@ const ScreenProfile = ({ setIsMounted }) => {
 
         setIsMounted(false);
         if(imgbackprofID !== null){
-            gdriverService.getFile(imgbackprofID).then(file => {
+            gdriverService.getFile(imgbackprofID,token_api).then(file => {
                 setImgBackProfile(file.data);
                 setIsMounted(true);
                 
@@ -65,14 +66,11 @@ const ScreenProfile = ({ setIsMounted }) => {
                 <Box {...nativeBaseProps.FIRST_BOX}>
                     <Box >
                         <Box>
-                            <AspectRatio
-                                borderBottomWidth={3}
-                                borderColor={"coolGray.300"}
-                                borderBottomRadius={5} 
+                            <AspectRatio 
                                 {...nativeBaseProps.ASPECT_RATIO}>
                                 <Image 
-                                    source={imgBackProfile === null?{uri: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg"}:
-                                    {uri: imgBackProfile}}
+                                    source={imgBackProfile === null?{uri: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg"}:{uri: imgBackProfile}}
+                                    //source={imgBackProfile === null?require('../../assets/icon.png'):{uri: imgBackProfile}}
                                     key={imgBackProfile} 
                                     alt="Background"    
                                 />
@@ -84,12 +82,13 @@ const ScreenProfile = ({ setIsMounted }) => {
                             />
                             <Badge {...nativeBaseProps.PLUS_ICON_BADGE}
                                 onTouchEnd={() =>{
+                                    setIsMounted(false);
                                     ImagePicker.imagePicker().then(imgCaptured =>{
                                         const filetypename = user.payload.idpeople+allFilesTypeNames.IMGPROF;
                                         const folderid = user.payload.folderid;
-
                                         gdriverService.sendFile(imgCaptured.base64,folderid,filetypename).then(result => {
                                             setImgProfile('data:image/png;base64,'+imgCaptured.base64);
+                                            setIsMounted(true);
                                         }).catch(error=>{
                                             console.log(error);
                                         });
@@ -100,12 +99,14 @@ const ScreenProfile = ({ setIsMounted }) => {
                             </Badge>
                             <Badge {...nativeBaseProps.BG_ICON_BADGE}
                                 onTouchEnd={() =>{
+                                    setIsMounted(false);
                                     ImagePicker.imagePicker(true).then(imgCaptured =>{
                                         const filetypename = user.payload.idpeople+allFilesTypeNames.IMGBACKPROF;
                                         const folderid = user.payload.folderid;
 
                                         gdriverService.sendFile(imgCaptured.base64,folderid,filetypename).then(result => {
                                             setImgBackProfile('data:image/png;base64,'+imgCaptured.base64);
+                                            setIsMounted(true);
                                         }).catch(error=>{
                                             console.log(error);
                                         });
@@ -179,29 +180,12 @@ const ScreenProfile = ({ setIsMounted }) => {
                                     INTERESTING TAGS:
                          </Heading>
                          <Divider {...nativeBaseProps.DIVIDERS} />
-                        <View
-                            flexDirection={"row"}
-                            flexGrow={10}
-                            maxW={"100%"}
-                            alignItems={"flex-start"}
-                            flexWrap={"wrap"}
-                            mb={4}
-                            mt={2}
-                        >
+                        <View>
                             {data.map((item,index) => {
                                 return(
                                     <Button
                                         rightIcon={<Icon size={5} as={<AntDesign name={"check"}/>} />}
-                                        borderColor={"coolGray.600"}
-                                        _text={{fontWeight:"bold"}} 
-                                        borderWidth="2"
-                                        backgroundColor={"rgb(0,185,243)"}
-                                        color={"white"}
-                                        borderRadius={"20"}
-                                        p={1}
-                                        marginTop={2} 
-                                        flexDirection={"column"} 
-                                        marginLeft={1} 
+                                        {...nativeBaseProps.TAGS}
                                         key={index}>
                                         {item}
                                     </Button>
@@ -232,7 +216,26 @@ const nativeBaseProps = {
         orientation:"horizontal",
         w:"98%"
       },
+    TAGS_VIEW:{
+        flexDirection:"row",
+        flexGrow:10,
+        maxW:"100%",
+        alignItems:"flex-start",
+        flexWrap:"wrap",
+        mb:4,
+        mt:2
+    }, 
     TAGS:{
+        borderColor:"coolGray.600",
+        _text:{fontWeight:"bold"}, 
+        borderWidth:"2",
+        backgroundColor:"rgb(0,185,243)",
+        color:"white",
+        borderRadius:"20",
+        p:1,
+        marginTop:2 ,
+        flexDirection:"column", 
+        marginLeft:1 
         
     },
     EDIT_DATE_TEXT:{
@@ -257,7 +260,10 @@ const nativeBaseProps = {
     },
     ASPECT_RATIO:{
         w:"100%", 
-        ratio:22/9
+        ratio:22/9,
+        borderBottomWidth:3,
+        borderColor:"coolGray.300",
+        borderBottomRadius:5
     },
     STACK_INFO:{
         p:"4", 

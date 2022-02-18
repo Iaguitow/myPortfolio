@@ -35,7 +35,7 @@ class GDrive{
         });
     }
 
-    getFile(fileid){
+    getFile(fileid,token_api){
         
         return new Promise((resolve, reject) =>{
             try {
@@ -50,6 +50,7 @@ class GDrive{
                     headers:{
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
+                        'Authorization':"Bearer "+ token_api 
                     }
                 }).then(function (response) {
                     resolve(response);

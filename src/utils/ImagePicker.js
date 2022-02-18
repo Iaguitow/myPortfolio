@@ -24,10 +24,12 @@ class Image{
     resizeImage(image) {
         return new Promise((resolve, reject) =>{
             try {
+
+
                 const manipResult = ImageManipulator.manipulateAsync(
                     image.localUri || image.uri,
-                    //[{ resize: {height:50, width:180} }],
                     [],
+                    //[{crop:{originX:1280,originY:1280,width:200,height:200}}],
                     { compress: 1, base64:true, format: ImageManipulator.SaveFormat.PNG }
                   );
                   resolve(manipResult);
