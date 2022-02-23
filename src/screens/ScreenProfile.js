@@ -34,23 +34,22 @@ const ScreenProfile = ({ setIsMounted }) => {
 
         const imgprofID = user.payload.fileidimgprofile;
         const imgbackprofID = user.payload.fileidimgbackprofile;
-        const token_api = user.payload.tokenapi; 
-
-        if(imgprofID !== null){
-            gdriverService.getFile(imgprofID,token_api).then(file => {
-                setImgProfile(file.data);
-                setIsMounted(true);
-            }).catch(error => {console.log(error);});
-        }else{setIsMounted(true);}
-
-        setIsMounted(false);
-        if(imgbackprofID !== null){
-            gdriverService.getFile(imgbackprofID,token_api).then(file => {
-                setImgBackProfile(file.data);
-                setIsMounted(true);
+        const imgIDArray = [imgprofID,imgbackprofID];
+        const token_api = user.payload.tokenapi;
+        
+        gdriverService.getFile(imgIDArray,token_api).then(allFilesData => {
+       
+            for(let i = 0; i<allFilesData.data.length;i++){
                 
-            }).catch(error => {console.log(error);});
-        }else{setIsMounted(true);}
+                if(allFilesData.data[i].fileName.replace(/[0-9]/g, '') === allFilesTypeNames.IMGPROF && allFilesData.data[i].fileLink !== undefined){
+                    setImgProfile(allFilesData.data[i].fileLink.replace("s220","s1000"));
+
+                }else if(allFilesData.data[i].fileName.replace(/[0-9]/g, '') === allFilesTypeNames.IMGBACKPROF && allFilesData.data[i].fileLink !== undefined){
+                    setImgBackProfile(allFilesData.data[i].fileLink.replace("s220","s1000"));
+                }
+            }
+
+        }).catch(error => { console.log(error);}).finally(endPoint =>{setIsMounted(true);});
         
     },[]);
 
@@ -76,7 +75,7 @@ const ScreenProfile = ({ setIsMounted }) => {
                                 />
                             </AspectRatio>
                             <Image 
-                                {...nativeBaseProps.IMG} 
+                                {...nativeBaseProps.IMG_PROFILE} 
                                 source={imgProfile === null?require('../../assets/icon.png'):{uri:imgProfile}}
                                 key={imgProfile} 
                             />
@@ -84,15 +83,21 @@ const ScreenProfile = ({ setIsMounted }) => {
                                 onTouchEnd={() =>{
                                     setIsMounted(false);
                                     ImagePicker.imagePicker().then(imgCaptured =>{
+                                        if(imgCaptured.cancelled){
+                                            setIsMounted(true);
+                                            return;
+                                        }
                                         const filetypename = user.payload.idpeople+allFilesTypeNames.IMGPROF;
                                         const folderid = user.payload.folderid;
-                                        gdriverService.sendFile(imgCaptured.base64,folderid,filetypename).then(result => {
+                                        const token_api = user.payload.tokenapi;
+
+                                        gdriverService.sendFile(imgCaptured.base64,folderid,filetypename,token_api).then(result => {
                                             setImgProfile('data:image/png;base64,'+imgCaptured.base64);
-                                            setIsMounted(true);
                                         }).catch(error=>{
                                             console.log(error);
-                                        });
+                                        }).finally(endPoint => {setIsMounted(true)});
                                     });
+                                    
                                 }}
                             >
                                 <Icon {...nativeBaseProps.ICON_COLOR} as={<Entypo name={"plus"}/>} />
@@ -101,15 +106,19 @@ const ScreenProfile = ({ setIsMounted }) => {
                                 onTouchEnd={() =>{
                                     setIsMounted(false);
                                     ImagePicker.imagePicker(true).then(imgCaptured =>{
+                                        if(imgCaptured.cancelled){
+                                            setIsMounted(true);
+                                            return;
+                                        }
                                         const filetypename = user.payload.idpeople+allFilesTypeNames.IMGBACKPROF;
                                         const folderid = user.payload.folderid;
+                                        const token_api = user.payload.tokenapi;
 
-                                        gdriverService.sendFile(imgCaptured.base64,folderid,filetypename).then(result => {
+                                        gdriverService.sendFile(imgCaptured.base64,folderid,filetypename,token_api).then(result => {
                                             setImgBackProfile('data:image/png;base64,'+imgCaptured.base64);
-                                            setIsMounted(true);
                                         }).catch(error=>{
                                             console.log(error);
-                                        });
+                                        }).finally(endPoint => {setIsMounted(true)});
                                     });
                                 }}
                             >
@@ -180,7 +189,7 @@ const ScreenProfile = ({ setIsMounted }) => {
                                     INTERESTING TAGS:
                          </Heading>
                          <Divider {...nativeBaseProps.DIVIDERS} />
-                        <View>
+                        <View {...nativeBaseProps.TAGS_VIEW}>
                             {data.map((item,index) => {
                                 return(
                                     <Button
@@ -325,8 +334,8 @@ const nativeBaseProps = {
         zIndex:2, 
         variant:"solid"
     },
-    IMG: {
-        borderColor:"white",
+    IMG_PROFILE: {
+        borderColor:"black",
         borderWidth:3,  
         marginTop: 0,
         alignSelf: "center",

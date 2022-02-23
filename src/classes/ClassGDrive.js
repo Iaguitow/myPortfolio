@@ -1,8 +1,9 @@
 import axios from "axios";
 import Toast from "../components/CompoToast"
+import ImagePicker from "../utils/ImagePicker"
 
 class GDrive{
-    sendFile(img,folderid,filetypename){
+    sendFile(img,folderid,filetypename,token_api){
         return new Promise((resolve, reject) =>{
             try {
                 return axios({
@@ -16,6 +17,7 @@ class GDrive{
                     headers:{
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
+                        'Authorization':"Bearer "+ token_api
                     }
                 }).then(function (response) {
                     resolve(response);
@@ -35,7 +37,7 @@ class GDrive{
         });
     }
 
-    getFile(fileid,token_api){
+    getFile(fileIDS,token_api){
         
         return new Promise((resolve, reject) =>{
             try {
@@ -46,13 +48,14 @@ class GDrive{
                     //SCHOOL IP
                     //url: "http://192.168.1.144:3000/routes/gdrive",
                     withCredentials: true,
-                    params: {fileid},
+                    params: {fileIDS},
                     headers:{
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
                         'Authorization':"Bearer "+ token_api 
                     }
                 }).then(function (response) {
+
                     resolve(response);
                 }).catch(function (error){
                     Toast.showToast("Error","Connection Error",error.message+", If this error continue happening, please verify your connectionn or try again later. ");
@@ -60,7 +63,7 @@ class GDrive{
                 });
             } catch (error) {
                 Toast.showToast("Error","Connection Error",error.message+", If this error continue happening, please verify your connectionn or try again later. ");
-                reject(false);
+                reject(error);
             }
         });
     }

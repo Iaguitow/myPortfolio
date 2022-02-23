@@ -3,43 +3,76 @@ import LocalStorage from "../utils/LocalStorage";
 import Toast from "../components/CompoToast"
 
 class Login {
-    postLogin(email, password, googleAcessToken = ""){
-        return new Promise((resolve, reject) =>{
-            try {
-                return axios({
-                    method: "post",
-                    //HOUSE IP
-                    url: "http://192.168.1.144:3000/routes/login",
-                    //SCHOOL IP
-                    //url: "http://172.26.192.211:3000/routes/login",
-                    withCredentials: true,
-                    params: {email, password},
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    }
-                }).then(function (response){
-                    if(typeof response.data === "string"){
-                        Toast.showToast(response.data);
-                        resolve(response.data);
-                    }
-                    const user = response.data[0];
-                    LocalStorage.storeUserSession(user.idpeople,user.email,user.name,user.tokenapi, googleAcessToken).then(() =>{
-                        resolve(user);
-                    }).catch((error) => {reject(error)});
-                }).catch(function (error){
-                    Toast.showToast("Error","Connection Error",error.message+", If this error continue happening, please verify your connectionn or try again later. ");
-                    reject(false);
-                }).finally(function (){
 
-                });
-            }      
-            catch (error) {
+  postRegisterPeople(name,email,phone,password,dateofbirth,dtactive,googleId = null){
+      return new Promise((resolve, reject) =>{
+        try {
+            return axios({
+                method: "post",
+                //HOUSE IP
+                url: "http://192.168.1.144:3000/routes/login/register",
+                //SCHOOL IP
+                //url: "http://172.26.192.211:3000/routes/login/register",
+                withCredentials: true,
+                params: {name,email,phone,password,dateofbirth,dtactive,googleId},
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                }
+            }).then(function (response){
+                resolve(response.data);  
+              
+            }).catch(function (error){
                 Toast.showToast("Error","Connection Error",error.message+", If this error continue happening, please verify your connectionn or try again later. ");
                 reject(false);
-            }
-        });
-    }
+            }).finally(function (){
+
+            });
+        }      
+        catch (error) {
+            Toast.showToast("Error","Connection Error",error.message+", If this error continue happening, please verify your connectionn or try again later. ");
+            reject(false);
+        }
+    });
+  }
+
+  postLogin(email, password, googleAcessToken = ""){
+      return new Promise((resolve, reject) =>{
+          try {
+              return axios({
+                  method: "post",
+                  //HOUSE IP
+                  url: "http://192.168.1.144:3000/routes/login",
+                  //SCHOOL IP
+                  //url: "http://172.26.192.211:3000/routes/login",
+                  withCredentials: true,
+                  params: {email, password},
+                  headers: {
+                      'Accept': 'application/json',
+                      'Content-Type': 'application/json',
+                  }
+              }).then(function (response){
+                  if(typeof response.data === "string"){
+                      Toast.showToast(response.data);
+                      resolve(response.data);
+                  }
+                  const user = response.data[0];
+                  LocalStorage.storeUserSession(user.idpeople,user.email,user.name,user.tokenapi, googleAcessToken).then(() =>{
+                      resolve(user);
+                  }).catch((error) => {reject(error)});
+              }).catch(function (error){
+                  Toast.showToast("Error","Connection Error",error.message+", If this error continue happening, please verify your connectionn or try again later. ");
+                  reject(false);
+              }).finally(function (){
+
+              });
+          }      
+          catch (error) {
+              Toast.showToast("Error","Connection Error",error.message+", If this error continue happening, please verify your connectionn or try again later. ");
+              reject(false);
+          }
+      });
+  }
 
     getLoginRecoveryCode(to, subject, text) {
         return new Promise((resolve, reject) => {

@@ -4,7 +4,7 @@ import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import GeneralUtils from "../utils/GeneralUtils";
 import Toast from "./CompoToast";
-import dbPeople from "../classes/ClassDBPeople";
+import dbLogin from "../classes/ClassDBLogin";
 import { actionsTypesAPI } from "../Actions/ConstActionsApi";
 import { actions } from "../Actions/ActionLogin";
 import { useDispatch, useSelector } from "react-redux";
@@ -330,7 +330,7 @@ export default function CompoRegisterPeople(props) {
                                         return;
                                     }
                                     props.sendIsRegisteringStateToParent(true);
-                                    dbPeople.postRegisterPeople(name.toUpperCase(),email.toLowerCase(),phone,password1,DOBformatted,dtactive).then(response =>{
+                                    dbLogin.postRegisterPeople(name.toUpperCase(),email.toLowerCase(),phone,password1,DOBformatted,dtactive).then(response =>{
                                         if(response === actionsTypesAPI.STATUS_USER_ALREADY_EXIST){
                                             Toast.showToast("User Already Exists");
                                             setisRegistering(false);

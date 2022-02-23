@@ -3,7 +3,7 @@ import { Animated } from "react-native";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
 import FootTabLogin from "../components/FootTabLogin";
-import dbPeople from "../classes/ClassDBPeople";
+import dbLogin from "../classes/ClassDBLogin";
 import SocialMedia from "../classes/ClassSocialMedia";
 import Toast from "../components/CompoToast";
 import GeneralUtils from "../utils/GeneralUtils";
@@ -221,7 +221,7 @@ function Login({ navigation }) {
                                         const googleId = googleResponse.user.id;
                                         const googleAcessToken = googleResponse.accessToken;
                                         
-                                        dbPeople.postRegisterPeople(name.toUpperCase(), email.toLowerCase(), phone, password, dateofBirth, dtactive, googleId).then((response) => {
+                                        dbLogin.postRegisterPeople(name.toUpperCase(), email.toLowerCase(), phone, password, dateofBirth, dtactive, googleId).then((response) => {
                                             if (response === "User Already Exists") {
                                                 Toast.showToast("User Already Exists");
                                                 setIsSignUping(false);
