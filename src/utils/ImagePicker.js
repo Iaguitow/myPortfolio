@@ -25,7 +25,7 @@ class Image{
         return new Promise((resolve, reject) =>{
             try {
                 const originalWidth = image.width;
-                const newWidth = bg?500:200;
+                const newWidth = bg?600:200;
                 const prop = (100*newWidth/originalWidth)/100;
                 const newHeight = Math.floor(prop*image.height);
 

@@ -7,6 +7,7 @@ class Login {
   postRegisterPeople(name,email,phone,password,dateofbirth,dtactive,googleId = null){
       return new Promise((resolve, reject) =>{
         try {
+            console.log(password);
             return axios({
                 method: "post",
                 //HOUSE IP
@@ -14,7 +15,7 @@ class Login {
                 //SCHOOL IP
                 //url: "http://172.26.192.211:3000/routes/login/register",
                 withCredentials: true,
-                params: {name,email,phone,password,dateofbirth,dtactive,googleId},
+                data: {name,email,phone,password,dateofbirth,dtactive,googleId},
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
@@ -46,7 +47,7 @@ class Login {
                   //SCHOOL IP
                   //url: "http://172.26.192.211:3000/routes/login",
                   withCredentials: true,
-                  params: {email, password},
+                  data: {email, password},
                   headers: {
                       'Accept': 'application/json',
                       'Content-Type': 'application/json',
@@ -74,7 +75,7 @@ class Login {
       });
   }
 
-    getLoginRecoveryCode(to, subject, text) {
+  getLoginRecoveryCode(to, subject, text) {
         return new Promise((resolve, reject) => {
           try {
             return axios({
@@ -102,19 +103,19 @@ class Login {
             reject(false);
           }
         })
-      }
+  }
 
-      postNewPassword(code, password, email) {
+  postNewPassword(code, password, email) {
         return new Promise((resolve, reject) => {
           try {
-            return axios({
+            return axios({  
               method: 'POST',
               //HOUSE IP
               url: "http://192.168.1.144:3000/routes/login/resetpassword",
               //SCHOOL IP
               //url: "http://172.26.192.211:3000/routes/login/resetpassword",
               withCredentials: true,
-              params: { code, password, email},
+              data: { code, password, email},
               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -132,7 +133,8 @@ class Login {
             reject(false);
           }
         })
-      }
+  }
+  
 }
 
 var login = new Login();

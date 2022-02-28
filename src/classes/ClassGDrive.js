@@ -1,8 +1,8 @@
 import axios from "axios";
 import Toast from "../components/CompoToast"
-import ImagePicker from "../utils/ImagePicker"
 
 class GDrive{
+
     sendFile(img,folderid,filetypename,token_api){
         return new Promise((resolve, reject) =>{
             try {

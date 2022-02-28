@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react';
 import { MaterialIcons, Entypo, AntDesign } from "@expo/vector-icons";
-import ImagePicker from "../utils/ImagePicker"
-import gdriverService from "../classes/ClassGDrive"
+import ImagePicker from "../utils/ImagePicker";
+import gdriverService from "../classes/ClassGDrive";
 import { useSelector } from "react-redux";
-import { allFilesTypeNames } from "../utils/ConstFilesTypeNames"
+import { allFilesTypeNames } from "../utils/ConstFilesTypeNames";
 import CompoLoadingView from "../components/CompoApiLoadingView";
 import {
     Stack,
@@ -22,12 +22,11 @@ import {
     Divider
 } from "native-base";
 
-const ScreenProfile = ({ setIsMounted }) => {
+const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
+    const user = useSelector(state => state.reducerLogin);
 
     const [imgProfile, setImgProfile] = useState(null);
     const [imgBackProfile, setImgBackProfile] = useState(null);
-
-    const user = useSelector(state => state.reducerLogin);
 
     useEffect(() => {
         setIsMounted(false);
@@ -38,19 +37,21 @@ const ScreenProfile = ({ setIsMounted }) => {
         const token_api = user.payload.tokenapi;
         
         gdriverService.getFile(imgIDArray,token_api).then(allFilesData => {
-       
-            for(let i = 0; i<allFilesData.data.length;i++){
-                
-                if(allFilesData.data[i].fileName.replace(/[0-9]/g, '') === allFilesTypeNames.IMGPROF && allFilesData.data[i].fileLink !== undefined){
-                    setImgProfile(allFilesData.data[i].fileLink.replace("s220","s1000"));
 
-                }else if(allFilesData.data[i].fileName.replace(/[0-9]/g, '') === allFilesTypeNames.IMGBACKPROF && allFilesData.data[i].fileLink !== undefined){
-                    setImgBackProfile(allFilesData.data[i].fileLink.replace("s220","s1000"));
+            if(!allFilesData.data.toString().includes("File not found")){
+                for(let i = 0; i<allFilesData.data.length;i++){
+                
+                    if(allFilesData.data[i].fileName.replace(/[0-9]/g, '') === allFilesTypeNames.IMGPROF){
+                        setImgProfile(allFilesData.data[i].fileLink.replace("s220","s1000"));
+                        setImageDrawerProfile(allFilesData.data[i].fileLink.replace("s220","s1000"));
+    
+                    }else if(allFilesData.data[i].fileName.replace(/[0-9]/g, '') === allFilesTypeNames.IMGBACKPROF){
+                        setImgBackProfile(allFilesData.data[i].fileLink.replace("s220","s1000"));
+                    }
                 }
             }
-
         }).catch(error => { console.log(error);}).finally(endPoint =>{setIsMounted(true);});
-        
+
     },[]);
 
     const data = ["React Native", "JavaScript", "C#", "Flutter", "Ionic", "DotNet", "MySQL", "Oracle", "SQL SERVER",
@@ -68,20 +69,22 @@ const ScreenProfile = ({ setIsMounted }) => {
                             <AspectRatio 
                                 {...nativeBaseProps.ASPECT_RATIO}>
                                 <Image 
-                                    source={imgBackProfile === null?{uri: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg"}:{uri: imgBackProfile}}
-                                    //source={imgBackProfile === null?require('../../assets/icon.png'):{uri: imgBackProfile}}
+                                    source={imgBackProfile === null?require('../../assets/defaultImgBackProfile.jpg'):{uri: imgBackProfile}}
+                                    maxH={165}
                                     key={imgBackProfile} 
                                     alt="Background"    
                                 />
                             </AspectRatio>
                             <Image 
                                 {...nativeBaseProps.IMG_PROFILE} 
-                                source={imgProfile === null?require('../../assets/icon.png'):{uri:imgProfile}}
+                                source={imgProfile === null?require('../../assets/defaultProfile2.png'):{uri:imgProfile}}
                                 key={imgProfile} 
                             />
                             <Badge {...nativeBaseProps.PLUS_ICON_BADGE}
-                                onTouchEnd={() =>{
+                            ////////////////PROFILE IMAGE////////////////
+                                onTouchStart={() =>{
                                     setIsMounted(false);
+
                                     ImagePicker.imagePicker().then(imgCaptured =>{
                                         if(imgCaptured.cancelled){
                                             setIsMounted(true);
@@ -93,17 +96,17 @@ const ScreenProfile = ({ setIsMounted }) => {
 
                                         gdriverService.sendFile(imgCaptured.base64,folderid,filetypename,token_api).then(result => {
                                             setImgProfile('data:image/png;base64,'+imgCaptured.base64);
+                                            setImageDrawerProfile('data:image/png;base64,'+imgCaptured.base64);
                                         }).catch(error=>{
                                             console.log(error);
                                         }).finally(endPoint => {setIsMounted(true)});
                                     });
-                                    
                                 }}
                             >
                                 <Icon {...nativeBaseProps.ICON_COLOR} as={<Entypo name={"plus"}/>} />
                             </Badge>
                             <Badge {...nativeBaseProps.BG_ICON_BADGE}
-                                onTouchEnd={() =>{
+                                onTouchStart={() =>{
                                     setIsMounted(false);
                                     ImagePicker.imagePicker(true).then(imgCaptured =>{
                                         if(imgCaptured.cancelled){
@@ -114,6 +117,7 @@ const ScreenProfile = ({ setIsMounted }) => {
                                         const folderid = user.payload.folderid;
                                         const token_api = user.payload.tokenapi;
 
+                                        ////////////////BACKGROUND IMAGE////////////////
                                         gdriverService.sendFile(imgCaptured.base64,folderid,filetypename,token_api).then(result => {
                                             setImgBackProfile('data:image/png;base64,'+imgCaptured.base64);
                                         }).catch(error=>{
@@ -207,16 +211,16 @@ const ScreenProfile = ({ setIsMounted }) => {
     )
 };
 
-export default function Profile() {
+export default function Profile({ setImageDrawerProfile }) {
     const [isMounted, setIsMounted] = useState(false);
-
     return (
       <View>
-        <ScreenProfile setIsMounted={ setIsMounted }/>
+        <ScreenProfile setIsMounted={ setIsMounted } setImageDrawerProfile={ setImageDrawerProfile } />
         {!isMounted && <CompoLoadingView />}
       </View>
     );
   }
+
 const nativeBaseProps = {
     DIVIDERS:{
         alignSelf:"center", 
@@ -335,7 +339,7 @@ const nativeBaseProps = {
         variant:"solid"
     },
     IMG_PROFILE: {
-        borderColor:"black",
+        borderColor:"rgb(0,185,243)",
         borderWidth:3,  
         marginTop: 0,
         alignSelf: "center",

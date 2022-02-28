@@ -1,11 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StatusBar, StyleSheet } from 'react-native';
 import { NavigationContainer, DrawerActions, useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons, MaterialIcons, AntDesign, Ionicons, FontAwesome5, EvilIcons } from "@expo/vector-icons";
 import { createDrawerNavigator, DrawerContentScrollView, useDrawerStatus } from "@react-navigation/drawer";
 import { useSelector } from "react-redux";
 import { LinearGradient } from 'expo-linear-gradient';
-import CompoLoadingView from "./CompoApiLoadingView";
 import { allDrawerScreens } from "../utils/ConstDrawerScreens";
 import ScreenProfile from "../screens/ScreenProfile";
 import {
@@ -59,6 +58,7 @@ const getIcon = (screenName) => {
 function MyDrawer() {
   
   const navigation = useNavigation();
+  const [imageDrawerProfile,setImageDrawerProfile] = useState(null);
 
   return (
     <Box flex={1} bg={"white"}>
@@ -111,9 +111,9 @@ function MyDrawer() {
             );
           },
         }}
-        drawerContent={(props) => <CustomDrawerContent {...props} />}
+        drawerContent={(props) => <CustomDrawerContent {...props} imageDrawerProfile={ imageDrawerProfile } />}
       >
-        <Drawer.Screen name={allDrawerScreens.PROFILE} component={ScreenProfile} />
+        <Drawer.Screen name={allDrawerScreens.PROFILE} children={() => { return <ScreenProfile  setImageDrawerProfile={ setImageDrawerProfile }/>}} />
         <Drawer.Screen name={allDrawerScreens.EXPERIENCE} component={Component} />
         <Drawer.Screen name={allDrawerScreens.SCHOOL} component={Component} />
         <Drawer.Screen name={allDrawerScreens.SKILLS} component={Component} />
@@ -138,13 +138,15 @@ function CustomDrawerContent(props) {
         <VStack space="4" my="5" mx="1">
 
 {/*****************************  HEADER ****************************/}
-          <Image {...nativeBaseProps.IMG} source={require('../../assets/icon.png')} />
+          <Image {...nativeBaseProps.IMG} source={props.imageDrawerProfile === null? require('../../assets/defaultProfile2.png'): {uri: props.imageDrawerProfile}} 
+            key={props.imageDrawerProfile}
+          />
           <Box px="4">
             <Text {...nativeBaseProps.TextName}>
               {user.payload.name}
             </Text>
             <Text {...nativeBaseProps.TextProfession}>
-              {user.payload.profession}
+              {user.payload.profession === null? "PROFESSION": user.payload.profession}
             </Text>
           </Box>
           <Divider {...nativeBaseProps.Dividers} />
@@ -213,12 +215,6 @@ function CustomDrawerContent(props) {
 }
 
 export default function CompoDrawer(nativeBaseProps) {
-  const isMounted = useRef(false);
-
-  useEffect(() => {
-    isMounted.current = true;
-    return () => { <CompoLoadingView /> }
-  }, [isMounted.current]);
 
   return (
     <NavigationContainer independent={true}>
@@ -282,7 +278,9 @@ const nativeBaseProps = {
     marginBottom: 0,
     size: 140,
     alt: "LOGO",
-    borderRadius: 100
+    borderRadius: 100,
+    borderWidth: 3,
+    borderColor: "rgb(0,185,243)"
   }
 }
 

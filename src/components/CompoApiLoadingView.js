@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     },
     lottie:{
       width: 270,
-      height: 270
+      height: 270,
     },
     text:{
       color:"white",
