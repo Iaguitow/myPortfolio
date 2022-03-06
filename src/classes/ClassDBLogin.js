@@ -7,7 +7,6 @@ class Login {
   postRegisterPeople(name,email,phone,password,dateofbirth,dtactive,googleId = null){
       return new Promise((resolve, reject) =>{
         try {
-            console.log(password);
             return axios({
                 method: "post",
                 //HOUSE IP

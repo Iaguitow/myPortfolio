@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { MaterialIcons, Entypo, AntDesign } from "@expo/vector-icons";
 import ImagePicker from "../utils/ImagePicker";
 import gdriverService from "../classes/ClassGDrive";
-import { useSelector } from "react-redux";
+import { tagActions } from "../Actions/ActionTags";
+import { useSelector, useDispatch } from "react-redux";
 import { allFilesTypeNames } from "../utils/ConstFilesTypeNames";
 import CompoLoadingView from "../components/CompoApiLoadingView";
 import {
@@ -24,18 +25,22 @@ import {
 
 const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
     const user = useSelector(state => state.reducerLogin);
+    const tags = useSelector(state => state.reducerTags);
+    const dispatch = useDispatch();
+    const getTags = (idpeople, token_api) => {dispatch(tagActions.getTags(idpeople, token_api,{ setIsMounted }))}
 
     const [imgProfile, setImgProfile] = useState(null);
     const [imgBackProfile, setImgBackProfile] = useState(null);
 
     useEffect(() => {
         setIsMounted(false);
-
+        
         const imgprofID = user.payload.fileidimgprofile;
         const imgbackprofID = user.payload.fileidimgbackprofile;
         const imgIDArray = [imgprofID,imgbackprofID];
         const token_api = user.payload.tokenapi;
-        
+        const idpeople = user.payload.idpeople;
+
         gdriverService.getFile(imgIDArray,token_api).then(allFilesData => {
 
             if(!allFilesData.data.toString().includes("File not found")){
@@ -50,15 +55,16 @@ const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
                     }
                 }
             }
-        }).catch(error => { console.log(error);}).finally(endPoint =>{setIsMounted(true);});
+        }).catch(error => { 
+            console.log(error);
+            
+        }).finally(endPoint =>{
+            //setIsMounted(true);
+            getTags(idpeople,token_api);
+            
+        });
 
     },[]);
-
-    const data = ["React Native", "JavaScript", "C#", "Flutter", "Ionic", "DotNet", "MySQL", "Oracle", "SQL SERVER",
-                  "Java", "Go", "Swift", "Android", "C/C++", "Pthon", "Django", "Ruby", "Ruby on Rails", "Kivy", "Rust",
-                  "Delphi","Docker","Machine Learning", "CSS", "HTML", "TypeScript", "ReactJS", "Web Developer Full Stack ",
-                  "Mobile Developer", "Front-End Developer", "Back-End Developer", "Desktop Developer", "IA Developer", "Data Science",
-                  "Data Analysis"];
 
     return (
         <ScrollView>
@@ -81,6 +87,7 @@ const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
                                 key={imgProfile} 
                             />
                             <Badge {...nativeBaseProps.PLUS_ICON_BADGE}
+                            
                             ////////////////PROFILE IMAGE////////////////
                                 onTouchStart={() =>{
                                     setIsMounted(false);
@@ -129,7 +136,9 @@ const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
                                 <Icon {...nativeBaseProps.ICON_COLOR} as={<MaterialIcons name={"add-a-photo"}/>} />
                             </Badge>
                         </Box>
-                        <Icon {...nativeBaseProps.EDIT_ICON} as={<AntDesign name={"edit"}/>} />        
+                        <Badge {...nativeBaseProps.EDIT_PROFILE_BADGE_ICON}>
+                            <Icon {...nativeBaseProps.ICON_COLOR} as={<AntDesign name={"edit"}/>} />        
+                        </Badge>
                         <Stack {...nativeBaseProps.STACK_INFO}>
                             <Stack>
                                 <Heading {...nativeBaseProps.NAME}>
@@ -188,19 +197,21 @@ const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
                     </Box>
                 </Box>
                     <Box {...nativeBaseProps.FIRST_BOX}>
-                        <Icon {...nativeBaseProps.EDIT_ICON} as={<AntDesign name={"edit"}/>} />
+                        <Badge {...nativeBaseProps.EDIT_PROFILE_BADGE_ICON}>
+                            <Icon {...nativeBaseProps.ICON_COLOR} as={<AntDesign name={"edit"}/>} />        
+                        </Badge>
                         <Heading {...nativeBaseProps.INTERESETED}>
                                     INTERESTING TAGS:
                          </Heading>
                          <Divider {...nativeBaseProps.DIVIDERS} />
                         <View {...nativeBaseProps.TAGS_VIEW}>
-                            {data.map((item,index) => {
+                            {tags.payload.tags.map((item,index) => {
                                 return(
                                     <Button
                                         rightIcon={<Icon size={5} as={<AntDesign name={"check"}/>} />}
                                         {...nativeBaseProps.TAGS}
-                                        key={index}>
-                                        {item}
+                                        key={item.tags_idtags}>
+                                        {item.tagname}
                                     </Button>
                                 )
                             })}
@@ -308,11 +319,17 @@ const nativeBaseProps = {
     ICON_COLOR:{
         color:"rgb(0,185,243)", 
     },
-    EDIT_ICON:{
+    EDIT_PROFILE_BADGE_ICON:{
         alignSelf:"flex-end",
         marginTop:5, 
         right:10, 
-        color:"rgb(0,185,243)" 
+        color:"rgb(0,185,243)",
+        shadow:'6',
+        zIndex:2,
+        variant:"solid",
+        backgroundColor:"white",
+        rounded: "full",
+        size:12 
     },
     BG_ICON_BADGE:{
         size:10, 

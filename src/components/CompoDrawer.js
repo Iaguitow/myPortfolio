@@ -81,7 +81,7 @@ function MyDrawer() {
               );
             }else if(title.children === allDrawerScreens.COMPETITORS){
               return (
-                //WHEN SHOW COMPETITOR IT IS NECESSARY SHOW ALSO THE SERCH BAR, CHANGE THE ICON BY SERACH BAR 
+                //WHEN SHOW COMPETITOR IT IS NECESSARY SHOW ALSO THE SERCH BAR, CHANGE THE ICON BY SEARCH BAR 
                 <Icon
                   onPress={() => {
                     navigation.dispatch(DrawerActions.openDrawer());
@@ -250,7 +250,7 @@ const nativeBaseProps = {
   },
   TextProfession:{
     marginLeft:-1, 
-    p:1,
+    p:2,
     borderWidth:2, 
     borderColor:"rgba(0,185,243,0.6)",
     borderRadius:17,
