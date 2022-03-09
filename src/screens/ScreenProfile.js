@@ -27,7 +27,7 @@ const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
     const user = useSelector(state => state.reducerLogin);
     const tags = useSelector(state => state.reducerTags);
     const dispatch = useDispatch();
-    const getTags = (idpeople, token_api) => {dispatch(tagActions.getTags(idpeople, token_api,{ setIsMounted }))}
+    const getTags = (idpeople, token_api) => {dispatch(tagActions.getTags(idpeople, token_api,{ setIsMounted })) }
 
     const [imgProfile, setImgProfile] = useState(null);
     const [imgBackProfile, setImgBackProfile] = useState(null);
@@ -205,7 +205,7 @@ const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
                          </Heading>
                          <Divider {...nativeBaseProps.DIVIDERS} />
                         <View {...nativeBaseProps.TAGS_VIEW}>
-                            {tags.payload.tags.map((item,index) => {
+                            {tags.payload.tags && tags.payload.tags.map((item,index) => {
                                 return(
                                     <Button
                                         rightIcon={<Icon size={5} as={<AntDesign name={"check"}/>} />}
