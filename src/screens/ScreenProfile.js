@@ -3,6 +3,7 @@ import { MaterialIcons, Entypo, AntDesign } from "@expo/vector-icons";
 import ImagePicker from "../utils/ImagePicker";
 import gdriverService from "../classes/ClassGDrive";
 import { tagActions } from "../Actions/ActionTags";
+import { ProfileActions } from "../Actions/ActionProfile"
 import { useSelector, useDispatch } from "react-redux";
 import { allFilesTypeNames } from "../utils/ConstFilesTypeNames";
 import CompoLoadingView from "../components/CompoApiLoadingView";
@@ -26,7 +27,10 @@ import {
 const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
     const user = useSelector(state => state.reducerLogin);
     const tags = useSelector(state => state.reducerTags);
+    const profile = useSelector(state => state.reducerProfile);
+
     const dispatch = useDispatch();
+    const getProfile = (idpeople, token_api) => {dispatch(ProfileActions.getProfile(idpeople, token_api)) }
     const getTags = (idpeople, token_api) => {dispatch(tagActions.getTags(idpeople, token_api,{ setIsMounted })) }
 
     const [imgProfile, setImgProfile] = useState(null);
@@ -60,10 +64,10 @@ const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
             
         }).finally(endPoint =>{
             //setIsMounted(true);
+            getProfile(idpeople,token_api);
             getTags(idpeople,token_api);
             
         });
-
     },[]);
 
     return (
@@ -142,21 +146,21 @@ const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
                         <Stack {...nativeBaseProps.STACK_INFO}>
                             <Stack>
                                 <Heading {...nativeBaseProps.NAME}>
-                                    IAGO SILVA VIEIRA
+                                    {profile.payload.name}
                                 </Heading>
                                 <Text {...nativeBaseProps.SCHOOL_INFO}>
-                                    COMPUTER SCIENCE | FACULDADE PITAGORAS
+                                    {profile.payload.schoolTitle}
                                 </Text>
                             </Stack>
                             <Stack space={1}>
                                 <Text {...nativeBaseProps.ADDRESS_CONTACT}>
-                                        London, England, United Kingdom
+                                        {profile.payload.lives}
                                 </Text>
                                 <Text {...nativeBaseProps.ADDRESS_CONTACT}>
-                                        vieiras.igs@gmail.com
+                                        {profile.payload.email}
                                 </Text>
                                 <Text {...nativeBaseProps.ADDRESS_CONTACT}>
-                                        07497454528
+                                        {profile.payload.phonenumber}
                                 </Text>
                             </Stack>
                             <Divider {...nativeBaseProps.DIVIDERS} />
@@ -165,7 +169,7 @@ const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
                                         PROFESSION:
                                 </Text>
                                 <Text {...nativeBaseProps.INFO_TEXT}>
-                                        REACT NATIVE DEVELOPER
+                                        {profile.payload.profession}
                                 </Text>
                             </VStack>
                             <VStack>
@@ -173,8 +177,7 @@ const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
                                         ABOUT YOU:
                                 </Text>
                                 <Text {...nativeBaseProps.INFO_TEXT}>
-                                        Bengaluru (also called Bangalore) is the center of India's high-tech
-                                        industry. The city is also known for its parks and nightlife.
+                                        {profile.payload.aboutyou}
                                 </Text>
                             </VStack>
                             <VStack>
@@ -182,8 +185,7 @@ const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
                                         MY GOAL:
                                 </Text>
                                 <Text {...nativeBaseProps.INFO_TEXT}>
-                                        Bengaluru (also called Bangalore) is the center of India's high-tech
-                                        industry. The city is also known for its parks and nightlife.
+                                        {profile.payload.goal}
                                 </Text>
                             </VStack>
                             <HStack>
