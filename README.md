@@ -57,8 +57,8 @@ When I was looking for how to build my portfolio, I figured out that I would nee
       <li> REFRESH_TOKEN = XXXXXXXXX </li>
       <li> REFRESH_TOKEN_GDRIVE = XXXXXXXXX </li>
     </ul>
-  <li> 8 - execute the command nodemon indexAPI.js inside the dbServerMyPortfolio project. </li>
-  <li> 9 - execute the command expo start inside the myPortfolio project.  </li>
+  <li> 8 - execute the command nodemon indexAPI.js inside of dbServerMyPortfolio project. </li>
+  <li> 9 - execute the command expo start inside of myPortfolio project.  </li>
 </ul>
 
 # OTHER INFORMATION
