@@ -62,7 +62,7 @@ When I was looking for how to build my portfolio, I figured out that I would nee
 </ul>
 
 # OTHER INFORMATION
-I'm still working on this project. I hope finish it until august. It is only a project to "have fun" and learn something.
+I'm still working on this project. I hope finish it until august. It is only a project to "have fun" and to learn something new.
 
 
 
