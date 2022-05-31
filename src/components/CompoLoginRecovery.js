@@ -16,7 +16,7 @@ import {
     View
   } from "native-base";
 
-export default function App({ navigation }) {
+export default function LoginRecovery({ navigation }) {
 
 //STATES TO HANDLE THE EMAIL
 const [emailAnimation,] = useState(new Animated.Value(1));
@@ -89,7 +89,6 @@ const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(true);
                                         setInvalidEmail(true);
                                         return;
                                     }
-                                    // TRY PUT THE SET CODE INSIDE THE CODE SEND BUTTON AND JUST AFTER CLEAN IT FROM THE MEMORY.
                                     setIsSendCodeDisabled(false);
                                     setInvalidEmail(false);
                                 }}

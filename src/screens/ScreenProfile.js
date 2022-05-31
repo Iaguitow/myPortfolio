@@ -24,7 +24,8 @@ import {
     Divider
 } from "native-base";
 
-const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
+const ScreenProfile = ({ navigation, setIsMounted, setImageDrawerProfile }) => {
+
     const user = useSelector(state => state.reducerLogin);
     const tags = useSelector(state => state.reducerTags);
     const profile = useSelector(state => state.reducerProfile);
@@ -140,7 +141,12 @@ const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
                                 <Icon {...nativeBaseProps.ICON_COLOR} as={<MaterialIcons name={"add-a-photo"}/>} />
                             </Badge>
                         </Box>
-                        <Badge {...nativeBaseProps.EDIT_PROFILE_BADGE_ICON}>
+                        <Badge 
+                            {...nativeBaseProps.EDIT_PROFILE_BADGE_ICON}
+                            onTouchStart={() =>{
+                                navigation.navigate("CompoProfile");
+                            }}    
+                        >
                             <Icon {...nativeBaseProps.ICON_COLOR} as={<AntDesign name={"edit"}/>} />        
                         </Badge>
                         <Stack {...nativeBaseProps.STACK_INFO}>
@@ -224,11 +230,11 @@ const ScreenProfile = ({ setIsMounted, setImageDrawerProfile }) => {
     )
 };
 
-export default function Profile({ setImageDrawerProfile }) {
+export default function Profile({navigation, setImageDrawerProfile }) {
     const [isMounted, setIsMounted] = useState(false);
     return (
       <View>
-        <ScreenProfile setIsMounted={ setIsMounted } setImageDrawerProfile={ setImageDrawerProfile } />
+        <ScreenProfile navigation={ navigation } setIsMounted={ setIsMounted } setImageDrawerProfile={ setImageDrawerProfile } />
         {!isMounted && <CompoLoadingView />}
       </View>
     );

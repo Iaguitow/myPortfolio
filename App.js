@@ -12,9 +12,7 @@ import Login from "./src/screens/ScreenLogin";
 import RegisterPeople from "./src/screens/ScreenRegisterPeople";
 import ScreenLoginRecovery from "./src/screens/ScreenLoginRecovery";
 import Drawer from "./src/components/CompoDrawer"
-import ScreenProfile from "./src/screens/ScreenProfile";
-
-//import Social from "./src/classes/ClassSocialMedia";
+import CompoProfile from "./src/components/CompoProfile";
 
 LogBox.ignoreLogs(["The contrast ratio"]);
 
@@ -32,9 +30,8 @@ export default function App() {
               <Stack.Screen name='Login' component={Login} />
               <Stack.Screen name='RegisterPeople' component={RegisterPeople}/>
               <Stack.Screen name='Drawer' component={Drawer}/>
-              <Stack.Screen name='ScreenLoginRecovery' component={ScreenLoginRecovery}/>
-              
-              {/*<Stack.Screen name='Social' component={Social}/>**/}
+              <Stack.Screen name='ScreenLoginRecovery' component={ScreenLoginRecovery} />
+              <Stack.Screen name='CompoProfile' component={CompoProfile}/>
             </Stack.Navigator>
           </NavigationContainer>
         </View>

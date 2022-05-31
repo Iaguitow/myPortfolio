@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { StatusBar, StyleSheet } from 'react-native';
 import { NavigationContainer, DrawerActions, useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons, MaterialIcons, AntDesign, Ionicons, FontAwesome5, EvilIcons } from "@expo/vector-icons";
@@ -55,14 +55,13 @@ const getIcon = (screenName) => {
 };
 
 /*****************************  NAVIGATION POINTING ****************************/
-function MyDrawer() {
+function MyDrawer({ navigation }) {
   
-  const navigation = useNavigation();
+  const navigations = useNavigation();
   const [imageDrawerProfile,setImageDrawerProfile] = useState(null);
 
   return (
     <Box flex={1} bg={"white"}>
-      {/* CustomDrawerContent => Takes the props from the Drawer.Screen and send it to customDrawerContent through the {...props} */}
       <Drawer.Navigator
         screenOptions={{
           headerTransparent: false,
@@ -74,7 +73,7 @@ function MyDrawer() {
           headerTitle: (title) => {
             if (title.children !== allDrawerScreens.COMPETITORS) {
               return (
-                // NECESSARY PUT DYNAMIC, CREATE A FILE WITH SWITCH CASE TAKING THE CURRENTLY HOUR AND RETURNING THE GREEDING.
+                // NECESSARY PUT DYNAMIC, CREATE A FUNCTION WITH SWITCH CASE TAKING THE CURRENTLY HOUR AND RETURNING THE GREEDING.
                 <Text color={"white"}>
                   Good Morning Iago
                 </Text>
@@ -84,7 +83,7 @@ function MyDrawer() {
                 //WHEN SHOW COMPETITOR IT IS NECESSARY SHOW ALSO THE SERCH BAR, CHANGE THE ICON BY SEARCH BAR 
                 <Icon
                   onPress={() => {
-                    navigation.dispatch(DrawerActions.openDrawer());
+                    navigations.dispatch(DrawerActions.openDrawer());
                   }}
                   color={"rgb(255,255,255)"}
                   as={<MaterialIcons name="menu" />}
@@ -104,7 +103,7 @@ function MyDrawer() {
               <Icon
                 {...nativeBaseProps.HeaderIconsProps}
                 onPress={() => {
-                  navigation.dispatch(DrawerActions.openDrawer());
+                  navigations.dispatch(DrawerActions.openDrawer());
                 }}
                 as={<MaterialIcons name="menu" />}
               />
@@ -113,7 +112,7 @@ function MyDrawer() {
         }}
         drawerContent={(props) => <CustomDrawerContent {...props} imageDrawerProfile={ imageDrawerProfile } />}
       >
-        <Drawer.Screen name={allDrawerScreens.PROFILE} children={() => { return <ScreenProfile  setImageDrawerProfile={ setImageDrawerProfile }/>}} />
+        <Drawer.Screen name={allDrawerScreens.PROFILE} children={() => { return <ScreenProfile navigation={ navigation } setImageDrawerProfile={ setImageDrawerProfile }/>}} />
         <Drawer.Screen name={allDrawerScreens.EXPERIENCE} component={Component} />
         <Drawer.Screen name={allDrawerScreens.SCHOOL} component={Component} />
         <Drawer.Screen name={allDrawerScreens.SKILLS} component={Component} />
@@ -155,7 +154,6 @@ function CustomDrawerContent(props) {
           <VStack divider={<Divider {...nativeBaseProps.Dividers} />} space="0">
             <VStack space="2">
               <StatusBar barStyle={isOpen?"light-content":"light-content"} />
-              {/* Props CAME FROM THE DRAWERNAVIGATOR WITH THE LIST OF SCREEN. USING MAP TO LIST IT. routeNames is a prop from the drawer. */}
               {props.state.routeNames.map((name, index) => {
                 return (
                   <Box key={index}>
@@ -214,11 +212,11 @@ function CustomDrawerContent(props) {
   );
 }
 
-export default function CompoDrawer(nativeBaseProps) {
+export default function CompoDrawer({ navigation, nativeBaseProps}) {
 
   return (
     <NavigationContainer independent={true}>
-      <MyDrawer nativeBaseProps = { nativeBaseProps } />
+      <MyDrawer navigation={ navigation } nativeBaseProps = { nativeBaseProps } />
     </NavigationContainer>
   );
 }
